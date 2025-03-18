@@ -272,6 +272,34 @@
                 ],
             };
             this.initializeScript();
+            this.fetchPlayerInfo();
+        }
+
+        fetchPlayerInfo() {
+            const maxAttempts = 10; // Maximaal aantal pogingen
+            let attempts = 0;
+
+            const checkForPlayerInfo = () => {
+                // Haal de gegevens op uit localStorage
+                const playerId = localStorage.getItem('grepolisPlayerId');
+                const playerName = localStorage.getItem('grepolisPlayerName');
+
+                if (playerId && playerName) {
+                    this.playerId = playerId;
+                    this.playerName = playerName;
+                    console.log('Player-ID gevonden via localStorage:', this.playerId);
+                    console.log('Spelersnaam gevonden via localStorage:', this.playerName);
+                } else if (attempts < maxAttempts) {
+                    attempts++;
+                    console.log(`Poging ${attempts}: Geen spelersgegevens gevonden in localStorage. Opnieuw proberen...`);
+                    setTimeout(checkForPlayerInfo, 1000); // Probeer opnieuw na 1 seconde
+                } else {
+                    console.log('Geen spelersgegevens gevonden in localStorage na meerdere pogingen.');
+                }
+            };
+
+            // Start de controle
+            checkForPlayerInfo();
         }
 
         initializeScript() {
@@ -298,7 +326,7 @@
                 justify-content: center;
                 cursor: pointer;
                 position: fixed;
-                bottom: 20px;
+                bottom: 80px;
                 left: 20px;
                 z-index: 9999;
             `;
@@ -412,25 +440,69 @@
         showStartScreen() {
             const content = document.getElementById('popup-content');
             content.innerHTML = `
-                <h2>Welkom bij de Grepolis Forum Manager</h2>
-                <p>Dit script helpt je bij het aanmaken van fora en topics in het Grepolis alliantieforum.</p>
-                <p>Vul hieronder je spelersnaam en server in:</p>
-                <label for="player-name">Spelersnaam:</label>
-                <input type="text" id="player-name" placeholder="Voer je spelersnaam in" style="width: 100%; padding: 5px; margin-bottom: 10px;">
-                <label for="server">Server:</label>
-                <input type="text" id="server" placeholder="Voer de server in" style="width: 100%; padding: 5px; margin-bottom: 10px;">
-                <button id="save-settings" style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Opslaan</button>
-            `;
+        <h2>Welkom bij Grepolis Manager</h2>
+        <p>Dit script combineert de kracht van populaire Grepolis-tools in één handige oplossing.</p>
+        ${this.playerName ? `<p>Welkom, ${this.playerName}!</p>` : '<p>Welkom, gast!</p>'}
 
-            const saveButton = content.querySelector('#save-settings');
-            saveButton.addEventListener('click', () => {
-                this.playerName = document.getElementById('player-name').value;
-                this.server = document.getElementById('server').value;
-                console.log(`Spelersnaam: ${this.playerName}, Server: ${this.server}`);
-                alert('Instellingen opgeslagen!');
-            });
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px;">
+            <!-- Grepotools -->
+            <div style="flex: 1; min-width: 150px; text-align: center;">
+                <img src="https://www.grepotools.nl/wp-content/uploads/2022/08/logo_425x425.png" alt="Grepotools" style="width: 50px; height: 50px;">
+                <p style="font-size: 12px; font-weight: bold;">Grepotools</p>
+                <p style="font-size: 12px;">Script, tools en informatie voor Grepolis.</p>
+            </div>
+
+            <!-- DIO-Tools -->
+            <div style="flex: 1; min-width: 150px; text-align: center;">
+                <img src="https://dio-david1327.github.io/img/site/btn-dio-settings.png" alt="DIO-Tools" style="width: 50px; height: 50px;">
+                <p style="font-size: 12px; font-weight: bold;">DIO-Tools</p>
+                <p style="font-size: 12px;">Extra opties voor een verbeterde gameplay.</p>
+            </div>
+
+            <!-- GRCRTools -->
+            <div style="flex: 1; min-width: 150px; text-align: center;">
+                <img src="https://cdn.grcrt.net/img/octopus.png" alt="GRCRTools" style="width: 50px; height: 50px;">
+                <p style="font-size: 12px; font-weight: bold;">GRCRTools</p>
+                <p style="font-size: 12px;">Krachtige tools voor rapporten en gameplay.</p>
+            </div>
+
+            <!-- Map Enhancer -->
+            <div style="flex: 1; min-width: 150px; text-align: center;">
+                <img src="https://gme.cyllos.dev/res/icoon.png" alt="Map Enhancer" style="width: 50px; height: 50px;">
+                <p style="font-size: 12px; font-weight: bold;">Map Enhancer</p>
+                <p style="font-size: 12px;">Verbeter de kaartweergave met extra functies.</p>
+            </div>
+
+            <!-- Grepodata -->
+            <div style="flex: 1; min-width: 150px; text-align: center;">
+                <img src="https://grepodata.com/favicon.ico" alt="GrepoData" style="width: 50px; height: 50px;">
+                <p style="font-size: 12px; font-weight: bold;">GrepoData</p>
+                <p style="font-size: 12px;">Geavanceerde tools en statistieken voor Grepolis.</p>
+            </div>
+
+            <!-- Grepolis Notepad Forum Template -->
+            <div style="flex: 1; min-width: 150px; text-align: center;">
+                <img src="https://i.postimg.cc/7Pzd6360/def-button-2.png" alt="Grepolis Notepad Forum Template" style="width: 50px; height: 50px;">
+                <p style="font-size: 12px; font-weight: bold;">Grepolis Notepad Forum Template</p>
+                <p style="font-size: 12px;">Genereert een forumsjabloon voor Grepolis met eenheden, gebouwgegevens, stadsgod en OC.</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <p style="font-size: 12px; font-style: italic;">Het Grepolis Manager Team</p>
+            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 10px;">
+                <div>
+                    <p style="font-size: 12px; font-weight: bold;">Elona</p>
+                    <img src="https://imgur.com/QxTgAHJ.png" alt="Elona Handtekening" style="width: 100px; height: auto; transform: rotate(${Math.floor(Math.random() * 30) - 15}deg);">
+                </div>
+                <div>
+                    <p style="font-size: 12px; font-weight: bold;">Zambia1972</p>
+                    <img src="https://imgur.com/uHRXM9u.png" alt="Zambia1972 Handtekening" style="width: 200px; height: auto; transform: rotate(${Math.floor(Math.random() * 30) - 15}deg);">
+                </div>
+            </div>
+        </div>
+    `;
         }
-
         async createAllForaAndTopics() {
             const content = document.getElementById('popup-content');
             content.innerHTML = `
