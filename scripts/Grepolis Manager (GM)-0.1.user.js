@@ -872,7 +872,7 @@
                     display: grid;
                     grid-template-columns: repeat(5, 1fr);
                     gap: 5px;
-                    position: relative; /* Verander dit naar 'absolute' of 'fixed' indien nodig */
+                    uiContainer.style.position = 'absolute'; /* Verander dit naar 'absolute' of 'fixed' indien nodig */
                     top: 50px; /* Verplaats de container 50px naar beneden */
                     left: 20px; /* Verplaats de container 20px naar rechts */
                     z-index: 9999;
