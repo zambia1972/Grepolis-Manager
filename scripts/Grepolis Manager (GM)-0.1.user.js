@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Grepolis Forum Manager (GFM)
+// @name         Grepolis Manager
 // @namespace    http://tampermonkey.net/
 // @version      0.2
 // @description  Popup met werkbalk en buttons, inclusief chatbox en spraakfunctie
@@ -391,7 +391,7 @@
             const button1 = this.createToolbarButton('Startscherm', () => this.showStartScreen());
             const button2 = this.createToolbarButton('Knop 2', () => alert('Knop 2 wordt later toegevoegd.'));
             const button3 = this.createToolbarButton('Knop 3', () => alert('Knop 3 wordt later toegevoegd.'));
-            const button4 = this.createToolbarButton('Knop 4', () => alert('Knop 4 wordt later toegevoegd.'));
+            const button4 = this.createToolbarButton('Leiding Tools', () => this.showLeadershipTools());
             const button5 = this.createToolbarButton('Fora en Topics', () => this.createAllForaAndTopics());
 
             toolbar.appendChild(button1);
@@ -418,6 +418,25 @@
 
             // Toon het startscherm standaard
             this.showStartScreen();
+        }
+
+        showLeadershipTools() {
+            const content = document.getElementById('popup-content');
+            content.innerHTML = `
+                <h2>Leiding Tools</h2>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                    <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 1</button>
+                    <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 2</button>
+                    <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 3</button>
+                    <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 4</button>
+                    <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 5</button>
+                    <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 6</button>
+                    <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 7</button>
+                    <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 8</button>
+                    <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 9</button>
+                    <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 10</button>
+                </div>
+            `;
         }
 
         createToolbarButton(text, onClick) {
@@ -503,6 +522,7 @@
         </div>
     `;
         }
+
         async createAllForaAndTopics() {
             const content = document.getElementById('popup-content');
             content.innerHTML = `
