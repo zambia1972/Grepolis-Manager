@@ -868,7 +868,7 @@
                     const uiContainer = document.createElement('div');
                     uiContainer.id = 'afwezigheid-ui';
                     uiContainer.style.cssText = `
-                    margin: 20px 0; /* Ruimte boven en onder de container */
+                    margin: 50px 0; /* Ruimte boven en onder de container */
                     display: grid;
                     grid-template-columns: repeat(5, 1fr);
                     gap: 5px;
