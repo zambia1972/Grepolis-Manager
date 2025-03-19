@@ -46,8 +46,8 @@ let attackNotification = {
     this.settingsKeys.forEach((setting) => {
       const { key, default: defaultValue } = setting;
       const value = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
       setting.value = value;
     });
@@ -60,13 +60,13 @@ let attackNotification = {
 
   setSettingValue(settingKey, value) {
     const setting = attackNotification.settingsKeys.find(
-      ({ key }) => key === settingKey
+        ({ key }) => key === settingKey
     );
     setting.value = value;
 
     settings.safeSetting(
-      `${Game.world_id}|attackNotification.${settingKey}`,
-      value
+        `${Game.world_id}|attackNotification.${settingKey}`,
+        value
     );
   },
 
@@ -80,7 +80,7 @@ let attackNotification = {
     }
 
     const isAttackIndicatorActive = $(
-      ".activity.attack_indicator.active"
+        ".activity.attack_indicator.active"
     ).hasClass("active");
     const faviconElement = $('link[rel="shortcut icon"]');
     const standardIcon = this.defaultIcon;
@@ -121,7 +121,7 @@ let bbcodeCopyAlliance = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           .button_logo {
             margin-right:10px;
           }
@@ -144,9 +144,9 @@ let bbcodeCopyAlliance = {
 
   animate() {
     if (
-      !this.rendered ||
-      !$("#ally_towns").length ||
-      $(".bbcodeAllianceButton").length
+        !this.rendered ||
+        !$("#ally_towns").length ||
+        $(".bbcodeAllianceButton").length
     ) {
       return;
     }
@@ -161,18 +161,18 @@ let bbcodeCopyAlliance = {
 
   addBbcodeButton() {
     $("#ally_towns > div > div.game_header.bold").append(
-      $("<div/>", {
-        id: "bbcodeAllianceButton",
-        class: "button_new bbcodeAllianceButton",
-      }).button({
-        caption: `
+        $("<div/>", {
+          id: "bbcodeAllianceButton",
+          class: "button_new bbcodeAllianceButton",
+        }).button({
+          caption: `
           <img class="buttonLogo" src="https://www.grepotools.nl/grepotools/images/logoStable.png">
           <span class="buttonText">BBCode</span>`,
-      })
+        })
     );
 
     $(".bbcodeAllianceButton").tooltip(
-      `${language[language.settingActiveLanguage].bbcodeAlliance}`
+        `${language[language.settingActiveLanguage].bbcodeAlliance}`
     );
 
     $(".bbcodeAllianceButton").click(() => {
@@ -198,10 +198,10 @@ let bbcodeCopyAlliance = {
         setTimeout(() => {
           if (this.data.size > 0) {
             HumanMessage.success(
-              `${
-                language[language.settingActiveLanguage]
-                  .bbcodeAllianceCopySucces
-              }`
+                `${
+                    language[language.settingActiveLanguage]
+                        .bbcodeAllianceCopySucces
+                }`
             );
           }
           this.buttonAction = true;
@@ -216,21 +216,21 @@ let bbcodeCopyAlliance = {
 
     liItems.each(function () {
       const hrefWithoutHash = $(this)
-        .find(".gp_player_link")
-        .attr("href")
-        .slice(1);
+          .find(".gp_player_link")
+          .attr("href")
+          .slice(1);
       const memberData = JSON.parse(atob(hrefWithoutHash));
 
       members.push({
         id: memberData.id,
         name: memberData.name,
         points: bbcodeCopyAlliance.extractPoints(
-          $(this).find("div.small-descr").text(),
-          0
+            $(this).find("div.small-descr").text(),
+            0
         ),
         cities: bbcodeCopyAlliance.extractPoints(
-          $(this).find("div.small-descr").text(),
-          1
+            $(this).find("div.small-descr").text(),
+            1
         ),
       });
     });
@@ -240,19 +240,19 @@ let bbcodeCopyAlliance = {
 
   getAllianceInfo(members) {
     const allianceName = $("#bbcodeAllianceButton")
-      .closest(".ui-dialog")
-      .find(".ui-dialog-title")
-      .text();
+        .closest(".ui-dialog")
+        .find(".ui-dialog-title")
+        .text();
 
     const alliancePoints = members.reduce(
-      (sum, member) => sum + parseInt(member.points, 10),
-      0
+        (sum, member) => sum + parseInt(member.points, 10),
+        0
     );
     const allianceRank = this.extractNumber(
-      "#ally_rank_text > div.rank_number"
+        "#ally_rank_text > div.rank_number"
     );
     const [currentMembers, maxMembers] = this.extractMembers(
-      "#ally_towns .members_list li.header:not([class*=' ']) .small-descr"
+        "#ally_towns .members_list li.header:not([class*=' ']) .small-descr"
     );
 
     return {
@@ -270,12 +270,12 @@ let bbcodeCopyAlliance = {
 
   extractText(selector) {
     return $(selector)
-      .contents()
-      .filter(function () {
-        return this.nodeType === 3;
-      })
-      .text()
-      .trim();
+        .contents()
+        .filter(function () {
+          return this.nodeType === 3;
+        })
+        .text()
+        .trim();
   },
 
   extractNumber(selector) {
@@ -289,8 +289,8 @@ let bbcodeCopyAlliance = {
 
   hideDiotoolsBbcodeButton() {
     if (
-      otherScripts.diotoolsActive &&
-      otherScripts.getSettingValue("diotoolsBbcodeButton")
+        otherScripts.diotoolsActive &&
+        otherScripts.getSettingValue("diotoolsBbcodeButton")
     ) {
       $("#dio_alliance_player").hide();
     }
@@ -298,8 +298,8 @@ let bbcodeCopyAlliance = {
 
   hideGrcrtBbcodeButton() {
     if (
-      otherScripts.grcrtActive &&
-      otherScripts.getSettingValue("grcrtBbcodeButton")
+        otherScripts.grcrtActive &&
+        otherScripts.getSettingValue("grcrtBbcodeButton")
     ) {
       $("div[name='BBCode']").hide();
     }
@@ -307,8 +307,8 @@ let bbcodeCopyAlliance = {
 
   hideMoleholeBbcodeButton() {
     if (
-      otherScripts.grcrtActive &&
-      otherScripts.getSettingValue("moleholeBbcodeButton")
+        otherScripts.grcrtActive &&
+        otherScripts.getSettingValue("moleholeBbcodeButton")
     ) {
       $("#ally_towns > div > a.button").hide();
     }
@@ -336,7 +336,7 @@ let bbcodeCopyIsland = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           .buttonLogo {
             margin-right:10px;
           }
@@ -373,19 +373,19 @@ let bbcodeCopyIsland = {
 
   addButton(id) {
     $(`#${id} .island_info_left .game_header`).append(
-      $("<div/>", {
-        id: `bbcodeIslandButton${id}`,
-        class: `button_new bbcodeIslandButton ${id}`,
-      }).button({
-        caption: `
+        $("<div/>", {
+          id: `bbcodeIslandButton${id}`,
+          class: `button_new bbcodeIslandButton ${id}`,
+        }).button({
+          caption: `
           <img class="buttonLogo" src="https://www.grepotools.nl/grepotools/images/logoStable.png">
           <span class="buttonText">BBCode</span>`,
-      })
+        })
     );
     $(`#${id} .island_info_left .game_header`).css("height", "27px");
 
     $(`#bbcodeIslandButton${id}`).tooltip(
-      `${language[language.settingActiveLanguage].bbcodeIsland}`
+        `${language[language.settingActiveLanguage].bbcodeIsland}`
     );
 
     $(`#bbcodeIslandButton${id}`).click(function (e) {
@@ -397,9 +397,9 @@ let bbcodeCopyIsland = {
         bbcodeCopyIsland.data.set(0, islandInfo);
 
         const selectedOption = $(this)
-          .closest(".game_border")
-          .find("#island_towns_sort")
-          .val();
+            .closest(".game_border")
+            .find("#island_towns_sort")
+            .val();
 
         const selectedOptionMap = {
           name: "#island_info_towns_left_sorted_by_name",
@@ -408,8 +408,8 @@ let bbcodeCopyIsland = {
         };
 
         const ulElement = $(this)
-          .closest(".game_border")
-          .find(selectedOptionMap[selectedOption]);
+            .closest(".game_border")
+            .find(selectedOptionMap[selectedOption]);
 
         let i = 0;
 
@@ -418,21 +418,21 @@ let bbcodeCopyIsland = {
           if (aTag.length > 0 && aTag.attr("href")) {
             i++;
             const bbcodeTownData = JSON.parse(
-              atob($(this).find("a").attr("href").split("#")[1])
+                atob($(this).find("a").attr("href").split("#")[1])
             );
 
             let alliance;
             if (
-              externalData.townData.get(bbcodeTownData.id.toString())
-                .allianceName == null
+                externalData.townData.get(bbcodeTownData.id.toString())
+                    .allianceName == null
             ) {
               alliance = "";
             } else {
               alliance = decodeURI(
-                externalData.townData
-                  .get(bbcodeTownData.id.toString())
-                  .allianceName.split("+")
-                  .join(" ")
+                  externalData.townData
+                      .get(bbcodeTownData.id.toString())
+                      .allianceName.split("+")
+                      .join(" ")
               );
             }
 
@@ -451,7 +451,7 @@ let bbcodeCopyIsland = {
               townId: parseInt(bbcodeTownData.id),
               townName: externalData.townData.name,
               townPoints: parseInt(
-                $(this).find("span.small").first().text().match(/\d+/)[0]
+                  $(this).find("span.small").first().text().match(/\d+/)[0]
               ),
               player: playerName,
               alliance,
@@ -460,7 +460,7 @@ let bbcodeCopyIsland = {
             bbcodeCopyIsland.data.set(i, townInfo);
           } else {
             HumanMessage.error(
-              `${language[language.settingActiveLanguage].bbcodeIslandCopyFail}`
+                `${language[language.settingActiveLanguage].bbcodeIslandCopyFail}`
             );
             bbcodeCopyIsland.data.clear();
           }
@@ -471,9 +471,9 @@ let bbcodeCopyIsland = {
             $(".bbcodeIslandButton").removeClass("disabled");
             $("#ajax_loader").css("visibility", "hidden");
             HumanMessage.success(
-              `${
-                language[language.settingActiveLanguage].bbcodeIslandCopySucces
-              }`
+                `${
+                    language[language.settingActiveLanguage].bbcodeIslandCopySucces
+                }`
             );
           }
           bbcodeCopyIsland.buttonAction = true;
@@ -486,14 +486,14 @@ let bbcodeCopyIsland = {
     const windowClass = event.currentTarget.classList[2];
 
     const islandNumber = parseInt(
-      target.closest(`#${windowClass}`).find("h4").text().match(/\d+/g)
+        target.closest(`#${windowClass}`).find("h4").text().match(/\d+/g)
     );
 
     const islandInfo = target
-      .closest(`#${windowClass}`)
-      .find(".islandinfo_coords")
-      .text()
-      .trim();
+        .closest(`#${windowClass}`)
+        .find(".islandinfo_coords")
+        .text()
+        .trim();
 
     const regex = /(\w+):\s*(\d+)\s*\((\d+)\/(\d+)\)/;
     const match = islandInfo.match(regex);
@@ -506,11 +506,11 @@ let bbcodeCopyIsland = {
     }
 
     const islandFreeSpace = parseInt(
-      target
-        .closest(`#${windowClass}`)
-        .find(".islandinfo_free")
-        .text()
-        .match(/\d+/g)
+        target
+            .closest(`#${windowClass}`)
+            .find(".islandinfo_free")
+            .text()
+            .match(/\d+/g)
     );
 
     // Search islandData for islandNumber
@@ -518,7 +518,7 @@ let bbcodeCopyIsland = {
 
     for (let [key, value] of externalData.islandData.entries()) {
       const islandObject = value.find(
-        (item) => parseInt(item.id) === islandNumber
+          (item) => parseInt(item.id) === islandNumber
       );
       if (islandObject) {
         islandTag = islandObject.tagData;
@@ -540,8 +540,8 @@ let bbcodeCopyIsland = {
 
   hideDiotoolsBbcodeButton() {
     if (
-      otherScripts.diotoolsActive &&
-      otherScripts.getSettingValue("diotoolsBbcodeButton")
+        otherScripts.diotoolsActive &&
+        otherScripts.getSettingValue("diotoolsBbcodeButton")
     ) {
       $("#dio_island_info").hide();
     }
@@ -549,8 +549,8 @@ let bbcodeCopyIsland = {
 
   hideGrcrtBbcodeButton() {
     if (
-      otherScripts.grcrtActive &&
-      otherScripts.getSettingValue("grcrtBbcodeButton")
+        otherScripts.grcrtActive &&
+        otherScripts.getSettingValue("grcrtBbcodeButton")
     ) {
       $("div[name='BBCode']").hide();
     }
@@ -581,7 +581,7 @@ let bbcodeCopyPlayer = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           .button_logo {
             margin-right:10px;
           }
@@ -604,9 +604,9 @@ let bbcodeCopyPlayer = {
 
   animate() {
     if (
-      !this.rendered ||
-      !$("#player_towns").length ||
-      $(".bbcodePlayerButton").length
+        !this.rendered ||
+        !$("#player_towns").length ||
+        $(".bbcodePlayerButton").length
     ) {
       return;
     }
@@ -620,18 +620,18 @@ let bbcodeCopyPlayer = {
 
   addBbcodeButton() {
     $("#player_towns > div > div.game_header.bold").append(
-      $("<div/>", {
-        id: "bbcodePlayerButton",
-        class: "button_new bbcodePlayerButton",
-      }).button({
-        caption: `
+        $("<div/>", {
+          id: "bbcodePlayerButton",
+          class: "button_new bbcodePlayerButton",
+        }).button({
+          caption: `
           <img class="buttonLogo" src="https://www.grepotools.nl/grepotools/images/logoStable.png">
           <span class="buttonText">BBCode</span>`,
-      })
+        })
     );
 
     $(".bbcodePlayerButton").tooltip(
-      `${language[language.settingActiveLanguage].bbcodePlayer}`
+        `${language[language.settingActiveLanguage].bbcodePlayer}`
     );
 
     $(".bbcodePlayerButton").click(() => {
@@ -687,19 +687,19 @@ let bbcodeCopyPlayer = {
             townInfo = "";
             townOcean = externalData.townData.get(key.toString()).ocean;
             townName = decodeURI(
-              externalData.townData
-                .get(key.toString())
-                .townName.split("+")
-                .join(" ")
+                externalData.townData
+                    .get(key.toString())
+                    .townName.split("+")
+                    .join(" ")
             );
             townPoints = externalData.townData.get(key.toString()).points;
 
             if (i === 1) {
               bbcodeCopyPlayer.playerId = parseInt(
-                externalData.townData.get(key.toString()).playerId
+                  externalData.townData.get(key.toString()).playerId
               );
               bbcodeCopyPlayer.allianceId = parseInt(
-                externalData.townData.get(key.toString()).allianceId
+                  externalData.townData.get(key.toString()).allianceId
               );
               bbcodeCopyPlayer.data.set(0, bbcodeCopyPlayer.getPlayerInfo());
             }
@@ -721,9 +721,9 @@ let bbcodeCopyPlayer = {
             $(".bbcodePlayerButton").removeClass("disabled");
             $("#ajax_loader").css("visibility", "hidden");
             HumanMessage.success(
-              `${
-                language[language.settingActiveLanguage].bbcodePlayerCopySucces
-              }`
+                `${
+                    language[language.settingActiveLanguage].bbcodePlayerCopySucces
+                }`
             );
             bbcodePastePlayer.tablePage = 1;
           } else {
@@ -740,18 +740,18 @@ let bbcodeCopyPlayer = {
     let allianceName = "";
     if ($("#player_info .gp_alliance_link").length > 0) {
       allianceName = $("#player_info .gp_alliance_link")
-        .attr("onclick")
-        .match(/'([^']+)'/)[1];
+          .attr("onclick")
+          .match(/'([^']+)'/)[1];
     }
     const playerRank = $("#player_info").find(".rank").text().trim();
     const playerBattlePoints = $("#player_info")
-      .find(".battle_points")
-      .text()
-      .trim();
+        .find(".battle_points")
+        .text()
+        .trim();
     const playerGrepolisScore = $("#player_info")
-      .find(".grepolis_score_box .grepolis_score")
-      .text()
-      .trim();
+        .find(".grepolis_score_box .grepolis_score")
+        .text()
+        .trim();
 
     return {
       playerId: parseInt(this.playerId),
@@ -766,8 +766,8 @@ let bbcodeCopyPlayer = {
 
   hideDiotoolsBbcodeButton() {
     if (
-      otherScripts.diotoolsActive &&
-      otherScripts.getSettingValue("diotoolsBbcodeButton")
+        otherScripts.diotoolsActive &&
+        otherScripts.getSettingValue("diotoolsBbcodeButton")
     ) {
       $("#dio_player_towns").hide();
       $("#dio_BBplayer1").hide();
@@ -777,8 +777,8 @@ let bbcodeCopyPlayer = {
 
   hideGrcrtBbcodeButton() {
     if (
-      otherScripts.grcrtActive &&
-      otherScripts.getSettingValue("grcrtBbcodeButton")
+        otherScripts.grcrtActive &&
+        otherScripts.getSettingValue("grcrtBbcodeButton")
     ) {
       $("div[name='BBCode']").hide();
     }
@@ -805,7 +805,7 @@ const bbcodePaste = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           .buttonLogo {
             margin-right:10px;
             width:20px;
@@ -824,14 +824,14 @@ const bbcodePaste = {
   addBBCodeButton(containerSelector, buttonClass, wrapperSelector) {
     if ($(containerSelector).get(0) && !$(buttonClass).get(0)) {
       $(wrapperSelector).append(
-        $("<div/>", {
-          id: `${containerSelector}`,
-          class: `button_new GrepoToolsButtonPaste ${buttonClass.substring(1)}`,
-        }).button({
-          caption: `
+          $("<div/>", {
+            id: `${containerSelector}`,
+            class: `button_new GrepoToolsButtonPaste ${buttonClass.substring(1)}`,
+          }).button({
+            caption: `
           <img class="buttonLogo" src="https://www.grepotools.nl/grepotools/images/logoStable.png">
           <span class="buttonText">BBCode</span>`,
-        })
+          })
       );
     }
   },
@@ -840,33 +840,33 @@ const bbcodePaste = {
     if (bbcodePaste.rendered) {
       // Forum new topic / post reply
       bbcodePaste.addBBCodeButton(
-        "#bbcodes",
-        ".gtForum",
-        "#bbcodes .bb_button_wrapper"
+          "#bbcodes",
+          ".gtForum",
+          "#bbcodes .bb_button_wrapper"
       );
       bbcodePaste.addBBCodeButton(
-        "#post_save_form",
-        ".gtForum",
-        "#post_save_form .bb_button_wrapper"
+          "#post_save_form",
+          ".gtForum",
+          "#post_save_form .bb_button_wrapper"
       );
 
       // Message / message reply
       bbcodePaste.addBBCodeButton(
-        "#message_new_message",
-        ".gtMesage",
-        "#message_bbcodes .bb_button_wrapper"
+          "#message_new_message",
+          ".gtMesage",
+          "#message_bbcodes .bb_button_wrapper"
       );
       bbcodePaste.addBBCodeButton(
-        ".bb_button_wrapper",
-        ".gtMesage",
-        "#message_bbcodes .bb_button_wrapper"
+          ".bb_button_wrapper",
+          ".gtMesage",
+          "#message_bbcodes .bb_button_wrapper"
       );
 
       // Note
       this.addBBCodeButton(
-        ".notes_container",
-        ".gtNotes",
-        ".notes_container .bb_button_wrapper"
+          ".notes_container",
+          ".gtNotes",
+          ".notes_container .bb_button_wrapper"
       );
 
       $(".GrepoToolsButtonPaste").click((e) => {
@@ -889,9 +889,9 @@ const bbcodePaste = {
           };
 
           const mapping =
-            classMapping[
-              $(e.target).closest("div.GrepoToolsButtonPaste").attr("class")
-            ];
+              classMapping[
+                  $(e.target).closest("div.GrepoToolsButtonPaste").attr("class")
+                  ];
 
           if (mapping) {
             this.location = mapping.location;
@@ -899,8 +899,8 @@ const bbcodePaste = {
             this.start = this.messageElement.selectionStart;
             this.end = this.messageElement.selectionEnd;
             this.textBefore = this.messageElement.value.substring(
-              0,
-              this.start
+                0,
+                this.start
             );
             this.textAfter = this.messageElement.value.substring(this.end);
 
@@ -917,16 +917,16 @@ const bbcodePaste = {
       });
 
       this.setupPasteButton(
-        "#GrepoToolsPasteIslandButton",
-        bbcodePasteIsland.createOutput.bind(bbcodePasteIsland)
+          "#GrepoToolsPasteIslandButton",
+          bbcodePasteIsland.createOutput.bind(bbcodePasteIsland)
       );
       this.setupPasteButton(
-        "#GrepoToolsPastePlayerButton",
-        bbcodePastePlayer.createOutput.bind(bbcodePastePlayer)
+          "#GrepoToolsPastePlayerButton",
+          bbcodePastePlayer.createOutput.bind(bbcodePastePlayer)
       );
       this.setupPasteButton(
-        "#GrepoToolsPasteAllianceButton",
-        bbcodePasteAlliance.createOutput.bind(bbcodePasteAlliance)
+          "#GrepoToolsPasteAllianceButton",
+          bbcodePasteAlliance.createOutput.bind(bbcodePasteAlliance)
       );
     }
   },
@@ -977,8 +977,8 @@ const bbcodePaste = {
             const textarea = $("#txta_notes > div.middle > textarea");
             if (textarea.length) {
               textarea
-                .val(`${this.textBefore}${data}${this.textAfter}`)
-                .keyup();
+                  .val(`${this.textBefore}${data}${this.textAfter}`)
+                  .keyup();
               this.messageElement.focus();
             } else {
               bbcodeWindow.windowId.close();
@@ -1028,8 +1028,8 @@ let bbcodePasteAlliance = {
     this.settingsKeys.forEach((setting) => {
       const { key, default: defaultValue } = setting;
       let value = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
       setting.value = value;
     });
@@ -1042,13 +1042,13 @@ let bbcodePasteAlliance = {
 
   setSettingValue(settingKey, value) {
     const setting = bbcodePasteAlliance.settingsKeys.find(
-      ({ key }) => key === settingKey
+        ({ key }) => key === settingKey
     );
     setting.value = value;
 
     settings.safeSetting(
-      `${Game.world_id}|bbcodePasteAlliance.${settingKey}`,
-      value
+        `${Game.world_id}|bbcodePasteAlliance.${settingKey}`,
+        value
     );
   },
 
@@ -1091,30 +1091,30 @@ let bbcodePasteAlliance = {
     bbcodePasteAlliance.output = "[quote]\n";
     if (bbcodePasteAlliance.getSettingValue("showAllianceName")) {
       bbcodePasteAlliance.output += `[ally]${
-        bbcodeCopyAlliance.data.get(0).allianceName
+          bbcodeCopyAlliance.data.get(0).allianceName
       }[/ally]\n`;
     }
     if (bbcodePasteAlliance.getSettingValue("showAllianceNumberPlayers")) {
       bbcodePasteAlliance.output += `${
-        language[language.settingActiveLanguage].members
+          language[language.settingActiveLanguage].members
       }: ${bbcodeCopyAlliance.data.get(0).allianceCurrentMembers}\n${
-        language[language.settingActiveLanguage].maxMembers
+          language[language.settingActiveLanguage].maxMembers
       }: ${bbcodeCopyAlliance.data.get(0).allianceMaxMembers}\n`;
     }
 
     if (bbcodePasteAlliance.getSettingValue("showAlliancePoints")) {
       bbcodePasteAlliance.output += `${
-        language[language.settingActiveLanguage].alliance
+          language[language.settingActiveLanguage].alliance
       } ${language[language.settingActiveLanguage].points.toLowerCase()}: ${
-        bbcodeCopyAlliance.data.get(0).alliancePoints
+          bbcodeCopyAlliance.data.get(0).alliancePoints
       }\n`;
     }
 
     if (bbcodePasteAlliance.getSettingValue("showAllianceRank")) {
       bbcodePasteAlliance.output += `${
-        language[language.settingActiveLanguage].alliance
+          language[language.settingActiveLanguage].alliance
       } ${language[language.settingActiveLanguage].rank.toLowerCase()}: ${
-        bbcodeCopyAlliance.data.get(0).allianceRank
+          bbcodeCopyAlliance.data.get(0).allianceRank
       }\n`;
     }
 
@@ -1123,59 +1123,59 @@ let bbcodePasteAlliance = {
     bbcodePasteAlliance.output += "[**] ";
 
     bbcodePasteAlliance.getSettingValue("showNumber")
-      ? (bbcodePasteAlliance.output += `${
-          language[language.settingActiveLanguage].numberShort
+        ? (bbcodePasteAlliance.output += `${
+            language[language.settingActiveLanguage].numberShort
         } [||] ${language[language.settingActiveLanguage].player} `)
-      : (bbcodePasteAlliance.output += `${
-          language[language.settingActiveLanguage].player
+        : (bbcodePasteAlliance.output += `${
+            language[language.settingActiveLanguage].player
         }`);
 
     bbcodePasteAlliance.getSettingValue("showPlayerTowns")
-      ? (bbcodePasteAlliance.output += ` [||] ${
-          language[language.settingActiveLanguage].towns
+        ? (bbcodePasteAlliance.output += ` [||] ${
+            language[language.settingActiveLanguage].towns
         } `)
-      : "";
+        : "";
 
     bbcodePasteAlliance.getSettingValue("showPlayerPoints")
-      ? (bbcodePasteAlliance.output += ` [||] ${
-          language[language.settingActiveLanguage].points
+        ? (bbcodePasteAlliance.output += ` [||] ${
+            language[language.settingActiveLanguage].points
         } `)
-      : "";
+        : "";
 
     bbcodePasteAlliance.getSettingValue("showEmptyColumn")
-      ? (bbcodePasteAlliance.output += " [||] ")
-      : "";
+        ? (bbcodePasteAlliance.output += " [||] ")
+        : "";
     bbcodePasteAlliance.output += " [/**]\n";
 
     // create table content
     for (let i = 1; i < bbcodeCopyAlliance.data.size; ++i) {
       bbcodePasteAlliance.output += "[*] ";
       bbcodePasteAlliance.getSettingValue("showNumber")
-        ? (bbcodePasteAlliance.output +=
-            bbcodeCopyAlliance.data.get(i).playerRank + ". [|] ")
-        : "";
+          ? (bbcodePasteAlliance.output +=
+              bbcodeCopyAlliance.data.get(i).playerRank + ". [|] ")
+          : "";
 
       bbcodePasteAlliance.output += `[player]${
-        bbcodeCopyAlliance.data.get(i).playerName
+          bbcodeCopyAlliance.data.get(i).playerName
       }[/player]`;
 
       if (bbcodePasteAlliance.getSettingValue("showPlayerTowns")) {
         bbcodePasteAlliance.output +=
-          ` [|]  ${bbcodeCopyAlliance.data.get(i).playerCities} ` +
-          (bbcodeCopyAlliance.data.get(i).playerCities > 1
-            ? language[language.settingActiveLanguage].towns
-            : language[language.settingActiveLanguage].town);
+            ` [|]  ${bbcodeCopyAlliance.data.get(i).playerCities} ` +
+            (bbcodeCopyAlliance.data.get(i).playerCities > 1
+                ? language[language.settingActiveLanguage].towns
+                : language[language.settingActiveLanguage].town);
       }
 
       bbcodePasteAlliance.getSettingValue("showPlayerPoints")
-        ? (bbcodePasteAlliance.output += ` [|] ${
-            bbcodeCopyAlliance.data.get(i).playerPoints
+          ? (bbcodePasteAlliance.output += ` [|] ${
+              bbcodeCopyAlliance.data.get(i).playerPoints
           } ${language[language.settingActiveLanguage].points}`)
-        : "";
+          : "";
 
       bbcodePasteAlliance.getSettingValue("showEmptyColumn")
-        ? (bbcodePasteAlliance.output += " [||] ")
-        : "";
+          ? (bbcodePasteAlliance.output += " [||] ")
+          : "";
 
       bbcodePasteAlliance.output += " [/*]\n";
     }
@@ -1219,8 +1219,8 @@ let bbcodePasteIsland = {
     this.settingsKeys.forEach((setting) => {
       const { key, default: defaultValue } = setting;
       let value = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
       setting.value = value;
     });
@@ -1233,13 +1233,13 @@ let bbcodePasteIsland = {
 
   setSettingValue(settingKey, value) {
     const setting = bbcodePasteIsland.settingsKeys.find(
-      ({ key }) => key === settingKey
+        ({ key }) => key === settingKey
     );
     setting.value = value;
 
     settings.safeSetting(
-      `${Game.world_id}|bbcodePasteIsland.${settingKey}`,
-      value
+        `${Game.world_id}|bbcodePasteIsland.${settingKey}`,
+        value
     );
   },
 
@@ -1294,28 +1294,28 @@ let bbcodePasteIsland = {
     bbcodePasteIsland.output = "[quote]\n";
     if (bbcodePasteIsland.getSettingValue("showIslandNumber")) {
       bbcodePasteIsland.output += `${
-        language[language.settingActiveLanguage].islandNumber
+          language[language.settingActiveLanguage].islandNumber
       }: [island]${bbcodeCopyIsland.data.get(0).islandNumber}[/island]\n`;
     }
     if (bbcodePasteIsland.getSettingValue("showIslandTag")) {
       bbcodePasteIsland.output += `${
-        language[language.settingActiveLanguage].islandTag
+          language[language.settingActiveLanguage].islandTag
       }: ${bbcodeCopyIsland.data.get(0).islandTag}\n`;
     }
 
     if (bbcodePasteIsland.getSettingValue("showIslandOccupation")) {
       bbcodePasteIsland.output += `${
-        language[language.settingActiveLanguage].towns
+          language[language.settingActiveLanguage].towns
       }: ${bbcodeCopyIsland.data.size - 1} ${
-        language[language.settingActiveLanguage].occupied
+          language[language.settingActiveLanguage].occupied
       } / ${bbcodeCopyIsland.data.get(0).islandFreeSpace} ${
-        language[language.settingActiveLanguage].free
+          language[language.settingActiveLanguage].free
       }\n`;
     }
 
     if (bbcodePasteIsland.getSettingValue("showIslandResources")) {
       bbcodePasteIsland.output += `${
-        language[language.settingActiveLanguage].resources
+          language[language.settingActiveLanguage].resources
       }: `;
 
       for (let i = 1; i >= 0; --i) {
@@ -1335,15 +1335,15 @@ let bbcodePasteIsland = {
 
     if (bbcodePasteIsland.getSettingValue("showIslandOcean")) {
       bbcodePasteIsland.output += `${
-        language[language.settingActiveLanguage].ocean
+          language[language.settingActiveLanguage].ocean
       }: ${bbcodeCopyIsland.data.get(0).ocean}\n`;
     }
 
     if (bbcodePasteIsland.getSettingValue("showIslandCoordinates")) {
       bbcodePasteIsland.output += `${
-        language[language.settingActiveLanguage].coordinates
+          language[language.settingActiveLanguage].coordinates
       }: ${bbcodeCopyIsland.data.get(0).islandX} / ${
-        bbcodeCopyIsland.data.get(0).islandY
+          bbcodeCopyIsland.data.get(0).islandY
       }\n`;
     }
 
@@ -1352,74 +1352,74 @@ let bbcodePasteIsland = {
     bbcodePasteIsland.output += "[**] ";
 
     bbcodePasteIsland.getSettingValue("showNumber")
-      ? (bbcodePasteIsland.output += `${
-          language[language.settingActiveLanguage].numberShort
+        ? (bbcodePasteIsland.output += `${
+            language[language.settingActiveLanguage].numberShort
         } [||] ${language[language.settingActiveLanguage].town}`)
-      : (bbcodePasteIsland.output +=
-          language[language.settingActiveLanguage].town);
+        : (bbcodePasteIsland.output +=
+            language[language.settingActiveLanguage].town);
 
     bbcodePasteIsland.getSettingValue("showPoints")
-      ? (bbcodePasteIsland.output += ` [||] ${
-          language[language.settingActiveLanguage].points
+        ? (bbcodePasteIsland.output += ` [||] ${
+            language[language.settingActiveLanguage].points
         }`)
-      : "";
+        : "";
 
     bbcodePasteIsland.getSettingValue("showPlayer")
-      ? (bbcodePasteIsland.output += ` [||] ${
-          language[language.settingActiveLanguage].player
+        ? (bbcodePasteIsland.output += ` [||] ${
+            language[language.settingActiveLanguage].player
         }`)
-      : "";
+        : "";
 
     bbcodePasteIsland.getSettingValue("showAlliance")
-      ? (bbcodePasteIsland.output += ` [||] ${
-          language[language.settingActiveLanguage].alliance
+        ? (bbcodePasteIsland.output += ` [||] ${
+            language[language.settingActiveLanguage].alliance
         }`)
-      : "";
+        : "";
 
     bbcodePasteIsland.getSettingValue("showEmptyColumn")
-      ? (bbcodePasteIsland.output += " [||] ")
-      : "";
+        ? (bbcodePasteIsland.output += " [||] ")
+        : "";
     bbcodePasteIsland.output += " [/**]\n";
 
     // create table content
     for (let i = 1; i < bbcodeCopyIsland.data.size; ++i) {
       bbcodePasteIsland.output += "[*]";
       bbcodePasteIsland.getSettingValue("showNumber")
-        ? (bbcodePasteIsland.output += ` ${i}. [|] [town]${
-            bbcodeCopyIsland.data.get(i).townId
+          ? (bbcodePasteIsland.output += ` ${i}. [|] [town]${
+              bbcodeCopyIsland.data.get(i).townId
           }[/town]`)
-        : (bbcodePasteIsland.output += ` [town]${
-            bbcodeCopyIsland.data.get(i).townId
+          : (bbcodePasteIsland.output += ` [town]${
+              bbcodeCopyIsland.data.get(i).townId
           }[/town]`);
 
       bbcodePasteIsland.getSettingValue("showPoints")
-        ? (bbcodePasteIsland.output += ` [|] ${
-            bbcodeCopyIsland.data.get(i).townPoints
+          ? (bbcodePasteIsland.output += ` [|] ${
+              bbcodeCopyIsland.data.get(i).townPoints
           } ${language[language.settingActiveLanguage].points}`)
-        : "";
+          : "";
 
       if (bbcodeCopyIsland.data.get(i).player != "") {
         bbcodePasteIsland.getSettingValue("showPlayer")
-          ? (bbcodePasteIsland.output += ` [|] ${
-              bbcodeCopyIsland.data.get(i).player
+            ? (bbcodePasteIsland.output += ` [|] ${
+                bbcodeCopyIsland.data.get(i).player
             }`)
-          : "";
+            : "";
 
         bbcodePasteIsland.getSettingValue("showAlliance") &&
         bbcodeCopyIsland.data.get(i).alliance !== ""
-          ? (bbcodePasteIsland.output += ` [|] [ally]${
-              bbcodeCopyIsland.data.get(i).alliance
+            ? (bbcodePasteIsland.output += ` [|] [ally]${
+                bbcodeCopyIsland.data.get(i).alliance
             }[/ally]`)
-          : "";
+            : "";
       } else {
         bbcodePasteIsland.output += ` [|] ${
-          language[language.settingActiveLanguage].ghostTown
+            language[language.settingActiveLanguage].ghostTown
         } [|] `;
       }
 
       bbcodePasteIsland.getSettingValue("showEmptyColumn")
-        ? (bbcodePasteIsland.output += " [|] ")
-        : "";
+          ? (bbcodePasteIsland.output += " [|] ")
+          : "";
       bbcodePasteIsland.output += " [/*]\n";
     }
 
@@ -1463,8 +1463,8 @@ let bbcodePastePlayer = {
     this.settingsKeys.forEach((setting) => {
       const { key, default: defaultValue } = setting;
       let value = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
       setting.value = value;
     });
@@ -1477,13 +1477,13 @@ let bbcodePastePlayer = {
 
   setSettingValue(settingKey, value) {
     const setting = bbcodePastePlayer.settingsKeys.find(
-      ({ key }) => key === settingKey
+        ({ key }) => key === settingKey
     );
     setting.value = value;
 
     settings.safeSetting(
-      `${Game.world_id}|bbcodePastePlayer.${settingKey}`,
-      value
+        `${Game.world_id}|bbcodePastePlayer.${settingKey}`,
+        value
     );
   },
 
@@ -1542,25 +1542,25 @@ let bbcodePastePlayer = {
     bbcodePastePlayer.output = "[quote]\n";
     if (bbcodePastePlayer.getSettingValue("showPlayerName")) {
       bbcodePastePlayer.output +=
-        "[player]" + bbcodeCopyPlayer.data.get(0).playerName + "[/player]\n";
+          "[player]" + bbcodeCopyPlayer.data.get(0).playerName + "[/player]\n";
     }
     if (bbcodePastePlayer.getSettingValue("showAllianceName")) {
       bbcodePastePlayer.output +=
-        "[ally]" + bbcodeCopyPlayer.data.get(0).allianceName + "[/ally]\n\n";
+          "[ally]" + bbcodeCopyPlayer.data.get(0).allianceName + "[/ally]\n\n";
     }
     if (bbcodePastePlayer.getSettingValue("showGrepolisRank")) {
       bbcodePastePlayer.output += `${
-        language[language.settingActiveLanguage].grepolisRank
+          language[language.settingActiveLanguage].grepolisRank
       }: ${bbcodeCopyPlayer.data.get(0).playerRank} \n`;
     }
     if (bbcodePastePlayer.getSettingValue("showPlayerGrepolisScore")) {
       bbcodePastePlayer.output += `${
-        language[language.settingActiveLanguage].grepolisScore
+          language[language.settingActiveLanguage].grepolisScore
       }: ${bbcodeCopyPlayer.data.get(0).playerGrepolisScore} \n`;
     }
     if (bbcodePastePlayer.getSettingValue("showPlayerBattlePoints")) {
       bbcodePastePlayer.output += `${
-        language[language.settingActiveLanguage].battlePoints
+          language[language.settingActiveLanguage].battlePoints
       }: ${bbcodeCopyPlayer.data.get(0).playerBattlePoints} \n`;
     }
 
@@ -1569,42 +1569,42 @@ let bbcodePastePlayer = {
     bbcodePastePlayer.output += "[**]";
 
     bbcodePastePlayer.getSettingValue("showNumber")
-      ? (bbcodePastePlayer.output += ` ${
-          language[language.settingActiveLanguage].numberShort
+        ? (bbcodePastePlayer.output += ` ${
+            language[language.settingActiveLanguage].numberShort
         } [||] ${language[language.settingActiveLanguage].town} `)
-      : (bbcodePastePlayer.output += ` ${
-          language[language.settingActiveLanguage].town
+        : (bbcodePastePlayer.output += ` ${
+            language[language.settingActiveLanguage].town
         }`);
     bbcodePastePlayer.getSettingValue("showPoints")
-      ? (bbcodePastePlayer.output += ` [||] ${
-          language[language.settingActiveLanguage].points
+        ? (bbcodePastePlayer.output += ` [||] ${
+            language[language.settingActiveLanguage].points
         } `)
-      : "";
+        : "";
     bbcodePastePlayer.getSettingValue("showOcean")
-      ? (bbcodePastePlayer.output += ` [||] ${
-          language[language.settingActiveLanguage].ocean
+        ? (bbcodePastePlayer.output += ` [||] ${
+            language[language.settingActiveLanguage].ocean
         }`)
-      : "";
+        : "";
     bbcodePastePlayer.getSettingValue("showIslandNumber")
-      ? (bbcodePastePlayer.output += ` [||] ${
-          language[language.settingActiveLanguage].islandNumber
+        ? (bbcodePastePlayer.output += ` [||] ${
+            language[language.settingActiveLanguage].islandNumber
         }`)
-      : "";
+        : "";
     bbcodePastePlayer.getSettingValue("showIslandTag")
-      ? (bbcodePastePlayer.output += ` [||] ${
-          language[language.settingActiveLanguage].islandTag
+        ? (bbcodePastePlayer.output += ` [||] ${
+            language[language.settingActiveLanguage].islandTag
         }`)
-      : "";
+        : "";
     bbcodePastePlayer.getSettingValue("showEmptyColumn")
-      ? (bbcodePastePlayer.output += " [||] ")
-      : "";
+        ? (bbcodePastePlayer.output += " [||] ")
+        : "";
     bbcodePastePlayer.output += " [/**]\n";
 
     // create table content
     let startRow =
-      bbcodePastePlayer.tablePage * bbcodePastePlayer.tableMaxRows -
-      bbcodePastePlayer.tableMaxRows +
-      1;
+        bbcodePastePlayer.tablePage * bbcodePastePlayer.tableMaxRows -
+        bbcodePastePlayer.tableMaxRows +
+        1;
     let endRow = startRow + bbcodePastePlayer.tableMaxRows;
     if (endRow > bbcodeCopyPlayer.data.size) {
       endRow = bbcodeCopyPlayer.data.size;
@@ -1612,40 +1612,40 @@ let bbcodePastePlayer = {
     for (let i = startRow; i < endRow; ++i) {
       bbcodePastePlayer.output += "[*]";
       bbcodePastePlayer.getSettingValue("showNumber")
-        ? (bbcodePastePlayer.output += ` ${i}. [|] [town]${
-            bbcodeCopyPlayer.data.get(i).townId
+          ? (bbcodePastePlayer.output += ` ${i}. [|] [town]${
+              bbcodeCopyPlayer.data.get(i).townId
           }[/town]`)
-        : (bbcodePastePlayer.output += ` [town]${
-            bbcodeCopyPlayer.data.get(i).townId
+          : (bbcodePastePlayer.output += ` [town]${
+              bbcodeCopyPlayer.data.get(i).townId
           }[/town]`);
 
       bbcodePastePlayer.getSettingValue("showPoints")
-        ? (bbcodePastePlayer.output += ` [|] ${
-            bbcodeCopyPlayer.data.get(i).townPoints
+          ? (bbcodePastePlayer.output += ` [|] ${
+              bbcodeCopyPlayer.data.get(i).townPoints
           } ${language[language.settingActiveLanguage].points}`)
-        : "";
+          : "";
 
       bbcodePastePlayer.getSettingValue("showOcean")
-        ? (bbcodePastePlayer.output += ` [|] ${
-            language[language.settingActiveLanguage].ocean
+          ? (bbcodePastePlayer.output += ` [|] ${
+              language[language.settingActiveLanguage].ocean
           } ${bbcodeCopyPlayer.data.get(i).Ocean}`)
-        : "";
+          : "";
 
       bbcodePastePlayer.getSettingValue("showIslandNumber")
-        ? (bbcodePastePlayer.output += ` [|] [island]${
-            bbcodeCopyPlayer.data.get(i).islandNumber
+          ? (bbcodePastePlayer.output += ` [|] [island]${
+              bbcodeCopyPlayer.data.get(i).islandNumber
           }[/island]`)
-        : "";
+          : "";
 
       bbcodePastePlayer.getSettingValue("showIslandTag")
-        ? (bbcodePastePlayer.output += ` [|] ${
-            bbcodeCopyPlayer.data.get(i).islandTag
+          ? (bbcodePastePlayer.output += ` [|] ${
+              bbcodeCopyPlayer.data.get(i).islandTag
           }`)
-        : "";
+          : "";
 
       bbcodePastePlayer.getSettingValue("showEmptyColumn")
-        ? (bbcodePastePlayer.output += " [|] ")
-        : "";
+          ? (bbcodePastePlayer.output += " [|] ")
+          : "";
       bbcodePastePlayer.output += " [/*]\n";
     }
     bbcodePastePlayer.output += "[/table]\n[/quote]\n";
@@ -1675,7 +1675,7 @@ let bbcodeWindow = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           #bbcodeContent { 
             height:500px;
             background-color:"#FFE3A1";
@@ -1713,8 +1713,8 @@ let bbcodeWindow = {
 
   createCheckbox(id, caption, setting = false) {
     const checkbox = $("<div/>", { id, class: "checkbox_new large" })
-      .append($("<div/>", { class: "cbx_icon" }))
-      .append($("<div/>", { class: "cbx_caption" }).text(caption));
+        .append($("<div/>", { class: "cbx_icon" }))
+        .append($("<div/>", { class: "cbx_caption" }).text(caption));
 
     if (setting) {
       checkbox.addClass("checked");
@@ -1735,13 +1735,13 @@ let bbcodeWindow = {
       class: "button_new",
       style: "margin-top:10px",
     })
-      .append($("<div/>", { class: "left" }))
-      .append($("<div/>", { class: "right" }))
-      .append(
-        $("<div/>", { class: "caption js-caption" })
-          .append($("<span/>").text(caption))
-          .append($("<div/>", { class: "effect js-effect" }))
-      );
+        .append($("<div/>", { class: "left" }))
+        .append($("<div/>", { class: "right" }))
+        .append(
+            $("<div/>", { class: "caption js-caption" })
+                .append($("<span/>").text(caption))
+                .append($("<div/>", { class: "effect js-effect" }))
+        );
 
     if (disabled) {
       button.addClass("disabled");
@@ -1749,8 +1749,8 @@ let bbcodeWindow = {
 
     button.on("click", function () {
       if (
-        !button.hasClass("disabled") &&
-        typeof functionToCall === "function"
+          !button.hasClass("disabled") &&
+          typeof functionToCall === "function"
       ) {
         functionToCall();
       }
@@ -1761,14 +1761,14 @@ let bbcodeWindow = {
 
   createDropdown(id, label, value, options = "") {
     return $("<div/>")
-      .append($("<label/>", { for: id }).text(label))
-      .append(
-        $("<div/>", { id: id, class: "dropdown default" }).dropdown({
-          list_pos: "left",
-          value: value,
-          options: options,
-        })
-      );
+        .append($("<label/>", { for: id }).text(label))
+        .append(
+            $("<div/>", { id: id, class: "dropdown default" }).dropdown({
+              list_pos: "left",
+              value: value,
+              options: options,
+            })
+        );
   },
 
   tab(tab) {
@@ -1779,9 +1779,9 @@ let bbcodeWindow = {
           bbcodeWindow.controlActionsPlayer();
         } else {
           $("#bbcodeContent").append(
-            `<p><b style="margin-left:15px">${
-              language[language.settingActiveLanguage].noDataAvailable
-            }</b></p>`
+              `<p><b style="margin-left:15px">${
+                  language[language.settingActiveLanguage].noDataAvailable
+              }</b></p>`
           );
         }
         break;
@@ -1790,9 +1790,9 @@ let bbcodeWindow = {
           bbcodeWindow.createContent(1);
         } else {
           $("#bbcodeContent").append(
-            `<p><b style="margin-left:15px">${
-              language[language.settingActiveLanguage].noDataAvailable
-            }</b></p>`
+              `<p><b style="margin-left:15px">${
+                  language[language.settingActiveLanguage].noDataAvailable
+              }</b></p>`
           );
         }
         break;
@@ -1801,9 +1801,9 @@ let bbcodeWindow = {
           bbcodeWindow.createContent(2);
         } else {
           $("#bbcodeContent").append(
-            `<p><b style="margin-left:15px">${
-              language[language.settingActiveLanguage].noDataAvailable
-            }</b></p>`
+              `<p><b style="margin-left:15px">${
+                  language[language.settingActiveLanguage].noDataAvailable
+              }</b></p>`
           );
         }
         break;
@@ -1818,20 +1818,20 @@ let bbcodeWindow = {
           {
             sectionId: "bbcodePastePlayerSettings",
             gameHeaderText: `${
-              language[language.settingActiveLanguage].playerDataAvailable
+                language[language.settingActiveLanguage].playerDataAvailable
             } ${bbcodeCopyPlayer.data.get(0).playerName} | ${
-              bbcodeCopyPlayer.data.size - 1
+                bbcodeCopyPlayer.data.size - 1
             } ${
-              bbcodeCopyPlayer.data.size - 1 > 1
-                ? language[language.settingActiveLanguage].towns
-                : language[language.settingActiveLanguage].town
+                bbcodeCopyPlayer.data.size - 1 > 1
+                    ? language[language.settingActiveLanguage].towns
+                    : language[language.settingActiveLanguage].town
             }`,
             display: "block",
             options: [
               {
                 type: "infoText",
                 caption: `${
-                  language[language.settingActiveLanguage].showInfoAboveTable
+                    language[language.settingActiveLanguage].showInfoAboveTable
                 }`,
               },
               {
@@ -1851,7 +1851,7 @@ let bbcodeWindow = {
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].grepolisRank
+                    language[language.settingActiveLanguage].grepolisRank
                 }`,
                 id: "bbcodePlayerShowGrepolisRank",
                 setting: bbcodePastePlayer.getSettingValue("showGrepolisRank"),
@@ -1860,50 +1860,50 @@ let bbcodeWindow = {
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].grepolisScore
+                    language[language.settingActiveLanguage].grepolisScore
                 }`,
                 id: "bbcodePlayerShowPlayerGrepolisScore",
                 setting: bbcodePastePlayer.getSettingValue(
-                  "showPlayerGrepolisScore"
+                    "showPlayerGrepolisScore"
                 ),
                 functionToCall: bbcodePastePlayer.setShowPlayerGrepolisScore,
               },
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].battlePoints
+                    language[language.settingActiveLanguage].battlePoints
                 }`,
                 id: "bbcodePlayerShowPlayerBattlePoints",
                 setting: bbcodePastePlayer.getSettingValue(
-                  "showPlayerBattlePoints"
+                    "showPlayerBattlePoints"
                 ),
                 functionToCall: bbcodePastePlayer.setShowPlayerBattlePoints,
               },
               {
                 type: "infoText",
                 caption: `${
-                  language[language.settingActiveLanguage].showInfoInTable
+                    language[language.settingActiveLanguage].showInfoInTable
                 }`,
               },
               {
                 type: "infoTextSmall",
                 caption: `${
-                  language[language.settingActiveLanguage].cityRequired
+                    language[language.settingActiveLanguage].cityRequired
                 }`,
               },
               {
                 type: "dropDown",
                 caption: `${
-                  language[language.settingActiveLanguage].selectPage
+                    language[language.settingActiveLanguage].selectPage
                 } `,
                 id: "bbcodePlayerPage",
                 setting: bbcodePastePlayer.tablePage,
                 options: bbcodeWindow.selectPageOptions(),
                 display:
-                  bbcodeCopyPlayer.data.size - 1 >
-                  bbcodePastePlayer.tableMaxRows
-                    ? true
-                    : false,
+                    bbcodeCopyPlayer.data.size - 1 >
+                    bbcodePastePlayer.tableMaxRows
+                        ? true
+                        : false,
               },
               {
                 type: "checkBox",
@@ -1929,7 +1929,7 @@ let bbcodeWindow = {
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].islandNumber
+                    language[language.settingActiveLanguage].islandNumber
                 }`,
                 id: "bbcodePlayerShowIslandNumber",
                 setting: bbcodePastePlayer.getSettingValue("showIslandNumber"),
@@ -1938,7 +1938,7 @@ let bbcodeWindow = {
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].islandTag
+                    language[language.settingActiveLanguage].islandTag
                 }`,
                 id: "bbcodePlayerShowIslandTag",
                 setting: bbcodePastePlayer.getSettingValue("showIslandTag"),
@@ -1947,7 +1947,7 @@ let bbcodeWindow = {
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].emptyColumn
+                    language[language.settingActiveLanguage].emptyColumn
                 }`,
                 id: "bbcodePlayershowEmptyColumn",
                 setting: bbcodePastePlayer.getSettingValue("showEmptyColumn"),
@@ -1969,26 +1969,26 @@ let bbcodeWindow = {
           {
             sectionId: "bbcodePasteIslandSettings",
             gameHeaderText: `${
-              language[language.settingActiveLanguage].islandDataAvailable
+                language[language.settingActiveLanguage].islandDataAvailable
             } ${bbcodeCopyIsland.data.get(0).islandNumber} | ${
-              bbcodeCopyIsland.data.size - 1
+                bbcodeCopyIsland.data.size - 1
             } ${
-              bbcodeCopyIsland.data.size - 1 > 1
-                ? language[language.settingActiveLanguage].towns
-                : language[language.settingActiveLanguage].town
+                bbcodeCopyIsland.data.size - 1 > 1
+                    ? language[language.settingActiveLanguage].towns
+                    : language[language.settingActiveLanguage].town
             }`,
             display: "block",
             options: [
               {
                 type: "infoText",
                 caption: `${
-                  language[language.settingActiveLanguage].showInfoAboveTable
+                    language[language.settingActiveLanguage].showInfoAboveTable
                 }`,
               },
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].islandNumber
+                    language[language.settingActiveLanguage].islandNumber
                 }`,
                 id: "bbcodeIslandShowIslandNumber",
                 setting: bbcodePasteIsland.getSettingValue("showIslandNumber"),
@@ -1997,7 +1997,7 @@ let bbcodeWindow = {
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].islandTag
+                    language[language.settingActiveLanguage].islandTag
                 }`,
                 id: "bbcodeIslandShowIslandTag",
                 setting: bbcodePasteIsland.getSettingValue("showIslandTag"),
@@ -2006,22 +2006,22 @@ let bbcodeWindow = {
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].islandOccupation
+                    language[language.settingActiveLanguage].islandOccupation
                 }`,
                 id: "bbcodeIslandShowIslandOccupation",
                 setting: bbcodePasteIsland.getSettingValue(
-                  "showIslandOccupation"
+                    "showIslandOccupation"
                 ),
                 functionToCall: bbcodePasteIsland.setShowIslandOccupation,
               },
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].resources
+                    language[language.settingActiveLanguage].resources
                 }`,
                 id: "bbcodeIslandShowIslandResources",
                 setting: bbcodePasteIsland.getSettingValue(
-                  "showIslandResources"
+                    "showIslandResources"
                 ),
                 functionToCall: bbcodePasteIsland.setShowIslandResources,
               },
@@ -2035,24 +2035,24 @@ let bbcodeWindow = {
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].coordinates
+                    language[language.settingActiveLanguage].coordinates
                 }`,
                 id: "bbcodeIslandShowIslandCoordinates",
                 setting: bbcodePasteIsland.getSettingValue(
-                  "showIslandCoordinates"
+                    "showIslandCoordinates"
                 ),
                 functionToCall: bbcodePasteIsland.setShowIslandCoordinates,
               },
               {
                 type: "infoText",
                 caption: `${
-                  language[language.settingActiveLanguage].showInfoInTable
+                    language[language.settingActiveLanguage].showInfoInTable
                 }`,
               },
               {
                 type: "infoTextSmall",
                 caption: `${
-                  language[language.settingActiveLanguage].cityRequired
+                    language[language.settingActiveLanguage].cityRequired
                 }`,
               },
               {
@@ -2086,7 +2086,7 @@ let bbcodeWindow = {
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].emptyColumn
+                    language[language.settingActiveLanguage].emptyColumn
                 }`,
                 id: "bbcodeIslandshowEmptyColumn",
                 setting: bbcodePasteIsland.getSettingValue("showEmptyColumn"),
@@ -2108,20 +2108,20 @@ let bbcodeWindow = {
           {
             sectionId: "bbcodePasteAllianceSettings",
             gameHeaderText: `${
-              language[language.settingActiveLanguage].allianceDataAvailable
+                language[language.settingActiveLanguage].allianceDataAvailable
             } ${bbcodeCopyAlliance.data.get(0).allianceName} | ${
-              bbcodeCopyAlliance.data.size - 1
+                bbcodeCopyAlliance.data.size - 1
             } ${
-              bbcodeCopyAlliance.data.size - 1 > 1
-                ? language[language.settingActiveLanguage].members
-                : language[language.settingActiveLanguage].member
+                bbcodeCopyAlliance.data.size - 1 > 1
+                    ? language[language.settingActiveLanguage].members
+                    : language[language.settingActiveLanguage].member
             }`,
             display: "block",
             options: [
               {
                 type: "infoText",
                 caption: `${
-                  language[language.settingActiveLanguage].showInfoAboveTable
+                    language[language.settingActiveLanguage].showInfoAboveTable
                 }`,
               },
               {
@@ -2129,51 +2129,51 @@ let bbcodeWindow = {
                 caption: `${language[language.settingActiveLanguage].alliance}`,
                 id: "bbcodeAllianceShowAllianceName",
                 setting:
-                  bbcodePasteAlliance.getSettingValue("showAllianceName"),
+                    bbcodePasteAlliance.getSettingValue("showAllianceName"),
                 functionToCall: bbcodePasteAlliance.setShowAllianceName,
               },
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].allianceNumberPlayers
+                    language[language.settingActiveLanguage].allianceNumberPlayers
                 }`,
                 id: "bbcodeAllianceShowAllianceNumberPlayers",
                 setting: bbcodePasteAlliance.getSettingValue(
-                  "showAllianceNumberPlayers"
+                    "showAllianceNumberPlayers"
                 ),
                 functionToCall:
-                  bbcodePasteAlliance.setShowAllianceNumberPlayers,
+                bbcodePasteAlliance.setShowAllianceNumberPlayers,
               },
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].alliancePoints
+                    language[language.settingActiveLanguage].alliancePoints
                 }`,
                 id: "bbcodeAllianceShowAlliancePoints",
                 setting:
-                  bbcodePasteAlliance.getSettingValue("showAlliancePoints"),
+                    bbcodePasteAlliance.getSettingValue("showAlliancePoints"),
                 functionToCall: bbcodePasteAlliance.setShowAlliancePoints,
               },
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].allianceRank
+                    language[language.settingActiveLanguage].allianceRank
                 }`,
                 id: "bbcodeAllianceShowAllianceRank",
                 setting:
-                  bbcodePasteAlliance.getSettingValue("showAllianceRank"),
+                    bbcodePasteAlliance.getSettingValue("showAllianceRank"),
                 functionToCall: bbcodePasteAlliance.setShowAllianceRank,
               },
               {
                 type: "infoText",
                 caption: `${
-                  language[language.settingActiveLanguage].showInfoInTable
+                    language[language.settingActiveLanguage].showInfoInTable
                 }`,
               },
               {
                 type: "infoTextSmall",
                 caption: `${
-                  language[language.settingActiveLanguage].playerRequired
+                    language[language.settingActiveLanguage].playerRequired
                 }`,
               },
               {
@@ -2188,7 +2188,7 @@ let bbcodeWindow = {
                 caption: `${language[language.settingActiveLanguage].points}`,
                 id: "bbcodeAllianceshowPoints",
                 setting:
-                  bbcodePasteAlliance.getSettingValue("showPlayerPoints"),
+                    bbcodePasteAlliance.getSettingValue("showPlayerPoints"),
                 functionToCall: bbcodePasteAlliance.setShowPlayerPoints,
               },
               {
@@ -2201,7 +2201,7 @@ let bbcodeWindow = {
               {
                 type: "checkBox",
                 caption: `${
-                  language[language.settingActiveLanguage].emptyColumn
+                    language[language.settingActiveLanguage].emptyColumn
                 }`,
                 id: "bbcodeAllianceshowEmptyColumn",
                 setting: bbcodePasteAlliance.getSettingValue("showEmptyColumn"),
@@ -2245,9 +2245,9 @@ let bbcodeWindow = {
             break;
           case "checkBox":
             optionDiv = this.createCheckbox(
-              option.id,
-              option.caption,
-              option.setting
+                option.id,
+                option.caption,
+                option.setting
             );
             optionDiv.click(function () {
               option.setting = bbcodeWindow.toggleCheckbox($(this));
@@ -2257,19 +2257,19 @@ let bbcodeWindow = {
           case "dropDown":
             if (option.display != false) {
               optionDiv = bbcodeWindow.createDropdown(
-                option.id,
-                option.caption,
-                option.setting,
-                option.options
+                  option.id,
+                  option.caption,
+                  option.setting,
+                  option.options
               );
             }
             break;
           case "button":
             optionDiv = this.createButton(
-              option.id,
-              option.caption,
-              option.disabled,
-              option.functionToCall
+                option.id,
+                option.caption,
+                option.disabled,
+                option.functionToCall
             );
             break;
         }
@@ -2299,16 +2299,16 @@ let bbcodeWindow = {
   selectPageOptions() {
     let dropdownOptions = [];
     const maxPage = Math.ceil(
-      (bbcodeCopyPlayer.data.size - 1) / bbcodePastePlayer.tableMaxRows
+        (bbcodeCopyPlayer.data.size - 1) / bbcodePastePlayer.tableMaxRows
     );
     for (let i = 1; i <= maxPage; i++) {
       dropdownOptions.push({
         value: i,
         name: ` ${
-          language[language.settingActiveLanguage].page
+            language[language.settingActiveLanguage].page
         } ${i} ${language[
-          language.settingActiveLanguage
-        ].of.toLowerCase()} ${maxPage} `,
+            language.settingActiveLanguage
+            ].of.toLowerCase()} ${maxPage} `,
       });
     }
 
@@ -2321,127 +2321,127 @@ let bbcodeWindow = {
     var _IdS = id;
     var _windows = require("game/windows/ids");
     (_windows[_IdS.toUpperCase()] = _IdS),
-      (function () {
-        var a = uw.GameControllers.TabController,
-          b = uw.GameModels.Progressable,
-          _content = $("<div/>", { id: "#bbcodePasteSettings" }),
-          c = a.extend({
-            initialize: function (b) {
-              a.prototype.initialize.apply(this, arguments);
-              var _wnd = this.getWindowModel(),
-                _$el = this.$el;
-              bbcodeWindow.windowId = _wnd;
-              this.$el.html(_content);
-              _wnd.hideLoading();
-              if (!_wnd.getJQElement) {
-                _wnd.getJQElement = function () {
-                  return _content;
-                };
-              }
-              if (!_wnd.appendContent) {
-                _wnd.appendContent = function (a) {
-                  return _content.append(a);
-                };
-              }
-              if (!_wnd.setContent2) {
-                _wnd.setContent2 = function (a) {
-                  return _content.html(a);
-                };
-              }
-              this.bindEventListeners();
-            },
-            render: function () {
-              this.reRender();
-            },
-            reRender: function () {
-              var _wnd = this.getWindowModel(),
-                _$el = this.$el;
+        (function () {
+          var a = uw.GameControllers.TabController,
+              b = uw.GameModels.Progressable,
+              _content = $("<div/>", { id: "#bbcodePasteSettings" }),
+              c = a.extend({
+                initialize: function (b) {
+                  a.prototype.initialize.apply(this, arguments);
+                  var _wnd = this.getWindowModel(),
+                      _$el = this.$el;
+                  bbcodeWindow.windowId = _wnd;
+                  this.$el.html(_content);
+                  _wnd.hideLoading();
+                  if (!_wnd.getJQElement) {
+                    _wnd.getJQElement = function () {
+                      return _content;
+                    };
+                  }
+                  if (!_wnd.appendContent) {
+                    _wnd.appendContent = function (a) {
+                      return _content.append(a);
+                    };
+                  }
+                  if (!_wnd.setContent2) {
+                    _wnd.setContent2 = function (a) {
+                      return _content.html(a);
+                    };
+                  }
+                  this.bindEventListeners();
+                },
+                render: function () {
+                  this.reRender();
+                },
+                reRender: function () {
+                  var _wnd = this.getWindowModel(),
+                      _$el = this.$el;
 
-              this.getWindowModel().setTitle(
-                `<img src="https://www.grepotools.nl/grepotools/images/logoStable.png" width="15" height="15"> 
+                  this.getWindowModel().setTitle(
+                      `<img src="https://www.grepotools.nl/grepotools/images/logoStable.png" width="15" height="15"> 
                 ${language[language.settingActiveLanguage].bbcodeWindowTitle}`
-              ),
-                this.getWindowModel().showLoading();
-              setTimeout(function () {
-                _wnd.setContent2('<div id="bbcodeContent"></div>'),
-                  bbcodeWindow.tab(_wnd.getActivePageNr());
+                  ),
+                      this.getWindowModel().showLoading();
+                  setTimeout(function () {
+                    _wnd.setContent2('<div id="bbcodeContent"></div>'),
+                        bbcodeWindow.tab(_wnd.getActivePageNr());
 
-                _wnd.hideLoading();
+                    _wnd.hideLoading();
 
-                _$el.find(".js-scrollbar-viewport").skinableScrollbar({
-                  orientation: "vertical",
-                  template: "tpl_skinable_scrollbar",
-                  skin: "narrow",
-                  disabled: !1,
-                  elements_to_scroll: _$el.find(".js-scrollbar-content"),
-                  element_viewport: _$el.find(".js-scrollbar-viewport"),
-                  scroll_position: 0,
-                  min_slider_size: 16,
-                });
-              }, 100);
-            },
-            bindEventListeners: function () {
-              this.$el
-                .parents("." + _IdS)
-                .on(
-                  "click",
-                  ".js-wnd-buttons .help",
-                  this._handleHelpButtonClickEvent.bind(this)
-                );
-            },
-            _handleHelpButtonClickEvent: function () {
-              var a = this.getWindowModel().getHelpButtonSettings();
-            },
-          });
-        uw.GameViews["grepotools_" + _IdS] = c;
-      })(),
-      (function () {
-        "use strict";
-        var a = uw.GameViews,
-          b = uw.GameCollections,
-          c = uw.GameModels,
-          d = uw.WindowFactorySettings,
-          e = require("game/windows/ids"),
-          f = require("game/windows/tabs"),
-          g = e[_IdS.toUpperCase()];
-        d[g] = function (b) {
-          b = b || {};
-          return us.extend(
-            {
-              window_type: g,
-              minheight: 520,
-              maxheight: 530,
-              width: 622,
-              tabs: [
-                {
-                  type: id,
-                  title: `${language[language.settingActiveLanguage].player}`,
-                  content_view_constructor: a["grepotools_" + _IdS],
-                  hidden: 0,
-                  disabled: 0,
+                    _$el.find(".js-scrollbar-viewport").skinableScrollbar({
+                      orientation: "vertical",
+                      template: "tpl_skinable_scrollbar",
+                      skin: "narrow",
+                      disabled: !1,
+                      elements_to_scroll: _$el.find(".js-scrollbar-content"),
+                      element_viewport: _$el.find(".js-scrollbar-viewport"),
+                      scroll_position: 0,
+                      min_slider_size: 16,
+                    });
+                  }, 100);
                 },
-                {
-                  type: id,
-                  title: `${language[language.settingActiveLanguage].island}`,
-                  content_view_constructor: a["grepotools_" + _IdS],
-                  hidden: 0,
-                  disabled: 0,
+                bindEventListeners: function () {
+                  this.$el
+                      .parents("." + _IdS)
+                      .on(
+                          "click",
+                          ".js-wnd-buttons .help",
+                          this._handleHelpButtonClickEvent.bind(this)
+                      );
                 },
-                {
-                  type: id,
-                  title: `${language[language.settingActiveLanguage].alliance}`,
-                  content_view_constructor: a["grepotools_" + _IdS],
-                  hidden: 0,
-                  disabled: 0,
+                _handleHelpButtonClickEvent: function () {
+                  var a = this.getWindowModel().getHelpButtonSettings();
                 },
-              ],
-              max_instances: 1,
-              activepagenr: 0,
-            },
-            b
-          );
-        };
-      })();
+              });
+          uw.GameViews["grepotools_" + _IdS] = c;
+        })(),
+        (function () {
+          "use strict";
+          var a = uw.GameViews,
+              b = uw.GameCollections,
+              c = uw.GameModels,
+              d = uw.WindowFactorySettings,
+              e = require("game/windows/ids"),
+              f = require("game/windows/tabs"),
+              g = e[_IdS.toUpperCase()];
+          d[g] = function (b) {
+            b = b || {};
+            return us.extend(
+                {
+                  window_type: g,
+                  minheight: 520,
+                  maxheight: 530,
+                  width: 622,
+                  tabs: [
+                    {
+                      type: id,
+                      title: `${language[language.settingActiveLanguage].player}`,
+                      content_view_constructor: a["grepotools_" + _IdS],
+                      hidden: 0,
+                      disabled: 0,
+                    },
+                    {
+                      type: id,
+                      title: `${language[language.settingActiveLanguage].island}`,
+                      content_view_constructor: a["grepotools_" + _IdS],
+                      hidden: 0,
+                      disabled: 0,
+                    },
+                    {
+                      type: id,
+                      title: `${language[language.settingActiveLanguage].alliance}`,
+                      content_view_constructor: a["grepotools_" + _IdS],
+                      hidden: 0,
+                      disabled: 0,
+                    },
+                  ],
+                  max_instances: 1,
+                  activepagenr: 0,
+                },
+                b
+            );
+          };
+        })();
   },
 };
 
@@ -2475,16 +2475,16 @@ let coordinates = {
     if (!this.rendered) {
       if (!$(`#${this.islandViewDivX}`).length) {
         $(`<div id='${this.islandViewDivX}'></div>`).insertAfter(
-          "#map_movements"
+            "#map_movements"
         );
       }
       if (!$(`#${this.islandViewDivY}`).length) {
         $(`<div id='${this.islandViewDivY}'></div>`).insertAfter(
-          "#map_movements"
+            "#map_movements"
         );
       }
       coordinates.setVisibilityIslandView(
-        coordinates.getSettingValue("visibleIslandView")
+          coordinates.getSettingValue("visibleIslandView")
       );
     }
   },
@@ -2578,11 +2578,11 @@ let coordinates = {
         `;
 
       const styles = Game.ui_scale.enlarged_ui_size
-        ? enlargedUiStyles
-        : defaultUiStyles;
+          ? enlargedUiStyles
+          : defaultUiStyles;
 
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(commonStyles + styles)
+          $(`<style id="${this.styleDiv}">`).append(commonStyles + styles)
       );
 
       this.rendered = true;
@@ -2593,8 +2593,8 @@ let coordinates = {
     this.settingsKeys.forEach((setting) => {
       const { key, default: defaultValue } = setting;
       const value = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
       setting.value = value;
     });
@@ -2607,7 +2607,7 @@ let coordinates = {
 
   setSettingValue(settingKey, value) {
     const setting = coordinates.settingsKeys.find(
-      ({ key }) => key === settingKey
+        ({ key }) => key === settingKey
     );
     setting.value = value;
 
@@ -2647,13 +2647,13 @@ let coordinates = {
 
     for (let x = 0; x <= windowWidth; x++) {
       htmlX += `<div class='IslandViewTextblockX'><span class='IslandViewTextblockX'>X: ${
-        startX + x
+          startX + x
       }</span></div>`;
     }
 
     for (let y = 0; y <= windowHeight; y++) {
       htmlY += `<div class='IslandViewTextblockY'><span class='IslandViewTextblockY'>Y: ${
-        startY + y
+          startY + y
       }</span></div>`;
     }
 
@@ -2707,19 +2707,19 @@ let coordinatesGrid = {
     if (!this.rendered) {
       if (!$(`#${this.strategicMapDiv}`).length) {
         $(`<div id='${this.strategicMapDiv}'></div>`).insertAfter(
-          "#minimap_islands_layer"
+            "#minimap_islands_layer"
         );
       }
 
       coordinatesGrid.setVisibilityStrategicMap(
-        coordinatesGrid.getSettingValue("visibleStrategicMap")
+          coordinatesGrid.getSettingValue("visibleStrategicMap")
       );
 
       if (!$(`#${this.islandViewDiv}`).length) {
         $(`<div id='${this.islandViewDiv}'></div>`).insertAfter("#map_islands");
       }
       coordinatesGrid.setVisibilityIslandView(
-        coordinatesGrid.getSettingValue("visibleIslandView")
+          coordinatesGrid.getSettingValue("visibleIslandView")
       );
     }
   },
@@ -2727,7 +2727,7 @@ let coordinatesGrid = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           .coordinatesBorderRight {
             border-right-width: 1px;
             border-right-style: dotted;
@@ -2759,8 +2759,8 @@ let coordinatesGrid = {
     this.settingsKeys.forEach((setting) => {
       const { key, default: defaultValue } = setting;
       const value = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
       setting.value = value;
     });
@@ -2773,13 +2773,13 @@ let coordinatesGrid = {
 
   setSettingValue(settingKey, value) {
     const setting = coordinatesGrid.settingsKeys.find(
-      ({ key }) => key === settingKey
+        ({ key }) => key === settingKey
     );
     setting.value = value;
 
     settings.safeSetting(
-      `${Game.world_id}|coordinatesGrid.${settingKey}`,
-      value
+        `${Game.world_id}|coordinatesGrid.${settingKey}`,
+        value
     );
   },
 
@@ -2797,7 +2797,7 @@ let coordinatesGrid = {
         this.activeDiv = this.strategicMapDiv;
 
         this.gridToDraw = ocean.visibleOceans.filter(
-          (value) => !this.gridVisibleStrategicMap.includes(value)
+            (value) => !this.gridVisibleStrategicMap.includes(value)
         );
         this.gridToDraw.forEach((ocean) => {
           if (ocean >= 0 && ocean <= 99) {
@@ -2811,7 +2811,7 @@ let coordinatesGrid = {
         this.activeDiv = this.islandViewDiv;
 
         this.gridToDraw = ocean.visibleOceans.filter(
-          (value) => !this.gridVisibleIslandView.includes(value)
+            (value) => !this.gridVisibleIslandView.includes(value)
         );
         this.gridToDraw.forEach((ocean) => {
           if (ocean >= 0 && ocean <= 99) {
@@ -2840,10 +2840,10 @@ let coordinatesGrid = {
       coordinatesGrid.setSettingValue("gridColor", color.split(" ").join(""));
     }
     $(
-      ".coordinatesBorderBottom, .coordinatesBorderRight, .coordinatesBorder"
+        ".coordinatesBorderBottom, .coordinatesBorderRight, .coordinatesBorder"
     ).css(
-      "border-color",
-      settings.colors[coordinatesGrid.getSettingValue("gridColor")]
+        "border-color",
+        settings.colors[coordinatesGrid.getSettingValue("gridColor")]
     );
   },
 
@@ -2975,26 +2975,26 @@ let islandNumbers = {
       this.databaseCheck();
       this.initializeIslandNumbersOffset();
       islandNumbers.loadDataInterval = setInterval(
-        islandNumbers.databaseCheck,
-        5000
+          islandNumbers.databaseCheck,
+          5000
       );
     }
   },
 
   initializeIslandNumbersOffset() {
     this.islandNumbersOffset = new Map(
-      this.islandData.map(
-        ([id, type, offsetXSK, offsetYSK, offsetXEO, offsetYEO]) => [
-          id,
-          this.createIslandData(
-            type,
-            offsetXSK,
-            offsetYSK,
-            offsetXEO,
-            offsetYEO
-          ),
-        ]
-      )
+        this.islandData.map(
+            ([id, type, offsetXSK, offsetYSK, offsetXEO, offsetYEO]) => [
+              id,
+              this.createIslandData(
+                  type,
+                  offsetXSK,
+                  offsetYSK,
+                  offsetXEO,
+                  offsetYEO
+              ),
+            ]
+        )
     );
   },
 
@@ -3012,38 +3012,38 @@ let islandNumbers = {
     if (!this.rendered) {
       if (!$(`#${this.strategicFarmingMapDiv}`).length) {
         $(`<div id='${this.strategicFarmingMapDiv}'></div>`).insertAfter(
-          "#minimap_islands_layer"
+            "#minimap_islands_layer"
         );
       }
       this.setVisibilityFarmingStrategicMap(
-        this.getSettingValue("visibleFarmingStrategicMap")
+          this.getSettingValue("visibleFarmingStrategicMap")
       );
 
       if (!$(`#${this.islandViewFarmingDiv}`).length) {
         $(`<div id='${this.islandViewFarmingDiv}'></div>`).insertAfter(
-          "#map_islands"
+            "#map_islands"
         );
       }
       this.setVisibilityFarmingIslandView(
-        this.getSettingValue("visibleFarmingIslandView")
+          this.getSettingValue("visibleFarmingIslandView")
       );
 
       if (!$(`#${this.strategicRockMapDiv}`).length) {
         $(`<div id='${this.strategicRockMapDiv}'></div>`).insertAfter(
-          "#minimap_islands_layer"
+            "#minimap_islands_layer"
         );
       }
       this.setVisibilityRockStrategicMap(
-        this.getSettingValue("visibleRockStrategicMap")
+          this.getSettingValue("visibleRockStrategicMap")
       );
 
       if (!$(`#${this.islandViewRockDiv}`).length) {
         $(`<div id='${this.islandViewRockDiv}'></div>`).insertAfter(
-          "#map_islands"
+            "#map_islands"
         );
       }
       this.setVisibilityRockIslandView(
-        this.getSettingValue("visibleRockIslandView")
+          this.getSettingValue("visibleRockIslandView")
       );
     }
   },
@@ -3051,7 +3051,7 @@ let islandNumbers = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
   .islandNumbersFarmingTextStrategicMap, .islandNumbersRockTextStrategicMap,
     .islandNumbersFarmingTextIslandView, .islandNumbersRockTextIslandView {
       position: absolute;
@@ -3101,8 +3101,8 @@ let islandNumbers = {
     this.settingsKeys.forEach((setting) => {
       const { key, default: defaultValue } = setting;
       const value = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
       setting.value = value;
     });
@@ -3115,7 +3115,7 @@ let islandNumbers = {
 
   setSettingValue(settingKey, value) {
     const setting = islandNumbers.settingsKeys.find(
-      ({ key }) => key === settingKey
+        ({ key }) => key === settingKey
     );
     setting.value = value;
 
@@ -3125,18 +3125,18 @@ let islandNumbers = {
   databaseCheck: async function () {
     try {
       const response = await fetch(
-        "https://www.grepotools.nl/grepotools/php/islandNumbers.php",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({
-            server: Game.world_id,
-            action: "CheckDB",
-            version: GM_info.script.version,
-          }),
-        }
+          "https://www.grepotools.nl/grepotools/php/islandNumbers.php",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              server: Game.world_id,
+              action: "CheckDB",
+              version: GM_info.script.version,
+            }),
+          }
       );
 
       if (!response.ok) {
@@ -3213,16 +3213,16 @@ let islandNumbers = {
     switch (Game.layout_mode) {
       case "strategic_map":
         islandsVisible = $("[id^=mini_i]")
-          .toArray()
-          .map((element) => element.id);
+            .toArray()
+            .map((element) => element.id);
         htmlFarming = "";
         htmlRock = "";
         text = "";
 
         for (let i = 0; i < islandsVisible.length; i++) {
           data = this.getCoordinatesFromID(
-            islandsVisible[i],
-            externalData.islandData
+              islandsVisible[i],
+              externalData.islandData
           );
           if (data) {
             soort = this.islandNumbersOffset.get(data.type.toString()).type;
@@ -3243,20 +3243,20 @@ let islandNumbers = {
 
         $(`#${this.strategicFarmingMapDiv}`).html(htmlFarming);
         $(".islandNumbersFarmingTextStrategicMap").css(
-          "color",
-          settings.colors[islandNumbers.getSettingValue("farmingTextColor")]
+            "color",
+            settings.colors[islandNumbers.getSettingValue("farmingTextColor")]
         );
 
         $(`#${this.strategicRockMapDiv}`).html(htmlRock);
         $(".islandNumbersRockTextStrategicMap").css(
-          "color",
-          settings.colors[islandNumbers.getSettingValue("rockTextColor")]
+            "color",
+            settings.colors[islandNumbers.getSettingValue("rockTextColor")]
         );
         break;
       case "island_view":
         islandsVisible = $("[id^=islandtile]")
-          .toArray()
-          .map((element) => element.id);
+            .toArray()
+            .map((element) => element.id);
 
         htmlFarming = "";
         htmlRock = "";
@@ -3264,8 +3264,8 @@ let islandNumbers = {
 
         for (let i = 0; i < islandsVisible.length; i++) {
           data = this.getCoordinatesFromID(
-            islandsVisible[i],
-            externalData.islandData
+              islandsVisible[i],
+              externalData.islandData
           );
           if (data) {
             soort = this.islandNumbersOffset.get(data.type.toString()).type;
@@ -3286,14 +3286,14 @@ let islandNumbers = {
 
         $(`#${this.islandViewFarmingDiv}`).html(htmlFarming);
         $(".islandNumbersFarmingTextIslandView").css(
-          "color",
-          settings.colors[islandNumbers.getSettingValue("farmingTextColor")]
+            "color",
+            settings.colors[islandNumbers.getSettingValue("farmingTextColor")]
         );
 
         $(`#${this.islandViewRockDiv}`).html(htmlRock);
         $(".islandNumbersRockTextIslandView").css(
-          "color",
-          settings.colors[islandNumbers.getSettingValue("rockTextColor")]
+            "color",
+            settings.colors[islandNumbers.getSettingValue("rockTextColor")]
         );
         break;
     }
@@ -3301,80 +3301,80 @@ let islandNumbers = {
 
   draw(data) {
     let valueX,
-      valueY,
-      className,
-      linkTag,
-      text = "";
+        valueY,
+        className,
+        linkTag,
+        text = "";
 
     switch (Game.layout_mode) {
       case "strategic_map":
         valueX =
-          data.x * 25.6 +
-          this.islandNumbersOffset.get(data.type.toString()).offsetXSK;
+            data.x * 25.6 +
+            this.islandNumbersOffset.get(data.type.toString()).offsetXSK;
         valueY =
-          data.y * 25.6 +
-          this.islandNumbersOffset.get(data.type.toString()).offsetYSK;
+            data.y * 25.6 +
+            this.islandNumbersOffset.get(data.type.toString()).offsetYSK;
         if (data.x % 2 !== 0) valueY += 12.8;
 
         if (this.islandTypeToDraw === "farming") {
           if (this.getSettingValue("visibleFarmingStrategicMap")) {
             text = this.getSettingValue("visibleFarmingTagsStrategicMap")
-              ? `${data.id}<br>${data.tagData}`
-              : `${data.id}`;
+                ? `${data.id}<br>${data.tagData}`
+                : `${data.id}`;
           } else if (this.getSettingValue("visibleFarmingTagsStrategicMap")) {
             text = `${data.tagData}`;
           }
 
           className = this.getSettingValue("link")
-            ? "islandNumbersFarmingTextStrategicMap"
-            : "islandNumbersFarmingTextStrategicMap noLink";
+              ? "islandNumbersFarmingTextStrategicMap"
+              : "islandNumbersFarmingTextStrategicMap noLink";
           linkTag = this.getSettingValue("link")
-            ? `<a href="#${data.link}" class="${className}">${text}</a>`
-            : text;
+              ? `<a href="#${data.link}" class="${className}">${text}</a>`
+              : text;
         }
         if (this.islandTypeToDraw === "rock") {
           className = this.getSettingValue("link")
-            ? "islandNumbersRockTextStrategicMap"
-            : "islandNumbersRockTextStrategicMap noLink";
+              ? "islandNumbersRockTextStrategicMap"
+              : "islandNumbersRockTextStrategicMap noLink";
           linkTag = this.getSettingValue("link")
-            ? `<a href="#${data.link}" class="${className}">${data.id}</a>`
-            : data.id;
+              ? `<a href="#${data.link}" class="${className}">${data.id}</a>`
+              : data.id;
         }
         return `<div class="${className}" style="left:${valueX}px;top:${valueY}px">${linkTag}</div>`;
         break;
       case "island_view":
         valueX =
-          data.x * 128 +
-          this.islandNumbersOffset.get(data.type.toString()).offsetXEO;
+            data.x * 128 +
+            this.islandNumbersOffset.get(data.type.toString()).offsetXEO;
         valueY =
-          data.y * 128 +
-          this.islandNumbersOffset.get(data.type.toString()).offsetYEO;
+            data.y * 128 +
+            this.islandNumbersOffset.get(data.type.toString()).offsetYEO;
         data.x % 2 != 0 ? (valueY += 64) : "";
 
         if (this.islandTypeToDraw === "farming") {
           if (this.getSettingValue("visibleFarmingIslandView")) {
             text = this.getSettingValue("visibleFarmingTagsIslandView")
-              ? `${data.id}<br>${data.tagData}`
-              : `${data.id}`;
+                ? `${data.id}<br>${data.tagData}`
+                : `${data.id}`;
           } else if (this.getSettingValue("visibleFarmingTagsIslandView")) {
             text = `${data.tagData}`;
           }
 
           className = this.getSettingValue("link")
-            ? "islandNumbersFarmingTextIslandView"
-            : "islandNumbersFarmingTextIslandView noLink";
+              ? "islandNumbersFarmingTextIslandView"
+              : "islandNumbersFarmingTextIslandView noLink";
           linkTag = this.getSettingValue("link")
-            ? `<a href="#${data.link}" class="${className}">${text}</a>`
-            : text;
+              ? `<a href="#${data.link}" class="${className}">${text}</a>`
+              : text;
         }
 
         if (this.islandTypeToDraw === "rock") {
           className = this.getSettingValue("link")
-            ? "islandNumbersRockTextIslandView"
-            : "islandNumbersRockTextIslandView noLink";
+              ? "islandNumbersRockTextIslandView"
+              : "islandNumbersRockTextIslandView noLink";
           linkTag = this.getSettingValue("link")
-            ? `<a href="#${data.link}" class="${className}">${data.id}</a>`
-            : data.id;
+              ? `<a href="#${data.link}" class="${className}">${data.id}</a>`
+              : data.id;
         }
         return `<div class="${className}" style="left:${valueX}px;top:${valueY}px">${linkTag}</div>`;
         break;
@@ -3384,10 +3384,10 @@ let islandNumbers = {
   setVisibilityFarmingStrategicMap(value) {
     islandNumbers.setSettingValue("visibleFarmingStrategicMap", value);
     const displayValue =
-      !islandNumbers.getSettingValue("visibleFarmingStrategicMap") &&
-      !islandNumbers.getSettingValue("visibleFarmingTagsStrategicMap")
-        ? "none"
-        : "block";
+        !islandNumbers.getSettingValue("visibleFarmingStrategicMap") &&
+        !islandNumbers.getSettingValue("visibleFarmingTagsStrategicMap")
+            ? "none"
+            : "block";
     $("#" + islandNumbers.strategicFarmingMapDiv).css("display", displayValue);
 
     if (displayValue === "block") {
@@ -3398,10 +3398,10 @@ let islandNumbers = {
   setVisibilityFarmingTagsStrategicMap(value) {
     islandNumbers.setSettingValue("visibleFarmingTagsStrategicMap", value);
     const displayValue =
-      !islandNumbers.getSettingValue("visibleFarmingStrategicMap") &&
-      !islandNumbers.getSettingValue("visibleFarmingTagsStrategicMap")
-        ? "none"
-        : "block";
+        !islandNumbers.getSettingValue("visibleFarmingStrategicMap") &&
+        !islandNumbers.getSettingValue("visibleFarmingTagsStrategicMap")
+            ? "none"
+            : "block";
     $("#" + islandNumbers.strategicFarmingMapDiv).css("display", displayValue);
 
     if (displayValue === "block") {
@@ -3418,10 +3418,10 @@ let islandNumbers = {
   setVisibilityFarmingIslandView(value) {
     islandNumbers.setSettingValue("visibleFarmingIslandView", value);
     const displayValue =
-      !islandNumbers.getSettingValue("visibleFarmingIslandView") &&
-      !islandNumbers.getSettingValue("visibleFarmingTagsIslandView")
-        ? "none"
-        : "block";
+        !islandNumbers.getSettingValue("visibleFarmingIslandView") &&
+        !islandNumbers.getSettingValue("visibleFarmingTagsIslandView")
+            ? "none"
+            : "block";
     $("#" + islandNumbers.islandViewFarmingDiv).css("display", displayValue);
 
     if (displayValue === "block") {
@@ -3432,10 +3432,10 @@ let islandNumbers = {
   setVisibilityFarmingTagsIslandView(value) {
     islandNumbers.setSettingValue("visibleFarmingTagsIslandView", value);
     const displayValue =
-      !islandNumbers.getSettingValue("visibleFarmingIslandView") &&
-      !islandNumbers.getSettingValue("visibleFarmingTagsIslandView")
-        ? "none"
-        : "block";
+        !islandNumbers.getSettingValue("visibleFarmingIslandView") &&
+        !islandNumbers.getSettingValue("visibleFarmingTagsIslandView")
+            ? "none"
+            : "block";
     $("#" + islandNumbers.islandViewFarmingDiv).css("display", displayValue);
 
     if (displayValue === "block") {
@@ -3461,15 +3461,15 @@ let islandNumbers = {
   setFarmingTextColor(color) {
     if (color && color != islandNumbers.getSettingValue("farmingTextColor")) {
       islandNumbers.setSettingValue(
-        "farmingTextColor",
-        color.split(" ").join("")
+          "farmingTextColor",
+          color.split(" ").join("")
       );
     }
     $(
-      ".islandNumbersFarmingTextStrategicMap, .islandNumbersFarmingTextIslandView"
+        ".islandNumbersFarmingTextStrategicMap, .islandNumbersFarmingTextIslandView"
     ).css(
-      "color",
-      settings.colors[islandNumbers.getSettingValue("farmingTextColor")]
+        "color",
+        settings.colors[islandNumbers.getSettingValue("farmingTextColor")]
     );
   },
 
@@ -3478,10 +3478,10 @@ let islandNumbers = {
       islandNumbers.setSettingValue("rockTextColor", color.split(" ").join(""));
     }
     $(
-      ".islandNumbersRockTextStrategicMap, .islandNumbersRockTextIslandView"
+        ".islandNumbersRockTextStrategicMap, .islandNumbersRockTextIslandView"
     ).css(
-      "color",
-      settings.colors[islandNumbers.getSettingValue("rockTextColor")]
+        "color",
+        settings.colors[islandNumbers.getSettingValue("rockTextColor")]
     );
   },
 };
@@ -3516,7 +3516,7 @@ let mapTags = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           .tags {
               background-color: inherit;
               pointer-events: none;
@@ -3586,8 +3586,8 @@ let mapTags = {
     this.settingsKeys.forEach((setting) => {
       const { key, default: defaultValue } = setting;
       const value = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
       setting.value = value;
     });
@@ -3624,10 +3624,10 @@ let mapTags = {
     }
 
     mapTags.towns = $("[id^=town]")
-      .not("[id*=flag]")
-      .not("[id*=info-]")
-      .not("[id*=bbcode]")
-      .toArray();
+        .not("[id*=flag]")
+        .not("[id*=info-]")
+        .not("[id*=bbcode]")
+        .toArray();
 
     if (externalData.townDataLoaded) {
       for (let i = start; i < mapTags.towns.length; i++) {
@@ -3641,61 +3641,61 @@ let mapTags = {
               let allianceName;
 
               externalData.townData.get(townID.toString()).playerName != null
-                ? (playerName = decodeURIComponent(
-                    externalData.townData
-                      .get(townID.toString())
-                      .playerName.split("+")
-                      .join(" ")
+                  ? (playerName = decodeURIComponent(
+                      externalData.townData
+                          .get(townID.toString())
+                          .playerName.split("+")
+                          .join(" ")
                   ))
-                : (playerName = "");
+                  : (playerName = "");
 
               externalData.townData.get(townID.toString()).playerId != null
-                ? (tag_speler_id = externalData.townData.get(
-                    townID.toString()
+                  ? (tag_speler_id = externalData.townData.get(
+                      townID.toString()
                   ).playerId)
-                : (tag_speler_id = "");
+                  : (tag_speler_id = "");
 
               let townName = decodeURIComponent(
-                externalData.townData
-                  .get(townID.toString())
-                  .townName.split("+")
-                  .join(" ")
+                  externalData.townData
+                      .get(townID.toString())
+                      .townName.split("+")
+                      .join(" ")
               );
 
               externalData.townData.get(townID.toString()).allianceName != null
-                ? (allianceName = decodeURIComponent(
-                    externalData.townData
-                      .get(townID.toString())
-                      .allianceName.split("+")
-                      .join(" ")
+                  ? (allianceName = decodeURIComponent(
+                      externalData.townData
+                          .get(townID.toString())
+                          .allianceName.split("+")
+                          .join(" ")
                   ))
-                : (allianceName = "");
+                  : (allianceName = "");
 
               let townPoints = externalData.townData.get(
-                townID.toString()
+                  townID.toString()
               ).points;
               let windDirection = mapTags.getTownWindDirection(
-                mapTags.towns[i].className
+                  mapTags.towns[i].className
               );
               let idle = 0;
 
               if (externalData.idleDataLoaded) {
                 if (externalData.idleData.has(tag_speler_id.toString())) {
                   idle = externalData.idleData.get(
-                    tag_speler_id.toString()
+                      tag_speler_id.toString()
                   ).idle;
                 }
               }
 
               if (!document.getElementById("gt_" + townID.toString())) {
                 this.draw(
-                  townID,
-                  playerName,
-                  townName,
-                  townPoints,
-                  allianceName,
-                  windDirection,
-                  idle
+                    townID,
+                    playerName,
+                    townName,
+                    townPoints,
+                    allianceName,
+                    windDirection,
+                    idle
                 );
               }
             }
@@ -3715,13 +3715,13 @@ let mapTags = {
   },
 
   draw(
-    townID,
-    playerName,
-    townName,
-    townPoints,
-    allianceName,
-    windDirection,
-    idle
+      townID,
+      playerName,
+      townName,
+      townPoints,
+      allianceName,
+      windDirection,
+      idle
   ) {
     let tagText = "";
     let lines = 0;
@@ -3749,7 +3749,7 @@ let mapTags = {
 
     if (this.getSettingValue("settingTownPoints")) {
       const puntenTekst = `${townPoints} ${
-        language[language.settingActiveLanguage].points
+          language[language.settingActiveLanguage].points
       }`;
       tagText = tagText ? `${tagText}<br>${puntenTekst}` : puntenTekst;
     }
@@ -3759,7 +3759,7 @@ let mapTags = {
       const townFlag = $(`#town_flag_${townID}`);
       townFlag.empty();
       townFlag.append(
-        `<div id="gt_${townID}" class="tags ${windDirection} ${linesCss}">${tagText}</div>`
+          `<div id="gt_${townID}" class="tags ${windDirection} ${linesCss}">${tagText}</div>`
       );
       if (this.getSettingValue("settingNoWrap")) {
         $(`#gt_${townID}`).addClass("nowrap");
@@ -3788,7 +3788,7 @@ let mapTags = {
       }
 
       $("#town_flag_" + townID).append(
-        `<div class="inactive_${windDirection} nowrap ${idleClass}">${idleText}</div>`
+          `<div class="inactive_${windDirection} nowrap ${idleClass}">${idleText}</div>`
       );
     }
   },
@@ -3864,7 +3864,7 @@ let messageAlliance = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           .buttonLogo {
             margin-right:10px;
             width:20px;
@@ -3890,9 +3890,9 @@ let messageAlliance = {
 
   animate() {
     if (
-      !this.rendered ||
-      !$("#ally_towns").length ||
-      $(".messageAllianceButton").length
+        !this.rendered ||
+        !$("#ally_towns").length ||
+        $(".messageAllianceButton").length
     ) {
       return;
     }
@@ -3903,20 +3903,20 @@ let messageAlliance = {
     this.hideMoleholeMessageButton();
 
     $("#ally_towns > div > div.game_header.bold").append(
-      $("<div/>", {
-        id: "messageAllianceButton",
-        class: "button_new messageAllianceButton",
-      }).button({
-        caption: `
+        $("<div/>", {
+          id: "messageAllianceButton",
+          class: "button_new messageAllianceButton",
+        }).button({
+          caption: `
           <img class="buttonLogo" src="https://www.grepotools.nl/grepotools/images/logoStable.png">
           <span class="buttonText">${
-            language[language.settingActiveLanguage].message
+              language[language.settingActiveLanguage].message
           }</span>`,
-      })
+        })
     );
 
     $(".messageAllianceButton").tooltip(
-      `${language[language.settingActiveLanguage].sendMessageAlliance}`
+        `${language[language.settingActiveLanguage].sendMessageAlliance}`
     );
 
     $(".messageAllianceButton").click(() => {
@@ -3925,15 +3925,15 @@ let messageAlliance = {
 
         const allianceMembers = $(".members_list li:eq(1) ul li.even");
         const messageTo = allianceMembers
-          .map((index, element) => {
-            const playerName = $(element)
-              .find("a.gp_player_link")
-              .attr("title");
-            return playerName !== uw.Game.player_name ? playerName : null;
-          })
-          .get()
-          .filter(Boolean)
-          .join(";");
+            .map((index, element) => {
+              const playerName = $(element)
+                  .find("a.gp_player_link")
+                  .attr("title");
+              return playerName !== uw.Game.player_name ? playerName : null;
+            })
+            .get()
+            .filter(Boolean)
+            .join(";");
 
         uw.Layout.newMessage.open({ recipients: messageTo });
 
@@ -3946,8 +3946,8 @@ let messageAlliance = {
 
   hideDiotoolsMessageButton() {
     if (
-      otherScripts.diotoolsActive &&
-      otherScripts.getSettingValue("diotoolsMessageButton")
+        otherScripts.diotoolsActive &&
+        otherScripts.getSettingValue("diotoolsMessageButton")
     ) {
       $("#dio_ally_mass_mail").hide();
     }
@@ -3955,8 +3955,8 @@ let messageAlliance = {
 
   hideGrcrtMessageButton() {
     if (
-      otherScripts.grcrtActive &&
-      otherScripts.getSettingValue("grcrtMessageButton")
+        otherScripts.grcrtActive &&
+        otherScripts.getSettingValue("grcrtMessageButton")
     ) {
       $("#grcrt_ally_mass_mail").hide();
     }
@@ -3964,8 +3964,8 @@ let messageAlliance = {
 
   hideMoleholeMessageButton() {
     if (
-      otherScripts.moleholeActive &&
-      otherScripts.getSettingValue("diotoolsMessageButton")
+        otherScripts.moleholeActive &&
+        otherScripts.getSettingValue("diotoolsMessageButton")
     ) {
       document.querySelectorAll(".write_message").forEach((element) => {
         element.style.display = "none";
@@ -3994,7 +3994,7 @@ let messageIsland = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           .buttonLogo {
             margin-right:10px;
             width:20px;
@@ -4034,20 +4034,20 @@ let messageIsland = {
 
   addButton(id) {
     $(`#${id} .island_info_left .game_header`).append(
-      $("<div/>", {
-        id: `messageIslandButton_${id}`,
-        class: "button_new",
-      }).button({
-        caption: `
+        $("<div/>", {
+          id: `messageIslandButton_${id}`,
+          class: "button_new",
+        }).button({
+          caption: `
             <img class="buttonLogo" src="https://www.grepotools.nl/grepotools/images/logoStable.png">
             <span class="buttonText">${
               language[language.settingActiveLanguage].message
-            }</span>`,
-      })
+          }</span>`,
+        })
     );
 
     $(`#messageIslandButton_${id}`).tooltip(
-      `${language[language.settingActiveLanguage].sendMessageIsland}`
+        `${language[language.settingActiveLanguage].sendMessageIsland}`
     );
 
     $(`#messageIslandButton_${id}`).click(function () {
@@ -4058,20 +4058,20 @@ let messageIsland = {
         playerData = "";
 
         const liItems = $(this)
-          .closest(".gpwindow_content")
-          .find(
-            "#island_info_towns_left_sorted_by_name li.odd, #island_info_towns_left_sorted_by_name li.even"
-          );
+            .closest(".gpwindow_content")
+            .find(
+                "#island_info_towns_left_sorted_by_name li.odd, #island_info_towns_left_sorted_by_name li.even"
+            );
 
         liItems.each(function () {
           if ($(this).find(".gp_town_link").length == 0) {
             HumanMessage.error(
-              language[language.settingActiveLanguage].islandEmptyNoMessage
+                language[language.settingActiveLanguage].islandEmptyNoMessage
             );
           } else {
             const hrefData = $(this).find(".gp_town_link").attr("href");
             const townId = JSON.parse(
-              atob(hrefData.slice(hrefData.lastIndexOf("#") + 1))
+                atob(hrefData.slice(hrefData.lastIndexOf("#") + 1))
             ).id;
 
             if (townId != undefined) {
@@ -4087,9 +4087,9 @@ let messageIsland = {
               playerName = decodeURI(data.playerName.split("+").join(" "));
 
               if (
-                data.allianceId == uw.Game.alliance_id &&
-                playerName != uw.Game.player_name &&
-                !messageTo.includes(playerName)
+                  data.allianceId == uw.Game.alliance_id &&
+                  playerName != uw.Game.player_name &&
+                  !messageTo.includes(playerName)
               ) {
                 messageTo.push(playerName);
               }
@@ -4097,7 +4097,7 @@ let messageIsland = {
           }
           if (!messageTo.length) {
             HumanMessage.error(
-              language[language.settingActiveLanguage].islandNoAllianceNoMessage
+                language[language.settingActiveLanguage].islandNoAllianceNoMessage
             );
           } else {
             uw.Layout.newMessage.open({
@@ -4115,8 +4115,8 @@ let messageIsland = {
 
   hideDiotoolsMessageButton() {
     if (
-      otherScripts.diotoolsActive &&
-      otherScripts.getSettingValue("diotoolsMessageButton")
+        otherScripts.diotoolsActive &&
+        otherScripts.getSettingValue("diotoolsMessageButton")
     ) {
       // island window
       document.querySelectorAll("#dio_message_island").forEach((element) => {
@@ -4127,8 +4127,8 @@ let messageIsland = {
 
   hideMoleholeMessageButton() {
     if (
-      otherScripts.moleholeActive &&
-      otherScripts.getSettingValue("moleholeMessageButton")
+        otherScripts.moleholeActive &&
+        otherScripts.getSettingValue("moleholeMessageButton")
     ) {
       document.querySelectorAll(".write_message").forEach((element) => {
         element.style.display = "none";
@@ -4175,12 +4175,12 @@ let oceanGrid = {
     if (!this.rendered) {
       if (!$(`#${this.strategicMapDiv}`).length) {
         $(`<div id='${this.strategicMapDiv}'></div>`).insertAfter(
-          "#minimap_islands_layer"
+            "#minimap_islands_layer"
         );
       }
 
       oceanGrid.setVisibilityStrategicMap(
-        oceanGrid.getSettingValue("visibleStrategicMap")
+          oceanGrid.getSettingValue("visibleStrategicMap")
       );
 
       if (!$(`#${this.islandViewDiv}`).length) {
@@ -4188,7 +4188,7 @@ let oceanGrid = {
       }
 
       oceanGrid.setVisibilityIslandView(
-        oceanGrid.getSettingValue("visibleIslandView")
+          oceanGrid.getSettingValue("visibleIslandView")
       );
     }
   },
@@ -4196,7 +4196,7 @@ let oceanGrid = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           .gridBorderRight {
             border-right-width: 3px;
             border-right-style: solid;
@@ -4254,8 +4254,8 @@ let oceanGrid = {
     this.settingsKeys.forEach((setting) => {
       const { key, default: defaultValue } = setting;
       let value = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
       setting.value = value;
     });
@@ -4268,7 +4268,7 @@ let oceanGrid = {
 
   setSettingValue(settingKey, value) {
     const setting = oceanGrid.settingsKeys.find(
-      ({ key }) => key === settingKey
+        ({ key }) => key === settingKey
     );
     setting.value = value;
 
@@ -4290,7 +4290,7 @@ let oceanGrid = {
         this.activeStyle = "gridTextStrategicMap";
 
         this.gridToDraw = ocean.visibleOceans.filter(
-          (value) => !this.gridVisibleStrategicMap.includes(value)
+            (value) => !this.gridVisibleStrategicMap.includes(value)
         );
         this.gridToDraw.forEach((ocean) => {
           if (ocean >= 0 && ocean <= 99) {
@@ -4305,7 +4305,7 @@ let oceanGrid = {
         this.activeStyle = "gridTextIslandView";
 
         this.gridToDraw = ocean.visibleOceans.filter(
-          (value) => !this.gridVisibleIslandView.includes(value)
+            (value) => !this.gridVisibleIslandView.includes(value)
         );
         this.gridToDraw.forEach((ocean) => {
           if (ocean >= 0 && ocean <= 99) {
@@ -4334,8 +4334,8 @@ let oceanGrid = {
       oceanGrid.setSettingValue("gridColor", color.split(" ").join(""));
     }
     $(".gridBorderRight, .gridBorderBottom, .gridBorder").css(
-      "border-color",
-      settings.colors[oceanGrid.getSettingValue("gridColor")]
+        "border-color",
+        settings.colors[oceanGrid.getSettingValue("gridColor")]
     );
   },
 
@@ -4344,8 +4344,8 @@ let oceanGrid = {
       oceanGrid.setSettingValue("gridTextColor", color.split(" ").join(""));
     }
     $(".gridTextStrategicMap, .gridTextIslandView").css(
-      "color",
-      settings.colors[oceanGrid.getSettingValue("gridTextColor")]
+        "color",
+        settings.colors[oceanGrid.getSettingValue("gridTextColor")]
     );
   },
 
@@ -4452,18 +4452,18 @@ let oceanNumbers = {
     if (!this.rendered) {
       if (!$(`#${this.strategicMapDiv}`).length) {
         $(`<div id='${this.strategicMapDiv}'></div>`).insertAfter(
-          "#minimap_islands_layer"
+            "#minimap_islands_layer"
         );
       }
       oceanNumbers.setVisibilityStrategicMap(
-        oceanNumbers.getSettingValue("visibleStrategicMap")
+          oceanNumbers.getSettingValue("visibleStrategicMap")
       );
 
       if (!$(`#${this.islandViewDiv}`).length) {
         $(`<div id='${this.islandViewDiv}'></div>`).insertAfter("#map_islands");
       }
       oceanNumbers.setVisibilityIslandView(
-        oceanNumbers.getSettingValue("visibleIslandView")
+          oceanNumbers.getSettingValue("visibleIslandView")
       );
     }
   },
@@ -4471,7 +4471,7 @@ let oceanNumbers = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           .oceanNumbersTextStrategicMap {
             position: absolute;
             z-index: 2;
@@ -4496,8 +4496,8 @@ let oceanNumbers = {
     this.settingsKeys.forEach((setting) => {
       const { key, default: defaultValue } = setting;
       const value = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
       setting.value = value;
     });
@@ -4510,7 +4510,7 @@ let oceanNumbers = {
 
   setSettingValue(settingKey, value) {
     const setting = oceanNumbers.settingsKeys.find(
-      ({ key }) => key === settingKey
+        ({ key }) => key === settingKey
     );
     setting.value = value;
 
@@ -4534,7 +4534,7 @@ let oceanNumbers = {
         this.offset = 75;
 
         this.oceanNumbersToDraw = ocean.visibleOceans.filter(
-          (value) => !this.oceanNumbersVisibleStrategicMap.includes(value)
+            (value) => !this.oceanNumbersVisibleStrategicMap.includes(value)
         );
         this.oceanNumbersToDraw.forEach((ocean) => {
           if (ocean >= 0 && ocean <= 99) {
@@ -4551,7 +4551,7 @@ let oceanNumbers = {
         this.offset = 175;
 
         this.oceanNumbersToDraw = ocean.visibleOceans.filter(
-          (value) => !this.oceanNumbersVisibleIslandView.includes(value)
+            (value) => !this.oceanNumbersVisibleIslandView.includes(value)
         );
         this.oceanNumbersToDraw.forEach((ocean) => {
           if (ocean >= 0 && ocean <= 99) {
@@ -4585,9 +4585,9 @@ let oceanNumbers = {
         const left = OceanX + (x * this.step + this.offset);
         const top = OceanY + (y * this.step + this.offset);
         const className =
-          Game.layout_mode === "strategic_map"
-            ? "oceanNumbersTextStrategicMap"
-            : "oceanNumbersTextIslandView";
+            Game.layout_mode === "strategic_map"
+                ? "oceanNumbersTextStrategicMap"
+                : "oceanNumbersTextIslandView";
 
         const div = document.createElement("div");
         div.className = className;
@@ -4625,7 +4625,7 @@ let spells = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           #docksSpells {
             padding-top:5px
           }
@@ -4654,7 +4654,7 @@ let spells = {
     function addSpells(containerSelector, spellsContainerId, spellsToAdd) {
       if ($(containerSelector)[0] && !$(spellsContainerId)[0]) {
         $('<div id="' + spellsContainerId.slice(1) + '"></div>').appendTo(
-          $(containerSelector + " > #units")
+            $(containerSelector + " > #units")
         );
         spellsToAdd.forEach((spell) => {
           spells.addSpell(spellsContainerId.slice(1), spell.name, spell.god);
@@ -4680,7 +4680,7 @@ let spells = {
     }).getCastedPowers();
 
     return spellsActive.some(
-      (spellActive) => spellActive.attributes.power_id === spell
+        (spellActive) => spellActive.attributes.power_id === spell
     );
   },
 
@@ -4696,7 +4696,7 @@ let spells = {
 
   getGodFavor(god) {
     return MM.checkAndPublishRawModel("PlayerGods", { id: Game.player_id }).get(
-      god + "_favor"
+        god + "_favor"
     );
   },
 
@@ -4715,84 +4715,84 @@ let spells = {
 
     if (spells.isSpellActive(spell)) {
       _classAdd =
-        " active_animation extendable animated_power_icon animated_power_icon_45x45";
+          " active_animation extendable animated_power_icon animated_power_icon_45x45";
     }
 
     $("#" + divId).append(
-      $("<div/>", {
-        class: "js-power-icon power_icon45x45 " + spell + " power" + _classAdd,
-        "data-spell": spell,
-      })
-        .append(
-          $("<div/>", { class: "extend_spell" })
-            .append($("<div/>", { class: "gold" }))
-            .append($("<div/>", { class: "amount" }))
-        )
-        .append($("<div/>", { class: "js-caption" }))
-        .append($("<div/>", { class: `spellCounter ${god}` }))
-
-        .on("mouseover", function (e) {
-          var tooltip = {
-            show_costs: true,
-          };
-
-          casted = HelperPower.createCastedPowerModel(spell, Game.townId);
-          spells.getAllActiveSpells().forEach((elem) => {
-            if (elem.getPowerId() === spell) {
-              casted = elem;
-            }
-          });
-
-          if (typeof casted.getId != "undefined") {
-            (tooltip.casted_power_end_at = casted.getEndAt()),
-              (tooltip.extendable = casted.isExtendable());
-          }
-          $(this)
-            .tooltip(
-              TooltipFactory.createPowerTooltip(casted.getPowerId(), tooltip)
+        $("<div/>", {
+          class: "js-power-icon power_icon45x45 " + spell + " power" + _classAdd,
+          "data-spell": spell,
+        })
+            .append(
+                $("<div/>", { class: "extend_spell" })
+                    .append($("<div/>", { class: "gold" }))
+                    .append($("<div/>", { class: "amount" }))
             )
-            .showTooltip(e);
-        })
+            .append($("<div/>", { class: "js-caption" }))
+            .append($("<div/>", { class: `spellCounter ${god}` }))
 
-        .on("click", function (e) {
-          casted = HelperPower.createCastedPowerModel(spell, Game.townId);
-          spells.getAllActiveSpells().forEach((elem) => {
-            if (elem.getPowerId() === spell) {
-              casted = elem;
-            }
-          });
+            .on("mouseover", function (e) {
+              var tooltip = {
+                show_costs: true,
+              };
 
-          let activeWindow;
-          $.each(Layout.wnd.getAllOpen(), function (ind, elem) {
-            activeWindow = elem;
-          });
+              casted = HelperPower.createCastedPowerModel(spell, Game.townId);
+              spells.getAllActiveSpells().forEach((elem) => {
+                if (elem.getPowerId() === spell) {
+                  casted = elem;
+                }
+              });
 
-          CM.unregister(
-            { main: activeWindow.getContext().main, sub: "casted_powers" },
-            "harbourSpells" + casted.getId()
-          );
+              if (typeof casted.getId != "undefined") {
+                (tooltip.casted_power_end_at = casted.getEndAt()),
+                    (tooltip.extendable = casted.isExtendable());
+              }
+              $(this)
+                  .tooltip(
+                      TooltipFactory.createPowerTooltip(casted.getPowerId(), tooltip)
+                  )
+                  .showTooltip(e);
+            })
 
-          var _btn = CM.register(
-              { main: activeWindow.getContext().main, sub: "casted_powers" },
-              "#harbourSpells" + casted.getId(),
-              activeWindow
-                .getJQElement()
-                .find($("#harbourSpells .new_ui_power_icon .gold"))
-                .button()
-            ),
-            power = HelperPower.createCastedPowerModel(spell, Game.townId);
-          if (casted.getId() == undefined) {
-            power.cast();
-          } else {
-            if (casted.isExtendable()) {
-              BuyForGoldWindowFactory.openExtendPowerForGoldWindow(
-                _btn,
-                casted
+            .on("click", function (e) {
+              casted = HelperPower.createCastedPowerModel(spell, Game.townId);
+              spells.getAllActiveSpells().forEach((elem) => {
+                if (elem.getPowerId() === spell) {
+                  casted = elem;
+                }
+              });
+
+              let activeWindow;
+              $.each(Layout.wnd.getAllOpen(), function (ind, elem) {
+                activeWindow = elem;
+              });
+
+              CM.unregister(
+                  { main: activeWindow.getContext().main, sub: "casted_powers" },
+                  "harbourSpells" + casted.getId()
               );
-              $(this).addClass(_classAdd); // -> Check if this line is necessary
-            }
-          }
-        })
+
+              var _btn = CM.register(
+                      { main: activeWindow.getContext().main, sub: "casted_powers" },
+                      "#harbourSpells" + casted.getId(),
+                      activeWindow
+                          .getJQElement()
+                          .find($("#harbourSpells .new_ui_power_icon .gold"))
+                          .button()
+                  ),
+                  power = HelperPower.createCastedPowerModel(spell, Game.townId);
+              if (casted.getId() == undefined) {
+                power.cast();
+              } else {
+                if (casted.isExtendable()) {
+                  BuyForGoldWindowFactory.openExtendPowerForGoldWindow(
+                      _btn,
+                      casted
+                  );
+                  $(this).addClass(_classAdd); // -> Check if this line is necessary
+                }
+              }
+            })
     );
   },
 };
@@ -4831,7 +4831,7 @@ let nightMode = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           .nightMode {
             position: absolute;
             left: 0;
@@ -4860,7 +4860,7 @@ let nightMode = {
     if (!this.rendered) {
       if (!$(`#${this.strategicMapDiv}`).length) {
         $(
-          `<div id='${this.strategicMapDiv}'><div class="nightMode"></div></div>`
+            `<div id='${this.strategicMapDiv}'><div class="nightMode"></div></div>`
         ).insertAfter("#minimap_islands_layer");
         if (!this.nightModeActive) {
           $(`#${this.strategicMapDiv}`).css("display", "none");
@@ -4871,8 +4871,8 @@ let nightMode = {
 
   checkNightMode() {
     $(nightMode.islandViewElement).hasClass("night")
-      ? (nightMode.nightModeActive = true)
-      : (nightMode.nightModeActive = false);
+        ? (nightMode.nightModeActive = true)
+        : (nightMode.nightModeActive = false);
     Game.night_mode = nightMode.nightModeActive;
   },
 
@@ -4922,8 +4922,8 @@ let nightMode = {
   // Old Small Ui
   addNightModeMenu() {
     let imgSrc = this.nightModeActive
-      ? "https://www.grepotools.nl/grepotools/images/moon.png"
-      : "https://www.grepotools.nl/grepotools/images/sun.png";
+        ? "https://www.grepotools.nl/grepotools/images/moon.png"
+        : "https://www.grepotools.nl/grepotools/images/sun.png";
 
     let nightModeMenuHTML = `
       <li id="nightMode_button" class="nightModeButton" style="margin-bottom:3px; margin-top: -1px;">
@@ -4953,8 +4953,8 @@ let nightMode = {
   updateMenu() {
     if (nightMode.nightModeActive) {
       $(".nightModeButtonIconImage img").attr(
-        "src",
-        "https://www.grepotools.nl/grepotools/images/moon.png"
+          "src",
+          "https://www.grepotools.nl/grepotools/images/moon.png"
       );
       $(".nightModeButtonIconImage img").css({
         "margin-left": "-1px",
@@ -4963,12 +4963,12 @@ let nightMode = {
         height: "18px",
       });
       $("#nightMode_button .name").html(
-        `${language[language.settingActiveLanguage].dayMode}`
+          `${language[language.settingActiveLanguage].dayMode}`
       );
     } else {
       $(".nightModeButtonIconImage img").attr(
-        "src",
-        "https://www.grepotools.nl/grepotools/images/sun.png"
+          "src",
+          "https://www.grepotools.nl/grepotools/images/sun.png"
       );
       $(".nightModeButtonIconImage img").css({
         "margin-left": "-3px",
@@ -4977,7 +4977,7 @@ let nightMode = {
         height: "18px",
       });
       $("#nightMode_button .name").html(
-        `${language[language.settingActiveLanguage].nightMode}`
+          `${language[language.settingActiveLanguage].nightMode}`
       );
     }
   },
@@ -4985,8 +4985,8 @@ let nightMode = {
   // New Big Ui
   addNightModeButton() {
     let imgSrc = this.nightModeActive
-      ? "https://www.grepotools.nl/grepotools/images/moon.png"
-      : "https://www.grepotools.nl/grepotools/images/sun.png";
+        ? "https://www.grepotools.nl/grepotools/images/moon.png"
+        : "https://www.grepotools.nl/grepotools/images/sun.png";
 
     const nightModeButtonHTML = `
       <div class="btn_settings circle_button nightModeButton GrepoToolsSettingsButton">
@@ -5012,8 +5012,8 @@ let nightMode = {
   updateButton() {
     if (nightMode.nightModeActive) {
       $(".nightModeButtonIconImage").attr(
-        "src",
-        "https://www.grepotools.nl/grepotools/images/moon.png"
+          "src",
+          "https://www.grepotools.nl/grepotools/images/moon.png"
       );
       $(".nightModeButtonIconImage").css({
         "margin-left": "1px",
@@ -5023,8 +5023,8 @@ let nightMode = {
       });
     } else {
       $(".nightModeButtonIconImage").attr(
-        "src",
-        "https://www.grepotools.nl/grepotools/images/sun.png"
+          "src",
+          "https://www.grepotools.nl/grepotools/images/sun.png"
       );
       $(".nightModeButtonIconImage").css({
         "margin-left": "0px",
@@ -5070,8 +5070,8 @@ let otherScripts = {
     this.settingsKeys.forEach((setting) => {
       const { key, default: defaultValue } = setting;
       const value = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
       setting.value = value;
     });
@@ -5084,7 +5084,7 @@ let otherScripts = {
 
   setSettingValue(settingKey, value) {
     const setting = otherScripts.settingsKeys.find(
-      ({ key }) => key === settingKey
+        ({ key }) => key === settingKey
     );
     setting.value = value;
 
@@ -5152,20 +5152,20 @@ let otherScripts = {
 
     // Hide spells
     otherScripts.toggleDisplay(
-      ".grcrt_power",
-      otherScripts.getSettingValue("grcrtHideSpells")
+        ".grcrt_power",
+        otherScripts.getSettingValue("grcrtHideSpells")
     );
 
     // Hide or show the hero icon
     otherScripts.toggleDisplay(
-      ".grcrt_hero",
-      otherScripts.getSettingValue("grcrtCityOverviewHero")
+        ".grcrt_hero",
+        otherScripts.getSettingValue("grcrtCityOverviewHero")
     );
 
     // Hide or show the ocean numbers
     otherScripts.toggleDisplay(
-      ".RepConvON",
-      oceanNumbers.getSettingValue("visibleIslandView")
+        ".RepConvON",
+        oceanNumbers.getSettingValue("visibleIslandView")
     );
   },
 
@@ -5183,8 +5183,8 @@ let otherScripts = {
 
     // Hide or show the ocean numbers
     otherScripts.toggleDisplay(
-      "#dio_oceanNumbers",
-      oceanNumbers.getSettingValue("visibleIslandView")
+        "#dio_oceanNumbers",
+        oceanNumbers.getSettingValue("visibleIslandView")
     );
   },
 };
@@ -5210,7 +5210,7 @@ let settingsMenu = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           #menuScreen { 
             height:500px;
             background-color:"#FFE3A1"; 
@@ -5318,8 +5318,8 @@ let settingsMenu = {
 
   createCheckbox(id, caption, setting = false) {
     const checkbox = $("<div/>", { id, class: "checkbox_new large" })
-      .append($("<div/>", { class: "cbx_icon" }))
-      .append($("<div/>", { class: "cbx_caption" }).text(caption));
+        .append($("<div/>", { class: "cbx_icon" }))
+        .append($("<div/>", { class: "cbx_caption" }).text(caption));
 
     if (setting) {
       checkbox.addClass("checked");
@@ -5340,13 +5340,13 @@ let settingsMenu = {
       class: "button_new",
       style: "margin-top:10px",
     })
-      .append($("<div/>", { class: "left" }))
-      .append($("<div/>", { class: "right" }))
-      .append(
-        $("<div/>", { class: "caption js-caption" })
-          .append($("<span/>").text(caption))
-          .append($("<div/>", { class: "effect js-effect" }))
-      );
+        .append($("<div/>", { class: "left" }))
+        .append($("<div/>", { class: "right" }))
+        .append(
+            $("<div/>", { class: "caption js-caption" })
+                .append($("<span/>").text(caption))
+                .append($("<div/>", { class: "effect js-effect" }))
+        );
 
     if (disabled) {
       button.addClass("disabled");
@@ -5354,8 +5354,8 @@ let settingsMenu = {
 
     button.on("click", function () {
       if (
-        !button.hasClass("disabled") &&
-        typeof functionToCall === "function"
+          !button.hasClass("disabled") &&
+          typeof functionToCall === "function"
       ) {
         functionToCall();
       }
@@ -5375,14 +5375,14 @@ let settingsMenu = {
 
   createDropdown(id, label, value, options = "") {
     return $("<div/>")
-      .append($("<label/>", { for: id }).text(label))
-      .append(
-        $("<div/>", { id: id, class: "dropdown default" }).dropdown({
-          list_pos: "left",
-          value: value,
-          options: options,
-        })
-      );
+        .append($("<label/>", { for: id }).text(label))
+        .append(
+            $("<div/>", { id: id, class: "dropdown default" }).dropdown({
+              list_pos: "left",
+              value: value,
+              options: options,
+            })
+        );
   },
 
   createMenuContent(tab) {
@@ -5391,9 +5391,9 @@ let settingsMenu = {
     switch (tab) {
       case 0:
         url =
-          language.settingActiveLanguage === "nl"
-            ? "https://www.grepotools.nl/gt_over_nl/"
-            : "https://www.grepotools.nl/gt_over_en/";
+            language.settingActiveLanguage === "nl"
+                ? "https://www.grepotools.nl/gt_over_nl/"
+                : "https://www.grepotools.nl/gt_over_en/";
 
         $("#menuScreen").append(`
         <iframe src="${url}" style="padding:0;margin:0;width: 100%; height: 100%; border: 0px; float: left;"></iframe>
@@ -5401,9 +5401,9 @@ let settingsMenu = {
         break;
       case 1:
         url =
-          language.settingActiveLanguage === "nl"
-            ? "https://www.grepotools.nl/gt_veranderingen_nl/"
-            : "https://www.grepotools.nl/gt_veranderingen_en/";
+            language.settingActiveLanguage === "nl"
+                ? "https://www.grepotools.nl/gt_veranderingen_nl/"
+                : "https://www.grepotools.nl/gt_veranderingen_en/";
 
         $("#menuScreen").append(`
         <iframe src="${url}" style="padding:0;margin:0;width: 100%; height: 100%; border: 0px; float: left;"></iframe>
@@ -5431,10 +5431,10 @@ let settingsMenu = {
 
         // submenu
         $("#menuScreen").append(
-          `<div id="settings-sub-menu" class="grepotools settings-sub-menu"></div>`
+            `<div id="settings-sub-menu" class="grepotools settings-sub-menu"></div>`
         );
         $("#menuScreen").append(
-          `<div id="menuVersionInfo">
+            `<div id="menuVersionInfo">
         ${language[language.settingActiveLanguage].script}
         <br>
         ${language[language.settingActiveLanguage].version}: 
@@ -5450,9 +5450,9 @@ let settingsMenu = {
         break;
       case 3:
         url =
-          language.settingActiveLanguage === "nl"
-            ? "https://www.grepotools.nl/gt_donatie_nl/"
-            : "https://www.grepotools.nl/en/gt_donate_en/";
+            language.settingActiveLanguage === "nl"
+                ? "https://www.grepotools.nl/gt_donatie_nl/"
+                : "https://www.grepotools.nl/en/gt_donate_en/";
 
         $("#menuScreen").append(`
         <iframe src="${url}" style="padding:0;margin:0;width: 100%; height: 100%; border: 0px; float: left;"></iframe>
@@ -5489,10 +5489,10 @@ let settingsMenu = {
           {
             id: "indexMenu-general",
             caption: `${
-              language[language.settingActiveLanguage].general
+                language[language.settingActiveLanguage].general
             } ${language[
-              language.settingActiveLanguage
-            ].settings.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].settings.toLowerCase()}`,
           },
         ],
       },
@@ -5524,10 +5524,10 @@ let settingsMenu = {
       item.options.forEach((option) => {
         const listItem = $("<li>").addClass("");
         const link = $("<a>")
-          .addClass("settings-link")
-          .attr("id", option.id)
-          .attr("href", "#")
-          .text(option.caption);
+            .addClass("settings-link")
+            .attr("id", option.id)
+            .attr("href", "#")
+            .text(option.caption);
 
         listItem.append(link);
         list.append(listItem);
@@ -5547,18 +5547,18 @@ let settingsMenu = {
           {
             type: "infoText",
             caption: `${
-              language[language.settingActiveLanguage].strategicMap
+                language[language.settingActiveLanguage].strategicMap
             } ${language[
-              language.settingActiveLanguage
-            ].settings.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].settings.toLowerCase()}`,
           },
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].oceanNumbers.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].oceanNumbers.toLowerCase()}`,
             id: "settingOceanNumbersStrategicMap",
             setting: oceanNumbers.getSettingValue("visibleStrategicMap"),
             functionToCall: oceanNumbers.setVisibilityStrategicMap,
@@ -5566,18 +5566,18 @@ let settingsMenu = {
           {
             type: "infoText",
             caption: `${
-              language[language.settingActiveLanguage].islandView
+                language[language.settingActiveLanguage].islandView
             } ${language[
-              language.settingActiveLanguage
-            ].settings.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].settings.toLowerCase()}`,
           },
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].oceanNumbers.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].oceanNumbers.toLowerCase()}`,
             id: "settingOceanNumbersIslandView",
             setting: oceanNumbers.getSettingValue("visibleIslandView"),
             functionToCall: oceanNumbers.setVisibilityIslandView,
@@ -5592,18 +5592,18 @@ let settingsMenu = {
           {
             type: "infoText",
             caption: `${
-              language[language.settingActiveLanguage].strategicMap
+                language[language.settingActiveLanguage].strategicMap
             } ${language[
-              language.settingActiveLanguage
-            ].settings.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].settings.toLowerCase()}`,
           },
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].oceanGrid.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].oceanGrid.toLowerCase()}`,
             id: "settingOceanGridStrategicMap",
             setting: oceanGrid.getSettingValue("visibleStrategicMap"),
             functionToCall: oceanGrid.setVisibilityStrategicMap,
@@ -5611,18 +5611,18 @@ let settingsMenu = {
           {
             type: "infoText",
             caption: `${
-              language[language.settingActiveLanguage].islandView
+                language[language.settingActiveLanguage].islandView
             } ${language[
-              language.settingActiveLanguage
-            ].settings.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].settings.toLowerCase()}`,
           },
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].oceanGrid.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].oceanGrid.toLowerCase()}`,
             id: "settingOceanGridIslandView",
             setting: oceanGrid.getSettingValue("visibleIslandView"),
             functionToCall: oceanGrid.setVisibilityIslandView,
@@ -5630,10 +5630,10 @@ let settingsMenu = {
           {
             type: "infoText",
             caption: `${
-              language[language.settingActiveLanguage].color
+                language[language.settingActiveLanguage].color
             } ${language[
-              language.settingActiveLanguage
-            ].settings.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].settings.toLowerCase()}`,
           },
           {
             type: "dropDown",
@@ -5662,20 +5662,20 @@ let settingsMenu = {
           {
             type: "infoText",
             caption: `${
-              language[language.settingActiveLanguage].strategicMap
+                language[language.settingActiveLanguage].strategicMap
             } ${language[
-              language.settingActiveLanguage
-            ].settings.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].settings.toLowerCase()}`,
           },
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].coordinates.toLowerCase()} ${language[
-              language.settingActiveLanguage
-            ].grid.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].coordinates.toLowerCase()} ${language[
+                language.settingActiveLanguage
+                ].grid.toLowerCase()}`,
             id: "settingCoordinatesGridStrategicMap",
             setting: coordinatesGrid.getSettingValue("visibleStrategicMap"),
             functionToCall: coordinatesGrid.setVisibilityStrategicMap,
@@ -5683,20 +5683,20 @@ let settingsMenu = {
           {
             type: "infoText",
             caption: `${
-              language[language.settingActiveLanguage].islandView
+                language[language.settingActiveLanguage].islandView
             } ${language[
-              language.settingActiveLanguage
-            ].settings.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].settings.toLowerCase()}`,
           },
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].coordinates.toLowerCase()} ${language[
-              language.settingActiveLanguage
-            ].grid.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].coordinates.toLowerCase()} ${language[
+                language.settingActiveLanguage
+                ].grid.toLowerCase()}`,
             id: "settingCoordinatesGridIslandView",
             setting: coordinatesGrid.getSettingValue("visibleIslandView"),
             functionToCall: coordinatesGrid.setVisibilityIslandView,
@@ -5704,10 +5704,10 @@ let settingsMenu = {
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].coordinates.toLowerCase()} (X/Y)`,
+                language.settingActiveLanguage
+                ].coordinates.toLowerCase()} (X/Y)`,
             id: "settingCoordinatesIslandView",
             setting: coordinates.getSettingValue("visibleIslandView"),
             functionToCall: coordinates.setVisibilityIslandView,
@@ -5715,12 +5715,12 @@ let settingsMenu = {
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].update
+                language[language.settingActiveLanguage].update
             } ${language[
-              language.settingActiveLanguage
-            ].coordinates.toLowerCase()} ${language[
-              language.settingActiveLanguage
-            ].whileScrolling.toLowerCase()} (X/Y)`,
+                language.settingActiveLanguage
+                ].coordinates.toLowerCase()} ${language[
+                language.settingActiveLanguage
+                ].whileScrolling.toLowerCase()} (X/Y)`,
             id: "settingCoordinatesUpdateXYScrolling",
             setting: coordinates.getSettingValue("updateScrolling"),
             functionToCall: coordinates.setUpdateScrolling,
@@ -5730,50 +5730,50 @@ let settingsMenu = {
       {
         sectionId: "submenu-islandNumbersTags",
         gameHeaderText:
-          language[language.settingActiveLanguage].islandNumbersTags,
+        language[language.settingActiveLanguage].islandNumbersTags,
         display: "none",
         options: [
           {
             type: "infoText",
             caption: `${
-              language[language.settingActiveLanguage].strategicMap
+                language[language.settingActiveLanguage].strategicMap
             } ${language[
-              language.settingActiveLanguage
-            ].settings.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].settings.toLowerCase()}`,
           },
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].farmerVillageIslandNumbers.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].farmerVillageIslandNumbers.toLowerCase()}`,
             id: "settingFarmerVillageIslandNumbersStrategicMap",
             setting: islandNumbers.getSettingValue(
-              "visibleFarmingStrategicMap"
+                "visibleFarmingStrategicMap"
             ),
             functionToCall: islandNumbers.setVisibilityFarmingStrategicMap,
           },
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].farmerVillageIslandTags.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].farmerVillageIslandTags.toLowerCase()}`,
             id: "settingFarmerVillageIslandTagsStrategicMap",
             setting: islandNumbers.getSettingValue(
-              "visibleFarmingTagsStrategicMap"
+                "visibleFarmingTagsStrategicMap"
             ),
             functionToCall: islandNumbers.setVisibilityFarmingTagsStrategicMap,
           },
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].rockIslandNumbers.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].rockIslandNumbers.toLowerCase()}`,
             id: "settingRockIslandNumbersStrategicMap",
             setting: islandNumbers.getSettingValue("visibleRockStrategicMap"),
             functionToCall: islandNumbers.setVisibilityRockStrategicMap,
@@ -5781,18 +5781,18 @@ let settingsMenu = {
           {
             type: "infoText",
             caption: `${
-              language[language.settingActiveLanguage].islandView
+                language[language.settingActiveLanguage].islandView
             } ${language[
-              language.settingActiveLanguage
-            ].settings.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].settings.toLowerCase()}`,
           },
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].farmerVillageIslandNumbers.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].farmerVillageIslandNumbers.toLowerCase()}`,
             id: "settingFarmerVillageIslandNumbersIslandView",
             setting: islandNumbers.getSettingValue("visibleFarmingIslandView"),
             functionToCall: islandNumbers.setVisibilityFarmingIslandView,
@@ -5800,23 +5800,23 @@ let settingsMenu = {
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].farmerVillageIslandTags.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].farmerVillageIslandTags.toLowerCase()}`,
             id: "settingFarmerVillageIslandTagsIslandView",
             setting: islandNumbers.getSettingValue(
-              "visibleFarmingTagsIslandView"
+                "visibleFarmingTagsIslandView"
             ),
             functionToCall: islandNumbers.setVisibilityFarmingTagsIslandView,
           },
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].rockIslandNumbers.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].rockIslandNumbers.toLowerCase()}`,
             id: "settingRockIslandNumbersIslandView",
             setting: islandNumbers.getSettingValue("visibleRockIslandView"),
             functionToCall: islandNumbers.setVisibilityRockIslandView,
@@ -5824,22 +5824,22 @@ let settingsMenu = {
           {
             type: "infoText",
             caption: `${
-              language[language.settingActiveLanguage].general
+                language[language.settingActiveLanguage].general
             } ${language[
-              language.settingActiveLanguage
-            ].and.toLowerCase()} ${language[
-              language.settingActiveLanguage
-            ].color.toLowerCase()} ${language[
-              language.settingActiveLanguage
-            ].settings.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].and.toLowerCase()} ${language[
+                language.settingActiveLanguage
+                ].color.toLowerCase()} ${language[
+                language.settingActiveLanguage
+                ].settings.toLowerCase()}`,
           },
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].islandLinkIslandInfo.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].islandLinkIslandInfo.toLowerCase()}`,
             id: "settingIslandLinkIslandInfo",
             setting: islandNumbers.getSettingValue("link"),
             functionToCall: islandNumbers.setLink,
@@ -5847,8 +5847,8 @@ let settingsMenu = {
           {
             type: "dropDown",
             caption: `${
-              language[language.settingActiveLanguage]
-                .farmerIslandNumbersTextColor
+                language[language.settingActiveLanguage]
+                    .farmerIslandNumbersTextColor
             }`,
             id: "islandNumbersFarmingTextColor",
             setting: islandNumbers.getSettingValue("farmingTextColor"),
@@ -5857,8 +5857,8 @@ let settingsMenu = {
           {
             type: "dropDown",
             caption: `${
-              language[language.settingActiveLanguage]
-                .rockIslandNumbersTextColor
+                language[language.settingActiveLanguage]
+                    .rockIslandNumbersTextColor
             }`,
             id: "islandNumbersRockTextColor",
             setting: islandNumbers.getSettingValue("rockTextColor"),
@@ -5874,10 +5874,10 @@ let settingsMenu = {
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].allianceName.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].allianceName.toLowerCase()}`,
             id: "settingAllianceName",
             setting: mapTags.getSettingValue("settingAllianceName"),
             functionToCall: mapTags.setAllianceName,
@@ -5885,10 +5885,10 @@ let settingsMenu = {
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].playerName.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].playerName.toLowerCase()}`,
             id: "settingPlayerName",
             setting: mapTags.getSettingValue("settingPlayerName"),
             functionToCall: mapTags.setPlayerName,
@@ -5896,10 +5896,10 @@ let settingsMenu = {
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].townName.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].townName.toLowerCase()}`,
             id: "settingTownName",
             setting: mapTags.getSettingValue("settingTownName"),
             functionToCall: mapTags.setTownName,
@@ -5907,10 +5907,10 @@ let settingsMenu = {
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].townPoints.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].townPoints.toLowerCase()}`,
             id: "settingTownPoints",
             setting: mapTags.getSettingValue("settingTownPoints"),
             functionToCall: mapTags.setTownPoints,
@@ -5918,10 +5918,10 @@ let settingsMenu = {
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[
-              language.settingActiveLanguage
-            ].inactiveTimePlayer.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].inactiveTimePlayer.toLowerCase()}`,
             id: "settingInactiveTimePlayer",
             setting: mapTags.getSettingValue("settingInactiveTimePlayer"),
             functionToCall: mapTags.setInactiveTimePlayer,
@@ -5929,7 +5929,7 @@ let settingsMenu = {
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].show
+                language[language.settingActiveLanguage].show
             } ${language[language.settingActiveLanguage].noWrap.toLowerCase()}`,
             id: "settingNoWrap",
             setting: mapTags.getSettingValue("settingNoWrap"),
@@ -5940,22 +5940,22 @@ let settingsMenu = {
       {
         sectionId: "submenu-general",
         gameHeaderText: `${
-          language[language.settingActiveLanguage].general
+            language[language.settingActiveLanguage].general
         } ${language[language.settingActiveLanguage].settings.toLowerCase()}`,
         display: "none",
         options: [
           {
             type: "infoText",
             caption: `${
-              language[language.settingActiveLanguage].general
+                language[language.settingActiveLanguage].general
             } ${language[
-              language.settingActiveLanguage
-            ].settings.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].settings.toLowerCase()}`,
           },
           {
             type: "checkBox",
             caption:
-              language[language.settingActiveLanguage].attackNotification,
+            language[language.settingActiveLanguage].attackNotification,
             id: "attackNotification",
             setting: attackNotification.getSettingValue("attackNotification"),
             functionToCall: attackNotification.setVisibilityAttackNotification,
@@ -5970,10 +5970,10 @@ let settingsMenu = {
           {
             type: "infoText",
             caption: `${
-              language[language.settingActiveLanguage].language
+                language[language.settingActiveLanguage].language
             } ${language[
-              language.settingActiveLanguage
-            ].settings.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].settings.toLowerCase()}`,
           },
           {
             type: "dropDown",
@@ -5994,23 +5994,23 @@ let settingsMenu = {
       {
         sectionId: "submenu-GRCRT",
         gameHeaderText: `GRCRT ${language[
-          language.settingActiveLanguage
-        ].settings.toLowerCase()} `,
+            language.settingActiveLanguage
+            ].settings.toLowerCase()} `,
         display: "none",
         options: [
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].hide
+                language[language.settingActiveLanguage].hide
             } bbcode ${language[
-              language.settingActiveLanguage
-            ].button.toLowerCase()} (${
-              language[language.settingActiveLanguage].alliance
+                language.settingActiveLanguage
+                ].button.toLowerCase()} (${
+                language[language.settingActiveLanguage].alliance
             } ${language[
-              language.settingActiveLanguage
-            ].and.toLowerCase()} ${language[
-              language.settingActiveLanguage
-            ].islandInformationWindow.toLowerCase()})`,
+                language.settingActiveLanguage
+                ].and.toLowerCase()} ${language[
+                language.settingActiveLanguage
+                ].islandInformationWindow.toLowerCase()})`,
             id: "settingGrcrtBbcodeButton",
             setting: otherScripts.getSettingValue("grcrtBbcodeButton"),
             functionToCall: otherScripts.setGrcrtBbcodeButton,
@@ -6018,10 +6018,10 @@ let settingsMenu = {
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].hide
+                language[language.settingActiveLanguage].hide
             } ${language[
-              language.settingActiveLanguage
-            ].heroIcon.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].heroIcon.toLowerCase()}`,
             id: "settingGrcrtCityOverviewHero",
             setting: otherScripts.getSettingValue("grcrtCityOverviewHero"),
             functionToCall: otherScripts.setGrcrtCityOverviewHero,
@@ -6029,10 +6029,10 @@ let settingsMenu = {
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].hide
+                language[language.settingActiveLanguage].hide
             } ${language[
-              language.settingActiveLanguage
-            ].spellsHarborBarracks.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].spellsHarborBarracks.toLowerCase()}`,
             id: "settingGrcrtHideSpells",
             setting: otherScripts.getSettingValue("grcrtHideSpells"),
             functionToCall: otherScripts.setGrcrtHideSpells,
@@ -6042,25 +6042,25 @@ let settingsMenu = {
       {
         sectionId: "submenu-DioTools",
         gameHeaderText: `DioTools ${language[
-          language.settingActiveLanguage
-        ].settings.toLowerCase()} `,
+            language.settingActiveLanguage
+            ].settings.toLowerCase()} `,
         display: "none",
         options: [
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].hide
+                language[language.settingActiveLanguage].hide
             } ${language[
-              language.settingActiveLanguage
-            ].message.toLowerCase()} ${language[
-              language.settingActiveLanguage
-            ].button.toLowerCase()} (${
-              language[language.settingActiveLanguage].alliance
+                language.settingActiveLanguage
+                ].message.toLowerCase()} ${language[
+                language.settingActiveLanguage
+                ].button.toLowerCase()} (${
+                language[language.settingActiveLanguage].alliance
             } ${language[
-              language.settingActiveLanguage
-            ].and.toLowerCase()} ${language[
-              language.settingActiveLanguage
-            ].islandInformationWindow.toLowerCase()})`,
+                language.settingActiveLanguage
+                ].and.toLowerCase()} ${language[
+                language.settingActiveLanguage
+                ].islandInformationWindow.toLowerCase()})`,
             id: "settingDiotoolsMessageButton",
             setting: otherScripts.getSettingValue("diotoolsMessageButton"),
             functionToCall: otherScripts.setDiotoolsMessageButton,
@@ -6068,16 +6068,16 @@ let settingsMenu = {
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].hide
+                language[language.settingActiveLanguage].hide
             } bbcode ${language[
-              language.settingActiveLanguage
-            ].button.toLowerCase()} (${
-              language[language.settingActiveLanguage].alliance
+                language.settingActiveLanguage
+                ].button.toLowerCase()} (${
+                language[language.settingActiveLanguage].alliance
             } ${language[
-              language.settingActiveLanguage
-            ].and.toLowerCase()} ${language[
-              language.settingActiveLanguage
-            ].islandInformationWindow.toLowerCase()})`,
+                language.settingActiveLanguage
+                ].and.toLowerCase()} ${language[
+                language.settingActiveLanguage
+                ].islandInformationWindow.toLowerCase()})`,
             id: "settingDiotoolsBbcodeButton",
             setting: otherScripts.getSettingValue("diotoolsBbcodeButton"),
             functionToCall: otherScripts.setDiotoolsBbcodeButton,
@@ -6085,10 +6085,10 @@ let settingsMenu = {
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].hide
+                language[language.settingActiveLanguage].hide
             } ${language[
-              language.settingActiveLanguage
-            ].heroIcon.toLowerCase()}`,
+                language.settingActiveLanguage
+                ].heroIcon.toLowerCase()}`,
             id: "settingDiotoolsCityOverviewHero",
             setting: otherScripts.getSettingValue("diotoolsCityOverviewHero"),
             functionToCall: otherScripts.setDiotoolsCityOverviewHero,
@@ -6098,25 +6098,25 @@ let settingsMenu = {
       {
         sectionId: "submenu-MoleHole",
         gameHeaderText: `MoleHole ${language[
-          language.settingActiveLanguage
-        ].settings.toLowerCase()} `,
+            language.settingActiveLanguage
+            ].settings.toLowerCase()} `,
         display: "none",
         options: [
           {
             type: "checkBox",
             caption: `${
-              language[language.settingActiveLanguage].hide
+                language[language.settingActiveLanguage].hide
             } ${language[
-              language.settingActiveLanguage
-            ].message.toLowerCase()} ${language[
-              language.settingActiveLanguage
-            ].button.toLowerCase()} (${
-              language[language.settingActiveLanguage].alliance
+                language.settingActiveLanguage
+                ].message.toLowerCase()} ${language[
+                language.settingActiveLanguage
+                ].button.toLowerCase()} (${
+                language[language.settingActiveLanguage].alliance
             } ${language[
-              language.settingActiveLanguage
-            ].and.toLowerCase()} ${language[
-              language.settingActiveLanguage
-            ].islandInformationWindow.toLowerCase()})`,
+                language.settingActiveLanguage
+                ].and.toLowerCase()} ${language[
+                language.settingActiveLanguage
+                ].islandInformationWindow.toLowerCase()})`,
             id: "settingMoleholeMessageButton",
             setting: otherScripts.getSettingValue("moleholeMessageButton"),
             functionToCall: otherScripts.setMoleholeMessageButton,
@@ -6147,9 +6147,9 @@ let settingsMenu = {
             break;
           case "checkBox":
             optionDiv = this.createCheckbox(
-              option.id,
-              option.caption,
-              option.setting
+                option.id,
+                option.caption,
+                option.setting
             );
             optionDiv.click(function () {
               option.setting = settingsMenu.toggleCheckbox($(this));
@@ -6158,18 +6158,18 @@ let settingsMenu = {
             break;
           case "dropDown":
             optionDiv = this.createDropdown(
-              option.id,
-              option.caption,
-              option.setting,
-              option.options
+                option.id,
+                option.caption,
+                option.setting,
+                option.options
             );
             break;
           case "button":
             optionDiv = this.createButton(
-              option.id,
-              option.caption,
-              option.disabled,
-              option.functionToCall
+                option.id,
+                option.caption,
+                option.disabled,
+                option.functionToCall
             );
             break;
         }
@@ -6184,17 +6184,17 @@ let settingsMenu = {
   selectPageOptions() {
     let dropdownOptions = [];
     const maxPage = Math.ceil(
-      bbcodeCopyPlayer.data.size / (bbcodeCopyPlayer.data.size - 1)
+        bbcodeCopyPlayer.data.size / (bbcodeCopyPlayer.data.size - 1)
     );
 
     for (let i = 1; i <= maxPage; i++) {
       dropdownOptions.push({
         value: i,
         name: ` ${
-          language[language.settingActiveLanguage].page
+            language[language.settingActiveLanguage].page
         } ${i} ${language[
-          language.settingActiveLanguage
-        ].of.toLowerCase()} ${maxPage} `,
+            language.settingActiveLanguage
+            ].of.toLowerCase()} ${maxPage} `,
       });
     }
 
@@ -6286,8 +6286,8 @@ let settingsMenu = {
       dropdown_opties.push({
         value: language.languages[i],
         name: language[language.settingActiveLanguage].languages[
-          language.languages[i]
-        ],
+            language.languages[i]
+            ],
       });
     }
     dropdown_opties.sort(settingsMenu.sortList("name"));
@@ -6303,7 +6303,7 @@ let settingsMenu = {
     }
     return function (a, b) {
       var result =
-        a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+          a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
       return result * sortOrder;
     };
   },
@@ -6336,24 +6336,24 @@ let settingsMenu = {
     if (!$("#menu_links").get(0)) {
       if ($("#player-apps").length) {
         const newItem = $("<li>", { class: "with-icon" })
-          .append(
-            $("<img/>", {
-              class: "support-menu-item-icon",
-              src: "https://www.grepotools.nl/grepotools/images/logoStable.png",
-              style: "width: 15px;padding-top:2px",
-            })
-          )
-          .append(
-            $("<a/>", { id: "menu_links" })
-              .html(
-                "Grepotools - " +
-                  language[language.settingActiveLanguage].settings
-              )
-              .click(function () {
-                WF.open("GrepoTools_settingsMenu");
-                settingsMenu.id.setActivePageNr(2);
-              })
-          );
+            .append(
+                $("<img/>", {
+                  class: "support-menu-item-icon",
+                  src: "https://www.grepotools.nl/grepotools/images/logoStable.png",
+                  style: "width: 15px;padding-top:2px",
+                })
+            )
+            .append(
+                $("<a/>", { id: "menu_links" })
+                    .html(
+                        "Grepotools - " +
+                        language[language.settingActiveLanguage].settings
+                    )
+                    .click(function () {
+                      WF.open("GrepoTools_settingsMenu");
+                      settingsMenu.id.setActivePageNr(2);
+                    })
+            );
 
         $("#player-apps").parent().after(newItem);
       }
@@ -6362,9 +6362,9 @@ let settingsMenu = {
 
   addSettingsButtonToGodsArea() {
     const imgSrc =
-      version.release === "beta" || version.release === "development"
-        ? "https://www.grepotools.nl/grepotools/images/logoBeta.png"
-        : "https://www.grepotools.nl/grepotools/images/logoStable.png";
+        version.release === "beta" || version.release === "development"
+            ? "https://www.grepotools.nl/grepotools/images/logoBeta.png"
+            : "https://www.grepotools.nl/grepotools/images/logoStable.png";
 
     const settingsButtonHTML = `
       <div class="btn_settings circle_button settings_godsarea GrepoToolsSettingsButton">
@@ -6398,20 +6398,20 @@ let settingsMenu = {
     }
 
     $(".settings_godsarea > div")
-      .on("mouseover", function (event) {
-        $("#popup_div").css({
-          left: `${event.clientX - 180}px`,
-          top: `${event.clientY + 15}px`,
-          display: "block",
+        .on("mouseover", function (event) {
+          $("#popup_div").css({
+            left: `${event.clientX - 180}px`,
+            top: `${event.clientY + 15}px`,
+            display: "block",
+          });
+        })
+        .on("mouseout", function () {
+          $("#popup_div").css("display", "none");
+        })
+        .on("click", function () {
+          WF.open("GrepoTools_settingsMenu");
+          settingsMenu.id.setActivePageNr(2);
         });
-      })
-      .on("mouseout", function () {
-        $("#popup_div").css("display", "none");
-      })
-      .on("click", function () {
-        WF.open("GrepoTools_settingsMenu");
-        settingsMenu.id.setActivePageNr(2);
-      });
   },
 
   settingsMenu(id) {
@@ -6419,130 +6419,130 @@ let settingsMenu = {
     var _IdS = id;
     var _windows = require("game/windows/ids");
     (_windows[_IdS.toUpperCase()] = _IdS),
-      (function () {
-        var a = uw.GameControllers.TabController,
-          b = uw.GameModels.Progressable,
-          _content = $("<div/>", { id: "menuScreen" }),
-          c = a.extend({
-            initialize: function (b) {
-              a.prototype.initialize.apply(this, arguments);
-              var _wnd = this.getWindowModel(),
-                _$el = this.$el;
-              settingsMenu.id = _wnd;
-              this.$el.html(_content);
-              _wnd.hideLoading();
-              if (!_wnd.getJQElement) {
-                _wnd.getJQElement = function () {
-                  return _content;
-                };
-              }
-              if (!_wnd.appendContent) {
-                _wnd.appendContent = function (a) {
-                  return _content.append(a);
-                };
-              }
-              if (!_wnd.setContent2) {
-                _wnd.setContent2 = function (a) {
-                  return _content.html(a);
-                };
-              }
-              this.bindEventListeners();
-            },
-            render: function () {
-              this.reRender();
-            },
-            reRender: function () {
-              var _wnd = this.getWindowModel(),
-                _$el = this.$el;
-              this.getWindowModel().setTitle(
-                `<img src="https://www.grepotools.nl/grepotools/images/logoStable.png" width="15" height="15"> Grepotools ${
-                  language[language.settingActiveLanguage].settings
-                }`
-              ),
-                this.getWindowModel().showLoading();
-              setTimeout(function () {
-                _wnd.setContent2(""),
-                  settingsMenu.createMenuContent(_wnd.getActivePageNr());
+        (function () {
+          var a = uw.GameControllers.TabController,
+              b = uw.GameModels.Progressable,
+              _content = $("<div/>", { id: "menuScreen" }),
+              c = a.extend({
+                initialize: function (b) {
+                  a.prototype.initialize.apply(this, arguments);
+                  var _wnd = this.getWindowModel(),
+                      _$el = this.$el;
+                  settingsMenu.id = _wnd;
+                  this.$el.html(_content);
+                  _wnd.hideLoading();
+                  if (!_wnd.getJQElement) {
+                    _wnd.getJQElement = function () {
+                      return _content;
+                    };
+                  }
+                  if (!_wnd.appendContent) {
+                    _wnd.appendContent = function (a) {
+                      return _content.append(a);
+                    };
+                  }
+                  if (!_wnd.setContent2) {
+                    _wnd.setContent2 = function (a) {
+                      return _content.html(a);
+                    };
+                  }
+                  this.bindEventListeners();
+                },
+                render: function () {
+                  this.reRender();
+                },
+                reRender: function () {
+                  var _wnd = this.getWindowModel(),
+                      _$el = this.$el;
+                  this.getWindowModel().setTitle(
+                      `<img src="https://www.grepotools.nl/grepotools/images/logoStable.png" width="15" height="15"> Grepotools ${
+                          language[language.settingActiveLanguage].settings
+                      }`
+                  ),
+                      this.getWindowModel().showLoading();
+                  setTimeout(function () {
+                    _wnd.setContent2(""),
+                        settingsMenu.createMenuContent(_wnd.getActivePageNr());
 
-                _wnd.hideLoading();
+                    _wnd.hideLoading();
 
-                _$el.find(".js-scrollbar-viewport").skinableScrollbar({
-                  orientation: "vertical",
-                  template: "tpl_skinable_scrollbar",
-                  skin: "narrow",
-                  disabled: !1,
-                  elements_to_scroll: _$el.find(".js-scrollbar-content"),
-                  element_viewport: _$el.find(".js-scrollbar-viewport"),
-                  scroll_position: 0,
-                  min_slider_size: 16,
-                });
-              }, 100);
-            },
-            bindEventListeners: function () {
-              this.$el
-                .parents("." + _IdS)
-                .on(
-                  "click",
-                  ".js-wnd-buttons .help",
-                  this._handleHelpButtonClickEvent.bind(this)
-                );
-            },
-            _handleHelpButtonClickEvent: function () {
-              var a = this.getWindowModel().getHelpButtonSettings();
-            },
-          });
-        uw.GameViews["grepotools_" + _IdS] = c;
-      })(),
-      (function () {
-        "use strict";
-        var a = uw.GameViews,
-          b = uw.GameCollections,
-          c = uw.GameModels,
-          d = uw.WindowFactorySettings,
-          e = require("game/windows/ids"),
-          f = require("game/windows/tabs"),
-          g = e[_IdS.toUpperCase()];
-        d[g] = function (b) {
-          b = b || {};
-          return us.extend(
-            {
-              window_type: g,
-              minheight: 550,
-              maxheight: 560,
-              width: 925,
-              tabs: [
-                {
-                  type: id,
-                  title: `${language[language.settingActiveLanguage].about}`,
-                  content_view_constructor: a["grepotools_" + _IdS],
-                  hidden: !1,
+                    _$el.find(".js-scrollbar-viewport").skinableScrollbar({
+                      orientation: "vertical",
+                      template: "tpl_skinable_scrollbar",
+                      skin: "narrow",
+                      disabled: !1,
+                      elements_to_scroll: _$el.find(".js-scrollbar-content"),
+                      element_viewport: _$el.find(".js-scrollbar-viewport"),
+                      scroll_position: 0,
+                      min_slider_size: 16,
+                    });
+                  }, 100);
                 },
-                {
-                  type: id,
-                  title: `${language[language.settingActiveLanguage].changes}`,
-                  content_view_constructor: a["grepotools_" + _IdS],
-                  hidden: !1,
+                bindEventListeners: function () {
+                  this.$el
+                      .parents("." + _IdS)
+                      .on(
+                          "click",
+                          ".js-wnd-buttons .help",
+                          this._handleHelpButtonClickEvent.bind(this)
+                      );
                 },
-                {
-                  type: id,
-                  title: `${language[language.settingActiveLanguage].settings}`,
-                  content_view_constructor: a["grepotools_" + _IdS],
-                  hidden: !1,
+                _handleHelpButtonClickEvent: function () {
+                  var a = this.getWindowModel().getHelpButtonSettings();
                 },
+              });
+          uw.GameViews["grepotools_" + _IdS] = c;
+        })(),
+        (function () {
+          "use strict";
+          var a = uw.GameViews,
+              b = uw.GameCollections,
+              c = uw.GameModels,
+              d = uw.WindowFactorySettings,
+              e = require("game/windows/ids"),
+              f = require("game/windows/tabs"),
+              g = e[_IdS.toUpperCase()];
+          d[g] = function (b) {
+            b = b || {};
+            return us.extend(
                 {
-                  type: id,
-                  title: `${language[language.settingActiveLanguage].donation}`,
-                  content_view_constructor: a["grepotools_" + _IdS],
-                  hidden: !1,
+                  window_type: g,
+                  minheight: 550,
+                  maxheight: 560,
+                  width: 925,
+                  tabs: [
+                    {
+                      type: id,
+                      title: `${language[language.settingActiveLanguage].about}`,
+                      content_view_constructor: a["grepotools_" + _IdS],
+                      hidden: !1,
+                    },
+                    {
+                      type: id,
+                      title: `${language[language.settingActiveLanguage].changes}`,
+                      content_view_constructor: a["grepotools_" + _IdS],
+                      hidden: !1,
+                    },
+                    {
+                      type: id,
+                      title: `${language[language.settingActiveLanguage].settings}`,
+                      content_view_constructor: a["grepotools_" + _IdS],
+                      hidden: !1,
+                    },
+                    {
+                      type: id,
+                      title: `${language[language.settingActiveLanguage].donation}`,
+                      content_view_constructor: a["grepotools_" + _IdS],
+                      hidden: !1,
+                    },
+                  ],
+                  max_instances: 1,
+                  activepagenr: 0,
                 },
-              ],
-              max_instances: 1,
-              activepagenr: 0,
-            },
-            b
-          );
-        };
-      })();
+                b
+            );
+          };
+        })();
   },
 };
 
@@ -6610,12 +6610,12 @@ let externalData = {
     externalData.loadIdleData();
 
     externalData.intervalLoadTownData = setInterval(
-      externalData.loadTownData,
-      3600000
+        externalData.loadTownData,
+        3600000
     );
     externalData.intervalLoadIdleData = setInterval(
-      externalData.loadIdleData,
-      3600000
+        externalData.loadIdleData,
+        3600000
     );
   },
 
@@ -6662,13 +6662,13 @@ let externalData = {
       const data = await response.text();
 
       externalData.islandData.set(
-        Game.world_id + "|" + ocean,
-        JSON.parse(data)
+          Game.world_id + "|" + ocean,
+          JSON.parse(data)
       );
 
       GM_setValue(
-        "islandData",
-        JSON.stringify(Array.from(externalData.islandData.entries()))
+          "islandData",
+          JSON.stringify(Array.from(externalData.islandData.entries()))
       );
       islandNumbers.animate();
     } catch (networkError) {
@@ -6681,9 +6681,9 @@ let externalData = {
     $.ajax({
       type: "GET",
       url:
-        "https://api.grepodata.com/data/" +
-        uw.Game.world_id +
-        "/player_idle.json",
+          "https://api.grepodata.com/data/" +
+          uw.Game.world_id +
+          "/player_idle.json",
       data: {
         server: uw.Game.world_id,
       },
@@ -6741,16 +6741,16 @@ let ocean = {
 
   getGameLayoutInfo() {
     const convertToPositiveInt = (value) =>
-      parseInt(value.replace("-", "").replace("px", ""));
+        parseInt(value.replace("-", "").replace("px", ""));
 
     switch (Game.layout_mode) {
       case "strategic_map":
         this.oceanSize = 2560;
 
         [this.left, this.top] = $("#minimap")
-          .css("translate")
-          .split(",")
-          .map(convertToPositiveInt);
+            .css("translate")
+            .split(",")
+            .map(convertToPositiveInt);
         break;
       case "island_view":
         this.oceanSize = 12800;
@@ -6767,7 +6767,7 @@ let ocean = {
 
   calculateOcean(x, y) {
     return parseInt(
-      Math.floor(x / this.oceanSize).toString() +
+        Math.floor(x / this.oceanSize).toString() +
         Math.floor(y / this.oceanSize).toString()
     );
   },
@@ -6796,8 +6796,8 @@ let statistics = {
     this.settingsKeys.forEach((setting) => {
       const { key, default: defaultValue } = setting;
       let value = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
       setting.value = value;
     });
@@ -6805,14 +6805,14 @@ let statistics = {
 
   getSettingValue(settingKey) {
     const setting = statistics.settingsKeys.find(
-      ({ key }) => key === settingKey
+        ({ key }) => key === settingKey
     );
     return setting ? setting.value : null;
   },
 
   setSettingValue(settingKey, value) {
     const setting = statistics.settingsKeys.find(
-      ({ key }) => key === settingKey
+        ({ key }) => key === settingKey
     );
     setting.value = value;
 
@@ -6877,7 +6877,7 @@ let version = {
   createStyle() {
     if (!this.rendered) {
       $("head").append(
-        $(`<style id="${this.styleDiv}">`).append(`
+          $(`<style id="${this.styleDiv}">`).append(`
           #notification_area .GrepoToolsUpdate .icon {
             background: url(https://www.grepotools.nl/grepotools/images/logoNotification.png) 3px 3px no-repeat !important; 
             cursor: pointer;
@@ -6895,8 +6895,8 @@ let version = {
     this.settingsKeys.forEach((setting) => {
       const { key, default: defaultValue } = setting;
       let value = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
       setting.value = value;
     });
@@ -6922,24 +6922,24 @@ let version = {
     return fetch("https://www.grepotools.nl/grepotools/php/version.php", {
       method: "POST",
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch server version. HTTP status: ${response.status}`
-          );
-        }
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(
+                `Failed to fetch server version. HTTP status: ${response.status}`
+            );
+          }
 
-        return response.text();
-      })
-      .then((data) => {
-        JSON.parse(data).forEach(function (value) {
-          version.data.set(value.id, value);
+          return response.text();
+        })
+        .then((data) => {
+          JSON.parse(data).forEach(function (value) {
+            version.data.set(value.id, value);
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching server version:", error);
+          throw error;
         });
-      })
-      .catch((error) => {
-        console.error("Error fetching server version:", error);
-        throw error;
-      });
   },
 
   getScriptVersions() {
@@ -6962,20 +6962,20 @@ let version = {
       version.release = "stable";
       version.releaseAction = "none";
     } else if (
-      version.localVersion === version.betaVersion &&
-      version.stableVersion < version.betaVersion
+        version.localVersion === version.betaVersion &&
+        version.stableVersion < version.betaVersion
     ) {
       version.release = "beta";
       version.releaseAction = "none";
     } else if (
-      version.localVersion > version.stableVersion &&
-      version.localVersion < version.betaVersion
+        version.localVersion > version.stableVersion &&
+        version.localVersion < version.betaVersion
     ) {
       version.release = "beta";
       version.releaseAction = "updateBeta";
     } else if (
-      version.localVersion > version.stableVersion &&
-      version.localVersion > version.betaVersion
+        version.localVersion > version.stableVersion &&
+        version.localVersion > version.betaVersion
     ) {
       version.release = "development";
       version.releaseAction = "none";
@@ -6989,15 +6989,15 @@ let version = {
 
     const showUpdateNotification = (versionType, targetVersion) => {
       version.showNotification(
-        `${versionType.toUpperCase()} ${language[
-          language.settingActiveLanguage
-        ].version.toUpperCase()} </br>${
-          language[language.settingActiveLanguage].update
-        } ${version.localVersion} ${language[
-          language.settingActiveLanguage
-        ].to.toLowerCase()} ${targetVersion}</br><br><a class="notify_subjectlink" href="https://www.grepotools.nl/" target="_blank">${
-          language[language.settingActiveLanguage].update
-        }</a>`
+          `${versionType.toUpperCase()} ${language[
+              language.settingActiveLanguage
+              ].version.toUpperCase()} </br>${
+              language[language.settingActiveLanguage].update
+          } ${version.localVersion} ${language[
+              language.settingActiveLanguage
+              ].to.toLowerCase()} ${targetVersion}</br><br><a class="notify_subjectlink" href="https://www.grepotools.nl/" target="_blank">${
+              language[language.settingActiveLanguage].update
+          }</a>`
       );
     };
 
@@ -7006,8 +7006,8 @@ let version = {
     }
 
     if (
-      version.getSettingValue("joinBetaProgram") &&
-      version.releaseAction === "updateBeta"
+        version.getSettingValue("joinBetaProgram") &&
+        version.releaseAction === "updateBeta"
     ) {
       showUpdateNotification(version.release, version.betaVersion);
     }
@@ -7032,16 +7032,16 @@ let version = {
 
       const notification = new uw.NotificationHandler();
       const layout =
-        typeof Layout.notify === "undefined"
-          ? new NotificationHandler()
-          : Layout;
+          typeof Layout.notify === "undefined"
+              ? new NotificationHandler()
+              : Layout;
 
       notification.notify(
-        $("#notification_area>.notification").length + 1,
-        "GrepoToolsUpdate",
-        `<span><b>${
-          language[language.settingActiveLanguage].grepotoolsUpdateAvailable
-        }</b></span>` +
+          $("#notification_area>.notification").length + 1,
+          "GrepoToolsUpdate",
+          `<span><b>${
+              language[language.settingActiveLanguage].grepotoolsUpdateAvailable
+          }</b></span>` +
           textNotification +
           `<span class="small notification_date">${dayTimeString}</span>`
       );
@@ -7077,7 +7077,7 @@ let language = {
     bbcodeAllianceCopySucces: "BBCode - Alliantie informatie is gekopieerd",
     bbcodeIsland: "Kopieer de informatie van dit eiland",
     bbcodeIslandCopyFail:
-      "BBCode - Eiland is leeg, informatie is niet gekopieerd",
+        "BBCode - Eiland is leeg, informatie is niet gekopieerd",
     bbcodeIslandCopySucces: "BBCode - Eiland informatie is gekopieerd",
     bbcodePlayer: "Kopieer de informatie van deze speler",
     bbcodePlayerCopySucces: "BBCode - Speler informatie is gekopieerd",
@@ -7110,11 +7110,11 @@ let language = {
     island: "Eiland",
     islandDataAvailable: "Eiland data beschikbaar. Eiland: ",
     islandEmptyNoMessage:
-      "Het eiland is leeg, er kan geen bericht worden verzonden",
+        "Het eiland is leeg, er kan geen bericht worden verzonden",
     islandInformationWindow: "Eiland informatie venster",
     islandLinkIslandInfo: "eiland nummers/tags als link naar eiland informatie",
     islandNoAllianceNoMessage:
-      "Op dit eiland zijn geen aliantieleden aanwezig, er kan geen bericht worden verzonden",
+        "Op dit eiland zijn geen aliantieleden aanwezig, er kan geen bericht worden verzonden",
     islandNumber: "Eiland nummer",
     islandNumbersTags: "Eiland nummers / tags",
     islandOccupation: "Eiland bezetting",
@@ -7144,7 +7144,7 @@ let language = {
     playerDataAvailable: "Speler data beschikbaar. Speler: ",
     playerName: "Spelersnaam",
     playerRequired:
-      "De speler wordt automatisch toegevoegd, dit veld is verplicht",
+        "De speler wordt automatisch toegevoegd, dit veld is verplicht",
     points: "Punten",
     rank: "Rank",
     resources: "Resources",
@@ -7158,7 +7158,7 @@ let language = {
     selectPage: "Selecteer pagina:",
     sendMessageAlliance: "Verstuur bericht aan alle leden van de alliantie",
     sendMessageIsland:
-      "Verstuur bericht aan alle leden van de alliantie op het eiland",
+        "Verstuur bericht aan alle leden van de alliantie op het eiland",
     settings: "Instellingen",
     show: "Toon",
     showInfoAboveTable: "Toon de informatie hieronder boven de tabel",
@@ -7257,7 +7257,7 @@ let language = {
     islandInformationWindow: "Island information window",
     islandLinkIslandInfo: "island numbers/tags as link to island information",
     islandNoAllianceNoMessage:
-      "There are no alliance members on this island, no message can be sent",
+        "There are no alliance members on this island, no message can be sent",
     islandNumber: "Island number",
     islandNumbersTags: "Island numbers / tags",
     islandOccupation: "Island occupation",
@@ -7358,13 +7358,13 @@ let language = {
     allianceRank: "Allianzrang",
     and: "Und",
     attackNotification:
-      "Animieren Sie das Browser-Symbol während eines Angriffs",
+        "Animieren Sie das Browser-Symbol während eines Angriffs",
     battlePoints: "Kampfpunkte",
     bbcodeAlliance: "Kopieren Sie die Informationen aller Allianzenmitglieder",
     bbcodeAllianceCopySucces: "BBCode - Allianzinformationen wurden kopiert",
     bbcodeIsland: "Kopieren Sie die Informationen dieser Insel",
     bbcodeIslandCopyFail:
-      "BBCode - Insel ist leer, Informationen wurden nicht kopiert",
+        "BBCode - Insel ist leer, Informationen wurden nicht kopiert",
     bbcodeIslandCopySucces: "BBCode - Inselinformationen wurden kopiert",
     bbcodePlayer: "Kopieren Sie die Informationen dieses Spielers",
     bbcodePlayerCopySucces: "BBCode - Spielerinformationen wurden kopiert",
@@ -7372,7 +7372,7 @@ let language = {
     button: "Knopf",
     changes: "Änderungen",
     cityRequired:
-      "Die Stadt wird automatisch hinzugefügt, dieses Feld ist erforderlich",
+        "Die Stadt wird automatisch hinzugefügt, dieses Feld ist erforderlich",
     color: "Farbe",
     coordinates: "Koordinaten",
     day: "Tag",
@@ -7398,11 +7398,11 @@ let language = {
     island: "Insel",
     islandDataAvailable: "Insel Daten verfügbar. Insel: ",
     islandEmptyNoMessage:
-      "Die Insel ist leer, es kann keine Nachricht gesendet werden",
+        "Die Insel ist leer, es kann keine Nachricht gesendet werden",
     islandInformationWindow: "Inselinformationsfenster",
     islandLinkIslandInfo: "Inselnummern/tags als Link zu Inselinformationen",
     islandNoAllianceNoMessage:
-      "Es gibt keine Allianzenmitglieder auf dieser Insel, es kann keine Nachricht gesendet werden",
+        "Es gibt keine Allianzenmitglieder auf dieser Insel, es kann keine Nachricht gesendet werden",
     islandNumber: "Inselnummer",
     islandNumbersTags: "Inselnummern / tags",
     islandOccupation: "Inselbesetzung",
@@ -7432,7 +7432,7 @@ let language = {
     playerDataAvailable: "Spielerdaten verfügbar. Spieler: ",
     playerName: "Spielername",
     playerRequired:
-      "Der Spieler wird automatisch hinzugefügt, dieses Feld ist erforderlich",
+        "Der Spieler wird automatisch hinzugefügt, dieses Feld ist erforderlich",
     points: "Punkte",
     rank: "Rang",
     resources: "Ressourcen",
@@ -7446,11 +7446,11 @@ let language = {
     selectPage: "Seite auswählen:",
     sendMessageAlliance: "Nachricht an alle Allianzenmitglieder senden",
     sendMessageIsland:
-      "Nachricht an alle Allianzenmitglieder auf der Insel senden",
+        "Nachricht an alle Allianzenmitglieder auf der Insel senden",
     settings: "Einstellungen",
     show: "Anzeigen",
     showInfoAboveTable:
-      "Zeigen Sie die Informationen unten über der Tabelle an",
+        "Zeigen Sie die Informationen unten über der Tabelle an",
     showInfoInTable: "Zeigen Sie die Informationen unten in der Tabelle an",
     silver: "Silber",
     spellsHarborBarracks: "Zauber im Hafen und in den Kasernen",
@@ -7511,7 +7511,7 @@ let language = {
     bbcodeAllianceCopySucces: "BBCode - Informations de l'alliance copiées",
     bbcodeIsland: "Copier les informations de cette île",
     bbcodeIslandCopyFail:
-      "BBCode - L'île est vide, les informations ne sont pas copiées",
+        "BBCode - L'île est vide, les informations ne sont pas copiées",
     bbcodeIslandCopySucces: "BBCode - Informations de l'île copiées",
     bbcodePlayer: "Copier les informations de ce joueur",
     bbcodePlayerCopySucces: "BBCode - Informations du joueur copiées",
@@ -7527,7 +7527,7 @@ let language = {
     donation: "Dons",
     emptyColumn: "Colonne vide",
     farmerIslandNumbersTextColor:
-      "Couleur du texte des numéros d'île de fermier",
+        "Couleur du texte des numéros d'île de fermier",
     farmerVillageIslandNumbers: "Numéros d'île de village de fermier",
     farmerVillageIslandTags: "Tags d'île de village de fermier",
     free: "Gratuit",
@@ -7547,9 +7547,9 @@ let language = {
     islandEmptyNoMessage: "L'île est vide, aucun message ne peut être envoyé",
     islandInformationWindow: "Fenêtre d'information sur l'île",
     islandLinkIslandInfo:
-      "numéros/tags d'île comme lien vers les informations de l'île",
+        "numéros/tags d'île comme lien vers les informations de l'île",
     islandNoAllianceNoMessage:
-      "Il n'y a pas de membres de l'alliance sur cette île, aucun message ne peut être envoyé",
+        "Il n'y a pas de membres de l'alliance sur cette île, aucun message ne peut être envoyé",
     islandNumber: "Numéro de l'île",
     islandNumbersTags: "Numéros / tags de l'île",
     islandOccupation: "Occupation de l'île",
@@ -7587,17 +7587,17 @@ let language = {
     safe: "Enregistrer",
     safeAndReload: "Enregistrer et recharger",
     safeFail:
-      "Les paramètres de GrepoTools n'ont pas été enregistrés avec succès",
+        "Les paramètres de GrepoTools n'ont pas été enregistrés avec succès",
     safeSuccess: "Les paramètres de GrepoTools ont été enregistrés avec succès",
     script: "Script Grepolis GrepoTools",
     selectPage: "Sélectionner la page :",
     sendMessageAlliance: "Envoyer un message à tous les membres de l'alliance",
     sendMessageIsland:
-      "Envoyer un message à tous les membres de l'alliance sur l'île",
+        "Envoyer un message à tous les membres de l'alliance sur l'île",
     settings: "Paramètres",
     show: "Afficher",
     showInfoAboveTable:
-      "Afficher les informations ci-dessous au-dessus de la table",
+        "Afficher les informations ci-dessous au-dessus de la table",
     showInfoInTable: "Afficher les informations ci-dessous dans la table",
     silver: "Argent",
     spellsHarborBarracks: "des sorts dans le port et la caserne",
@@ -7653,14 +7653,14 @@ let language = {
     allianceRank: "Βαθμός συμμαχίας",
     and: "Και",
     attackNotification:
-      "Αναπαραγωγή του εικονιδίου του προγράμματος περιήγησης κατά τη διάρκεια μιας επίθεσης",
+        "Αναπαραγωγή του εικονιδίου του προγράμματος περιήγησης κατά τη διάρκεια μιας επίθεσης",
     battlePoints: "Πόντοι μάχης",
     bbcodeAlliance: "Αντιγραφή των πληροφοριών όλων των μελών της συμμαχίας",
     bbcodeAllianceCopySucces:
-      "BBCode - Οι πληροφορίες της συμμαχίας αντιγράφηκαν",
+        "BBCode - Οι πληροφορίες της συμμαχίας αντιγράφηκαν",
     bbcodeIsland: "Αντιγραφή των πληροφοριών αυτού του νησιού",
     bbcodeIslandCopyFail:
-      "BBCode - Το νησί είναι άδειο, οι πληροφορίες δεν αντιγράφηκαν",
+        "BBCode - Το νησί είναι άδειο, οι πληροφορίες δεν αντιγράφηκαν",
     bbcodeIslandCopySucces: "BBCode - Οι πληροφορίες του νησιού αντιγράφηκαν",
     bbcodePlayer: "Αντιγραφή των πληροφοριών αυτού του παίκτη",
     bbcodePlayerCopySucces: "BBCode - Οι πληροφορίες του παίκτη αντιγράφηκαν",
@@ -7668,7 +7668,7 @@ let language = {
     button: "Κουμπί",
     changes: "Αλλαγές",
     cityRequired:
-      "Η πόλη προστίθεται αυτόματα, αυτό το πεδίο είναι υποχρεωτικό",
+        "Η πόλη προστίθεται αυτόματα, αυτό το πεδίο είναι υποχρεωτικό",
     color: "Χρώμα",
     coordinates: "Συντεταγμένες",
     day: "ημέρα",
@@ -7696,9 +7696,9 @@ let language = {
     islandEmptyNoMessage: "Το νησί είναι άδειο, δεν μπορεί να σταλεί μήνυμα",
     islandInformationWindow: "Παράθυρο πληροφοριών νησιού",
     islandLinkIslandInfo:
-      "αριθμοί/ετικέτες νησιού ως σύνδεσμος προς τις πληροφορίες του νησιού",
+        "αριθμοί/ετικέτες νησιού ως σύνδεσμος προς τις πληροφορίες του νησιού",
     islandNoAllianceNoMessage:
-      "Δεν υπάρχουν μέλη της συμμαχίας σε αυτό το νησί, δεν μπορεί να σταλεί μήνυμα",
+        "Δεν υπάρχουν μέλη της συμμαχίας σε αυτό το νησί, δεν μπορεί να σταλεί μήνυμα",
     islandNumber: "Αριθμός νησιού",
     islandNumbersTags: "Αριθμοί / ετικέτες νησιού",
     islandOccupation: "Κατοχή νησιού",
@@ -7728,7 +7728,7 @@ let language = {
     playerDataAvailable: "Δεδομένα παίκτη διαθέσιμα. Παίκτης: ",
     playerName: "Όνομα παίκτη",
     playerRequired:
-      "Ο παίκτης προστίθεται αυτόματα, αυτό το πεδίο είναι υποχρεωτικό",
+        "Ο παίκτης προστίθεται αυτόματα, αυτό το πεδίο είναι υποχρεωτικό",
     points: "Πόντοι",
     rank: "Βαθμός",
     resources: "Πόροι",
@@ -7742,7 +7742,7 @@ let language = {
     selectPage: "Επιλογή σελίδας:",
     sendMessageAlliance: "Αποστολή μηνύματος σε όλα τα μέλη της συμμαχίας",
     sendMessageIsland:
-      "Αποστολή μηνύματος σε όλα τα μέλη της συμμαχίας στο νησί",
+        "Αποστολή μηνύματος σε όλα τα μέλη της συμμαχίας στο νησί",
     settings: "Ρυθμίσεις",
     show: "Εμφάνιση",
     showInfoAboveTable: "Εμφάνιση των πληροφοριών παρακάτω πάνω από τον πίνακα",
@@ -7804,10 +7804,10 @@ let language = {
     battlePoints: "Punkty bitewne",
     bbcodeAlliance: "Skopiuj informacje o wszystkich członkach sojuszu",
     bbcodeAllianceCopySucces:
-      "BBCode - Informacje o sojuszu zostały skopiowane",
+        "BBCode - Informacje o sojuszu zostały skopiowane",
     bbcodeIsland: "Skopiuj informacje o tej wyspie",
     bbcodeIslandCopyFail:
-      "BBCode - Wyspa jest pusta, informacje nie zostały skopiowane",
+        "BBCode - Wyspa jest pusta, informacje nie zostały skopiowane",
     bbcodeIslandCopySucces: "BBCode - Informacje o wyspie zostały skopiowane",
     bbcodePlayer: "Skopiuj informacje o tym graczu",
     bbcodePlayerCopySucces: "BBCode - Informacje o graczu zostały skopiowane",
@@ -7843,7 +7843,7 @@ let language = {
     islandInformationWindow: "Okno informacji o wyspie",
     islandLinkIslandInfo: "numery/tagi wysp jako link do informacji o wyspie",
     islandNoAllianceNoMessage:
-      "Na tej wyspie nie ma członków sojuszu, nie można wysłać wiadomości",
+        "Na tej wyspie nie ma członków sojuszu, nie można wysłać wiadomości",
     islandNumber: "Numer wyspy",
     islandNumbersTags: "Numery / tagi wysp",
     islandOccupation: "Zajęcie wyspy",
@@ -7886,7 +7886,7 @@ let language = {
     selectPage: "Wybierz stronę:",
     sendMessageAlliance: "Wyślij wiadomość do wszystkich członków sojuszu",
     sendMessageIsland:
-      "Wyślij wiadomość do wszystkich członków sojuszu na wyspie",
+        "Wyślij wiadomość do wszystkich członków sojuszu na wyspie",
     settings: "Ustawienia",
     show: "Pokaż",
     showInfoAboveTable: "Pokaż informacje poniżej nad tabelą",
@@ -7950,7 +7950,7 @@ let language = {
     bbcodeAllianceCopySucces: "BBCode - Información de la alianza copiada",
     bbcodeIsland: "Copiar la información de esta isla",
     bbcodeIslandCopyFail:
-      "BBCode - La isla está vacía, la información no se copió",
+        "BBCode - La isla está vacía, la información no se copió",
     bbcodeIslandCopySucces: "BBCode - Información de la isla copiada",
     bbcodePlayer: "Copiar la información de este jugador",
     bbcodePlayerCopySucces: "BBCode - Información del jugador copiada",
@@ -7958,7 +7958,7 @@ let language = {
     button: "Botón",
     changes: "Cambios",
     cityRequired:
-      "La ciudad se agrega automáticamente, este campo es obligatorio",
+        "La ciudad se agrega automáticamente, este campo es obligatorio",
     color: "Color",
     coordinates: "Coordenadas",
     day: "día",
@@ -7967,7 +7967,7 @@ let language = {
     donation: "Donaciones",
     emptyColumn: "Columna vacía",
     farmerIslandNumbersTextColor:
-      "Color del texto de los números de la isla del granjero",
+        "Color del texto de los números de la isla del granjero",
     farmerVillageIslandNumbers: "Números de la isla del pueblo del granjero",
     farmerVillageIslandTags: "Etiquetas de la isla del pueblo del granjero",
     free: "Gratis",
@@ -7987,9 +7987,9 @@ let language = {
     islandEmptyNoMessage: "La isla está vacía, no se puede enviar un mensaje",
     islandInformationWindow: "Ventana de información de la isla",
     islandLinkIslandInfo:
-      "números/etiquetas de la isla como enlace a la información de la isla",
+        "números/etiquetas de la isla como enlace a la información de la isla",
     islandNoAllianceNoMessage:
-      "No hay miembros de la alianza en esta isla, no se puede enviar un mensaje",
+        "No hay miembros de la alianza en esta isla, no se puede enviar un mensaje",
     islandNumber: "Número de la isla",
     islandNumbersTags: "Números / etiquetas de la isla",
     islandOccupation: "Ocupación de la isla",
@@ -8019,13 +8019,13 @@ let language = {
     playerDataAvailable: "Datos del jugador disponibles. Jugador: ",
     playerName: "Nombre del jugador",
     playerRequired:
-      "El jugador se agrega automáticamente, este campo es obligatorio",
+        "El jugador se agrega automáticamente, este campo es obligatorio",
     points: "Puntos",
     rank: "Rango",
     resources: "Recursos",
     rockIslandNumbers: "Números de la isla rocosa",
     rockIslandNumbersTextColor:
-      "Color del texto de los números de la isla rocosa",
+        "Color del texto de los números de la isla rocosa",
     safe: "Guardar",
     safeAndReload: "Guardar y recargar",
     safeFail: "La configuración de GrepoTools no se ha guardado correctamente",
@@ -8034,7 +8034,7 @@ let language = {
     selectPage: "Seleccionar página:",
     sendMessageAlliance: "Enviar mensaje a todos los miembros de la alianza",
     sendMessageIsland:
-      "Enviar mensaje a todos los miembros de la alianza en la isla",
+        "Enviar mensaje a todos los miembros de la alianza en la isla",
     settings: "Configuraciones",
     show: "Mostrar",
     showInfoAboveTable: "Mostrar la información a continuación sobre la tabla",
@@ -8086,8 +8086,8 @@ let language = {
     language.loadSettings();
 
     if (
-      !language.languages.includes(language.settingActiveLanguage) ||
-      !language.settingActiveLanguage
+        !language.languages.includes(language.settingActiveLanguage) ||
+        !language.settingActiveLanguage
     ) {
       language.settingActiveLanguage = "en";
     }
@@ -8100,8 +8100,8 @@ let language = {
 
     settingsKeys.forEach(({ key, default: defaultValue }) => {
       this[key] = settings.loadSetting(
-        `${Game.world_id}|${this.module}.${key}`,
-        defaultValue
+          `${Game.world_id}|${this.module}.${key}`,
+          defaultValue
       );
     });
   },
@@ -8113,8 +8113,8 @@ let language = {
 
     if (settingsKeys.hasOwnProperty(setting)) {
       settings.safeSetting(
-        `${Game.world_id}|${language.module}.${setting}`,
-        settingsKeys[setting]
+          `${Game.world_id}|${language.module}.${setting}`,
+          settingsKeys[setting]
       );
     }
   },
@@ -8144,18 +8144,18 @@ let script = {
     language.init();
 
     console.log(
-      `%cGrepolis Grepotools Script: ${
-        language[language.settingActiveLanguage].active
-      }| ${language[language.settingActiveLanguage].version}: ${
-        GM_info.script.version
-      } ${version.release} | ${
-        language[language.settingActiveLanguage].world
-      }: ${Game.world_id} | ${
-        language[language.settingActiveLanguage].language
-      }: ${
-        language.settingActiveLanguage
-      } \nDiscord: https://discord.com/invite/K4jV7hFSRu`,
-      `color: green; font-size: 1em; font-weight: bolder;`
+        `%cGrepolis Grepotools Script: ${
+            language[language.settingActiveLanguage].active
+        }| ${language[language.settingActiveLanguage].version}: ${
+            GM_info.script.version
+        } ${version.release} | ${
+            language[language.settingActiveLanguage].world
+        }: ${Game.world_id} | ${
+            language[language.settingActiveLanguage].language
+        }: ${
+            language.settingActiveLanguage
+        } \nDiscord: https://discord.com/invite/K4jV7hFSRu`,
+        `color: green; font-size: 1em; font-weight: bolder;`
     );
 
     script.initInterval = setInterval(script.modulesInit, 500);
