@@ -452,106 +452,120 @@
         }
 
         showPlayerList() {
-            const players = this.getPlayers();
-            const headers = [
-                'Naam', 'Rang', 'Punten', 'Steden', 'Status',
-                '<img src="https://gpnl.innogamescdn.com/images/game/ally/founder.png" alt="Oprichter" width="16" height="16">',
-                '<img src="https://gpnl.innogamescdn.com/images/game/ally/leader.png" alt="Leider" width="16" height="16">',
-                '<img src="https://gpnl.innogamescdn.com/images/game/ally/invite.png" alt="Uitnodigingen" width="16" height="16">',
-                '<img src="https://gpnl.innogamescdn.com/images/game/ally/diplomacy.png" alt="Diplomatie" width="16" height="16">',
-                '<img src="https://gpnl.innogamescdn.com/images/game/ally/mass_mail.png" alt="Rondschrijven" width="16" height="16">',
-                '<img src="https://gpnl.innogamescdn.com/images/game/ally/forum_mod.png" alt="Forummoderator" width="16" height="16">',
-                '<img src="https://gpnl.innogamescdn.com/images/game/ally/internal_forum.png" alt="Intern forum" width="16" height="16">',
-                '<img src="https://gpnl.innogamescdn.com/images/game/ally/reservationtool_admin.png" alt="Reserveringen" width="16" height="16">',
-                'Geplande Inactiviteit'
-            ];
+    const players = this.getPlayers();
+    const headers = [
+        'Naam', 'Rang', 'Punten', 'Steden', 'Status',
+        '<img src="https://gpnl.innogamescdn.com/images/game/ally/founder.png" alt="Oprichter" width="16" height="16">',
+        '<img src="https://gpnl.innogamescdn.com/images/game/ally/leader.png" alt="Leider" width="16" height="16">',
+        '<img src="https://gpnl.innogamescdn.com/images/game/ally/invite.png" alt="Uitnodigingen" width="16" height="16">',
+        '<img src="https://gpnl.innogamescdn.com/images/game/ally/diplomacy.png" alt="Diplomatie" width="16" height="16">',
+        '<img src="https://gpnl.innogamescdn.com/images/game/ally/mass_mail.png" alt="Rondschrijven" width="16" height="16">',
+        '<img src="https://gpnl.innogamescdn.com/images/game/ally/forum_mod.png" alt="Forummoderator" width="16" height="16">',
+        '<img src="https://gpnl.innogamescdn.com/images/game/ally/internal_forum.png" alt="Intern forum" width="16" height="16">',
+        '<img src="https://gpnl.innogamescdn.com/images/game/ally/reservationtool_admin.png" alt="Reserveringen" width="16" height="16">',
+        'Geplande Inactiviteit'
+    ];
 
-            const currentDateTime = new Date().toLocaleString();
-            let html = `<div style="text-align: center; margin-bottom: 10px;"><strong>Laatst bijgewerkt:</strong> ${currentDateTime}</div>`;
-            html += '<table><thead><tr>';
-            headers.forEach(header => html += `<th>${header}</th>`);
-            html += '</tr></thead><tbody>';
+    const currentDateTime = new Date().toLocaleString();
+    let html = `<div style="text-align: center; margin-bottom: 10px;"><strong>Laatst bijgewerkt:</strong> ${currentDateTime}</div>`;
+    html += '<table><thead><tr>';
+    headers.forEach(header => html += `<th>${header}</th>`);
+    html += '</tr></thead><tbody>';
 
-            players.forEach(player => {
-                const statusText = this.determineStatus(player.status);
-                const statusIcon = this.getStatusIcon(statusText);
-                html += '<tr>';
-                html += `<td><a class="player-name-link" href="#" data-player="${player.name}">${player.name}</a></td>`;
-                html += `<td>${player.rank}</td>`;
-                html += `<td>${player.points}</td>`;
-                html += `<td>${player.cities}</td>`;
-                if (player.status === "online.png" || player.status === "vacation.png") {
-                    html += `<td>${statusIcon} ${statusText}</td>`;
-                } else {
-                    html += `<td>${statusIcon}</td>`;
-                }
-                player.rights.forEach(right => html += `<td>${right}</td>`);
-                html += `<td></td>`;
-                html += '</tr>';
-            });
+    if (players.length === 0) {
+        html += `<tr><td colspan="${headers.length}" style="text-align: center; color: red;">Geen spelers gevonden.</td></tr>`;
+    } else {
+        players.forEach(player => {
+            const statusText = this.determineStatus(player.status);
+            const statusIcon = this.getStatusIcon(statusText);
+            html += '<tr>';
+            html += `<td><a class="player-name-link" href="#" data-player="${player.name}">${player.name}</a></td>`;
+            html += `<td>${player.rank}</td>`;
+            html += `<td>${player.points}</td>`;
+            html += `<td>${player.cities}</td>`;
+            if (player.status === "online.png" || player.status === "vacation.png") {
+                html += `<td>${statusIcon} ${statusText}</td>`;
+            } else {
+                html += `<td>${statusIcon}</td>`;
+            }
+            player.rights.forEach(right => html += `<td>${right}</td>`);
+            html += `<td></td>`; // Placeholder for "Geplande Inactiviteit"
+            html += '</tr>';
+        });
+    }
 
-            html += '</tbody></table>';
-            const content = document.getElementById('popup-content');
-            content.innerHTML = html;
-        }
+    html += '</tbody></table>';
+    const content = document.getElementById('popup-content');
+    content.innerHTML = html;
+
+    console.log('Player list displayed successfully.'); // Debug log
+}
 
         getPlayers() {
-            const players = [];
-            const rows = document.querySelectorAll('#ally_members_body tr[id^="alliance_player_"]');
+    const players = [];
+    const rows = document.querySelectorAll('#ally_members_body tr[id^="alliance_player_"]');
 
-            rows.forEach(row => {
-                const nameLink = row.querySelector('.ally_name a');
-                const name = nameLink.textContent.trim();
-                const statusImg = nameLink.querySelector('img');
-                const status = statusImg ? statusImg.src.split('/').pop() : null;
-                const cells = row.cells;
+    console.log(`Found ${rows.length} player rows in the DOM.`); // Debug log
 
-                const rights = [];
-                for (let i = 4; i <= 11; i++) {
-                    const img = cells[i].querySelector('img');
-                    if (img && img.src.includes('yellow_checkmark')) {
-                        rights.push(`<img src="${img.src}" alt="${img.alt}" width="16" height="16">`);
-                    } else {
-                        rights.push('');
-                    }
-                }
+    rows.forEach(row => {
+        const nameLink = row.querySelector('.ally_name a');
+        const name = nameLink?.textContent.trim() || 'Unknown';
+        const statusImg = nameLink?.querySelector('img');
+        const status = statusImg ? statusImg.src.split('/').pop() : null;
 
-                players.push({
-                    name: name,
-                    rank: cells[1].textContent,
-                    points: cells[2].textContent,
-                    cities: cells[3].textContent,
-                    status: status,
-                    rights: rights
-                });
-            });
+        const cells = row.cells;
+        const rank = cells[1]?.textContent.trim() || 'Unknown';
+        const points = cells[2]?.textContent.trim() || 'Unknown';
+        const cities = cells[3]?.textContent.trim() || 'Unknown';
 
-            return players;
+        const rights = [];
+        for (let i = 4; i <= 11; i++) {
+            const img = cells[i]?.querySelector('img');
+            if (img && img.src.includes('yellow_checkmark')) {
+                rights.push(`<img src="${img.src}" alt="${img.alt}" width="16" height="16">`);
+            } else {
+                rights.push('');
+            }
         }
+
+        players.push({
+            name: name,
+            rank: rank,
+            points: points,
+            cities: cities,
+            status: status,
+            rights: rights
+        });
+
+        console.log(`Processed player: ${name}, Rank: ${rank}, Points: ${points}, Cities: ${cities}, Status: ${status}`); // Debug log
+    });
+
+    return players;
+}
 
         determineStatus(statusImg) {
-            const activityMap = {
-                "green.png": "Actief in de afgelopen 12 uur",
-                "online.png": "Actief in de afgelopen 10 minuten",
-                "vacation.png": "Vakantiemodus",
-                "yellow.png": "Meer dan 12 uur inactief",
-                "red.png": "Meer dan 24 uur inactief",
-            };
+    const activityMap = {
+        "green.png": "Actief in de afgelopen 12 uur",
+        "online.png": "Actief in de afgelopen 10 minuten",
+        "vacation.png": "Vakantiemodus",
+        "yellow.png": "Meer dan 12 uur inactief",
+        "red.png": "Meer dan 24 uur inactief",
+    };
 
-            return activityMap[statusImg] || "Onbekend";
-        }
+    return activityMap[statusImg] || "Onbekend";
+}
 
-        getStatusIcon(status) {
-            const statusIcons = {
-                "Actief in de afgelopen 12 uur": '<i class="fas fa-circle status-icon" style="color: limegreen;"></i>',
-                "Actief in de afgelopen 10 minuten": '<i class="fas fa-circle status-icon" style="color: limegreen;"></i>',
-                "Meer dan 12 uur inactief": '<i class="fas fa-circle status-icon" style="color: orange;"></i>',
-                "Meer dan 24 uur inactief": '<i class="fas fa-circle status-icon" style="color: red;"></i>',
-                "Vakantiemodus": '<i class="fas fa-umbrella-beach status-icon" style="color: blue;"></i>',
-            };
+getStatusIcon(status) {
+    const statusIcons = {
+        "Actief in de afgelopen 12 uur": '<i class="fas fa-circle status-icon" style="color: limegreen;"></i>',
+        "Actief in de afgelopen 10 minuten": '<i class="fas fa-circle status-icon" style="color: limegreen;"></i>',
+        "Meer dan 12 uur inactief": '<i class="fas fa-circle status-icon" style="color: orange;"></i>',
+        "Meer dan 24 uur inactief": '<i class="fas fa-circle status-icon" style="color: red;"></i>',
+        "Vakantiemodus": '<i class="fas fa-umbrella-beach status-icon" style="color: blue;"></i>',
+    };
 
-            return statusIcons[status] || '<i class="fas fa-question-circle status-icon" style="color: gray;"></i>';
-        }
+    return statusIcons[status] || '<i class="fas fa-question-circle status-icon" style="color: gray;"></i>';
+}
 
         createToolbarButton(text, onClick) {
             const button = document.createElement('button');
