@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Grepolis Manager
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.1
 // @description  Popup met werkbalk en buttons, inclusief Afwezigheidsassistent
 // @author       You
 // @match        *://*.grepolis.com/*
