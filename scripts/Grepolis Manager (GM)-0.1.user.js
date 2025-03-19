@@ -428,7 +428,7 @@
             content.innerHTML = `
                 <h2>Leiding Tools</h2>
                 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                    <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 1</button>
+                    <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;" onclick="forumManager.showPlayerList()">Spelerslijst</button>
                     <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 2</button>
                     <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 3</button>
                     <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 4</button>
@@ -440,6 +440,108 @@
                     <button style="background: black; color: #FF0000; border: 1px solid #FF0000; padding: 10px 20px; cursor: pointer; font-size: 14px; border-radius: 5px;">Tool 10</button>
                 </div>
             `;
+        }
+
+        showPlayerList() {
+            const players = this.getPlayers();
+            const headers = [
+                'Naam', 'Rang', 'Punten', 'Steden', 'Status',
+                '<img src="https://gpnl.innogamescdn.com/images/game/ally/founder.png" alt="Oprichter" width="16" height="16">',
+                '<img src="https://gpnl.innogamescdn.com/images/game/ally/leader.png" alt="Leider" width="16" height="16">',
+                '<img src="https://gpnl.innogamescdn.com/images/game/ally/invite.png" alt="Uitnodigingen" width="16" height="16">',
+                '<img src="https://gpnl.innogamescdn.com/images/game/ally/diplomacy.png" alt="Diplomatie" width="16" height="16">',
+                '<img src="https://gpnl.innogamescdn.com/images/game/ally/mass_mail.png" alt="Rondschrijven" width="16" height="16">',
+                '<img src="https://gpnl.innogamescdn.com/images/game/ally/forum_mod.png" alt="Forummoderator" width="16" height="16">',
+                '<img src="https://gpnl.innogamescdn.com/images/game/ally/internal_forum.png" alt="Intern forum" width="16" height="16">',
+                '<img src="https://gpnl.innogamescdn.com/images/game/ally/reservationtool_admin.png" alt="Reserveringen" width="16" height="16">',
+                'Geplande Inactiviteit'
+            ];
+
+            const currentDateTime = new Date().toLocaleString();
+            let html = `<div style="text-align: center; margin-bottom: 10px;"><strong>Laatst bijgewerkt:</strong> ${currentDateTime}</div>`;
+            html += '<table><thead><tr>';
+            headers.forEach(header => html += `<th>${header}</th>`);
+            html += '</tr></thead><tbody>';
+
+            players.forEach(player => {
+                const statusText = this.determineStatus(player.status);
+                const statusIcon = this.getStatusIcon(statusText);
+                html += '<tr>';
+                html += `<td><a class="player-name-link" href="#" data-player="${player.name}">${player.name}</a></td>`;
+                html += `<td>${player.rank}</td>`;
+                html += `<td>${player.points}</td>`;
+                html += `<td>${player.cities}</td>`;
+                if (player.status === "online.png" || player.status === "vacation.png") {
+                    html += `<td>${statusIcon} ${statusText}</td>`;
+                } else {
+                    html += `<td>${statusIcon}</td>`;
+                }
+                player.rights.forEach(right => html += `<td>${right}</td>`);
+                html += `<td></td>`;
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+            const content = document.getElementById('popup-content');
+            content.innerHTML = html;
+        }
+
+        getPlayers() {
+            const players = [];
+            const rows = document.querySelectorAll('#ally_members_body tr[id^="alliance_player_"]');
+
+            rows.forEach(row => {
+                const nameLink = row.querySelector('.ally_name a');
+                const name = nameLink.textContent.trim();
+                const statusImg = nameLink.querySelector('img');
+                const status = statusImg ? statusImg.src.split('/').pop() : null;
+                const cells = row.cells;
+
+                const rights = [];
+                for (let i = 4; i <= 11; i++) {
+                    const img = cells[i].querySelector('img');
+                    if (img && img.src.includes('yellow_checkmark')) {
+                        rights.push(`<img src="${img.src}" alt="${img.alt}" width="16" height="16">`);
+                    } else {
+                        rights.push('');
+                    }
+                }
+
+                players.push({
+                    name: name,
+                    rank: cells[1].textContent,
+                    points: cells[2].textContent,
+                    cities: cells[3].textContent,
+                    status: status,
+                    rights: rights
+                });
+            });
+
+            return players;
+        }
+
+        determineStatus(statusImg) {
+            const activityMap = {
+                "green.png": "Actief in de afgelopen 12 uur",
+                "online.png": "Actief in de afgelopen 10 minuten",
+                "vacation.png": "Vakantiemodus",
+                "yellow.png": "Meer dan 12 uur inactief",
+                "red.png": "Meer dan 24 uur inactief",
+            };
+
+            return activityMap[statusImg] || "Onbekend";
+        }
+
+        getStatusIcon(status) {
+            const statusIcons = {
+                "Actief in de afgelopen 12 uur": '<i class="fas fa-circle status-icon" style="color: limegreen;"></i>',
+                "Actief in de afgelopen 10 minuten": '<i class="fas fa-circle status-icon" style="color: limegreen;"></i>',
+                "Meer dan 12 uur inactief": '<i class="fas fa-circle status-icon" style="color: orange;"></i>',
+                "Meer dan 24 uur inactief": '<i class="fas fa-circle status-icon" style="color: red;"></i>',
+                "Vakantiemodus": '<i class="fas fa-umbrella-beach status-icon" style="color: blue;"></i>',
+            };
+
+            return statusIcons[status] || '<i class="fas fa-question-circle status-icon" style="color: gray;"></i>';
         }
 
         createToolbarButton(text, onClick) {
@@ -462,68 +564,68 @@
         showStartScreen() {
             const content = document.getElementById('popup-content');
             content.innerHTML = `
-        <h2>Welkom bij Grepolis Manager</h2>
-        <p>Dit script combineert de kracht van populaire Grepolis-tools in één handige oplossing.</p>
-        ${this.playerName ? `<p>Welkom, ${this.playerName}!</p>` : '<p>Welkom, gast!</p>'}
+                <h2>Welkom bij Grepolis Manager</h2>
+                <p>Dit script combineert de kracht van populaire Grepolis-tools in één handige oplossing.</p>
+                ${this.playerName ? `<p>Welkom, ${this.playerName}!</p>` : '<p>Welkom, gast!</p>'}
 
-        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px;">
-            <!-- Grepotools -->
-            <div style="flex: 1; min-width: 150px; text-align: center;">
-                <img src="https://www.grepotools.nl/wp-content/uploads/2022/08/logo_425x425.png" alt="Grepotools" style="width: 50px; height: 50px;">
-                <p style="font-size: 12px; font-weight: bold;">Grepotools</p>
-                <p style="font-size: 12px;">Script, tools en informatie voor Grepolis.</p>
-            </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px;">
+                    <!-- Grepotools -->
+                    <div style="flex: 1; min-width: 150px; text-align: center;">
+                        <img src="https://www.grepotools.nl/wp-content/uploads/2022/08/logo_425x425.png" alt="Grepotools" style="width: 50px; height: 50px;">
+                        <p style="font-size: 12px; font-weight: bold;">Grepotools</p>
+                        <p style="font-size: 12px;">Script, tools en informatie voor Grepolis.</p>
+                    </div>
 
-            <!-- DIO-Tools -->
-            <div style="flex: 1; min-width: 150px; text-align: center;">
-                <img src="https://dio-david1327.github.io/img/site/btn-dio-settings.png" alt="DIO-Tools" style="width: 50px; height: 50px;">
-                <p style="font-size: 12px; font-weight: bold;">DIO-Tools</p>
-                <p style="font-size: 12px;">Extra opties voor een verbeterde gameplay.</p>
-            </div>
+                    <!-- DIO-Tools -->
+                    <div style="flex: 1; min-width: 150px; text-align: center;">
+                        <img src="https://dio-david1327.github.io/img/site/btn-dio-settings.png" alt="DIO-Tools" style="width: 50px; height: 50px;">
+                        <p style="font-size: 12px; font-weight: bold;">DIO-Tools</p>
+                        <p style="font-size: 12px;">Extra opties voor een verbeterde gameplay.</p>
+                    </div>
 
-            <!-- GRCRTools -->
-            <div style="flex: 1; min-width: 150px; text-align: center;">
-                <img src="https://cdn.grcrt.net/img/octopus.png" alt="GRCRTools" style="width: 50px; height: 50px;">
-                <p style="font-size: 12px; font-weight: bold;">GRCRTools</p>
-                <p style="font-size: 12px;">Krachtige tools voor rapporten en gameplay.</p>
-            </div>
+                    <!-- GRCRTools -->
+                    <div style="flex: 1; min-width: 150px; text-align: center;">
+                        <img src="https://cdn.grcrt.net/img/octopus.png" alt="GRCRTools" style="width: 50px; height: 50px;">
+                        <p style="font-size: 12px; font-weight: bold;">GRCRTools</p>
+                        <p style="font-size: 12px;">Krachtige tools voor rapporten en gameplay.</p>
+                    </div>
 
-            <!-- Map Enhancer -->
-            <div style="flex: 1; min-width: 150px; text-align: center;">
-                <img src="https://gme.cyllos.dev/res/icoon.png" alt="Map Enhancer" style="width: 50px; height: 50px;">
-                <p style="font-size: 12px; font-weight: bold;">Map Enhancer</p>
-                <p style="font-size: 12px;">Verbeter de kaartweergave met extra functies.</p>
-            </div>
+                    <!-- Map Enhancer -->
+                    <div style="flex: 1; min-width: 150px; text-align: center;">
+                        <img src="https://gme.cyllos.dev/res/icoon.png" alt="Map Enhancer" style="width: 50px; height: 50px;">
+                        <p style="font-size: 12px; font-weight: bold;">Map Enhancer</p>
+                        <p style="font-size: 12px;">Verbeter de kaartweergave met extra functies.</p>
+                    </div>
 
-            <!-- Grepodata -->
-            <div style="flex: 1; min-width: 150px; text-align: center;">
-                <img src="https://grepodata.com/favicon.ico" alt="GrepoData" style="width: 50px; height: 50px;">
-                <p style="font-size: 12px; font-weight: bold;">GrepoData</p>
-                <p style="font-size: 12px;">Geavanceerde tools en statistieken voor Grepolis.</p>
-            </div>
+                    <!-- Grepodata -->
+                    <div style="flex: 1; min-width: 150px; text-align: center;">
+                        <img src="https://grepodata.com/favicon.ico" alt="GrepoData" style="width: 50px; height: 50px;">
+                        <p style="font-size: 12px; font-weight: bold;">GrepoData</p>
+                        <p style="font-size: 12px;">Geavanceerde tools en statistieken voor Grepolis.</p>
+                    </div>
 
-            <!-- Grepolis Notepad Forum Template -->
-            <div style="flex: 1; min-width: 150px; text-align: center;">
-                <img src="https://i.postimg.cc/7Pzd6360/def-button-2.png" alt="Grepolis Notepad Forum Template" style="width: 50px; height: 50px;">
-                <p style="font-size: 12px; font-weight: bold;">Grepolis Notepad Forum Template</p>
-                <p style="font-size: 12px;">Genereert een forumsjabloon voor Grepolis met eenheden, gebouwgegevens, stadsgod en OC.</p>
-            </div>
-        </div>
-
-        <div style="margin-top: 20px; text-align: center;">
-            <p style="font-size: 12px; font-style: italic;">Het Grepolis Manager Team</p>
-            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 10px;">
-                <div>
-                    <p style="font-size: 12px; font-weight: bold;">Elona</p>
-                    <img src="https://imgur.com/QxTgAHJ.png" alt="Elona Handtekening" style="width: 100px; height: auto; transform: rotate(${Math.floor(Math.random() * 30 - 15)}deg);">
+                    <!-- Grepolis Notepad Forum Template -->
+                    <div style="flex: 1; min-width: 150px; text-align: center;">
+                        <img src="https://i.postimg.cc/7Pzd6360/def-button-2.png" alt="Grepolis Notepad Forum Template" style="width: 50px; height: 50px;">
+                        <p style="font-size: 12px; font-weight: bold;">Grepolis Notepad Forum Template</p>
+                        <p style="font-size: 12px;">Genereert een forumsjabloon voor Grepolis met eenheden, gebouwgegevens, stadsgod en OC.</p>
+                    </div>
                 </div>
-                <div>
-                    <p style="font-size: 12px; font-weight: bold;">Zambia1972</p>
-                    <img src="https://imgur.com/uHRXM9u.png" alt="Zambia1972 Handtekening" style="width: 200px; height: auto; transform: rotate(${Math.floor(Math.random() * 30 - 15)}deg);">
+
+                <div style="margin-top: 20px; text-align: center;">
+                    <p style="font-size: 12px; font-style: italic;">Het Grepolis Manager Team</p>
+                    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 10px;">
+                        <div>
+                            <p style="font-size: 12px; font-weight: bold;">Elona</p>
+                            <img src="https://imgur.com/QxTgAHJ.png" alt="Elona Handtekening" style="width: 100px; height: auto; transform: rotate(${Math.floor(Math.random() * 30 - 15)}deg);">
+                        </div>
+                        <div>
+                            <p style="font-size: 12px; font-weight: bold;">Zambia1972</p>
+                            <img src="https://imgur.com/uHRXM9u.png" alt="Zambia1972 Handtekening" style="width: 200px; height: auto; transform: rotate(${Math.floor(Math.random() * 30 - 15)}deg);">
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    `;
+            `;
         }
 
         async createAllForaAndTopics() {
