@@ -503,12 +503,12 @@
 
         getPlayers() {
     const players = [];
-    const rows = document.querySelectorAll('#ally_members_body tr[id^="alliance_player_"]');
+    const rows = document.querySelectorAll('.alliance-members-table tr'); // Update this selector
 
     console.log(`Found ${rows.length} player rows in the DOM.`); // Debug log
 
     rows.forEach(row => {
-        const nameLink = row.querySelector('.ally_name a');
+        const nameLink = row.querySelector('.player-name a'); // Update this selector
         const name = nameLink?.textContent.trim() || 'Unknown';
         const statusImg = nameLink?.querySelector('img');
         const status = statusImg ? statusImg.src.split('/').pop() : null;
@@ -584,6 +584,28 @@ getStatusIcon(status) {
             return button;
         }
 
+        function waitForTableAndShowPlayerList() {
+    const observer = new MutationObserver((mutations, obs) => {
+        const table = document.querySelector('.alliance-members-table'); // Update this selector
+        if (table) {
+            console.log('Alliance members table found in the DOM.');
+            forumManager.showPlayerList();
+            obs.disconnect(); // Stop observing once the table is found
+        }
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+}
+
+// Call this function when the "Spelerslijst" button is clicked
+const showPlayerListButton = document.getElementById('show-player-list');
+if (showPlayerListButton) {
+    showPlayerListButton.addEventListener('click', waitForTableAndShowPlayerList);
+}
+        
         showStartScreen() {
             const content = document.getElementById('popup-content');
             content.innerHTML = `
