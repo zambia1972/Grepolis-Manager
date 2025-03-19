@@ -2,11 +2,13 @@
 // @name         Grepolis Script Loader
 // @namespace    http://tampermonkey.net/
 // @version      1.1
-// @description  Laad meerdere Grepolis-scripts vanaf GitHub
+// @description  Laad meerdere Grepolis-scripts vanaf GitHub en controleer op updates
 // @author       Zambia1972
 // @match        *://*.grepolis.com/*
 // @grant        GM_xmlhttpRequest
 // @require      https://code.jquery.com/jquery-3.6.0.min.js
+// @updateURL    https://github.com/zambia1972/Grepolis-Manager/raw/refs/heads/main/Grepolis%20Script%20Loader-1.1.user.js
+// @downloadURL  https://github.com/zambia1972/Grepolis-Manager/raw/refs/heads/main/Grepolis%20Script%20Loader-1.1.user.js
 // ==/UserScript==
 
 (function() {
@@ -125,15 +127,48 @@
         });
     }
 
+    // Check for updates
+    function checkForUpdates() {
+        const currentVersion = GM_info.script.version;
+        const updateURL = 'https://github.com/zambia1972/Grepolis-Manager/raw/refs/heads/main/Grepolis%20Script%20Loader-1.1.user.js';
+
+        GM_xmlhttpRequest({
+            method: 'GET',
+            url: updateURL,
+            onload: function(response) {
+                if (response.status === 200) {
+                    const remoteScript = response.responseText;
+                    const remoteVersionMatch = remoteScript.match(/@version\s+([\d.]+)/);
+                    if (remoteVersionMatch && remoteVersionMatch[1]) {
+                        const remoteVersion = remoteVersionMatch[1];
+                        if (remoteVersion > currentVersion) {
+                            console.log(`New version available: ${remoteVersion}`);
+                            if (confirm(`A new version (${remoteVersion}) of Grepolis Script Loader is available. Do you want to update?`)) {
+                                window.location.href = updateURL;
+                            }
+                        } else {
+                            console.log('No updates available.');
+                        }
+                    }
+                }
+            },
+            onerror: function(error) {
+                console.warn('Error checking for updates:', error);
+            }
+        });
+    }
+
     // Main execution
     waitForJQuery()
         .then(() => loadScriptsSequentially(scripts))
         .then(() => {
             console.log('All scripts loaded successfully');
+            checkForUpdates();
         })
         .catch((error) => {
             console.error('Error loading scripts:', error);
         });
+
     // Example of adding a passive event listener
     window.addEventListener('scroll', function(event) {
         // Your scroll event logic here
