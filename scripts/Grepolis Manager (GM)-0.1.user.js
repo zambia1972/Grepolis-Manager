@@ -868,19 +868,17 @@
                     const uiContainer = document.createElement('div');
                     uiContainer.id = 'afwezigheid-ui';
                     uiContainer.style.cssText = `
-                    margin: 20px 0; /* Ruimte boven en onder de container */
-                    display: grid;
-                    grid-template-columns: repeat(5, 1fr);
-                    gap: 5px;
-                    uiContainer.style.position = 'absolute'; /* Verander dit naar 'absolute' of 'fixed' indien nodig */
-                    top: 50px; /* Verplaats de container 50px naar beneden */
-                    left: 20px; /* Verplaats de container 20px naar rechts */
-                    z-index: 9999;
-                    background: #f5f5f5;
-                    padding: 10px;
-                    border-radius: 5px;
-                    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-                `;
+                        margin: 20px 0;
+                        display: grid;
+                        grid-template-columns: repeat(5, 1fr);
+                        gap: 5px;
+                        position: relative;
+                        z-index: 9999;
+                        background: #f5f5f5;
+                        padding: 10px;
+                        border-radius: 5px;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                    `;
     
                     // Plaats UI onderaan het topic-veld, na alle bestaande inhoud
                     tekstveld.parentNode.insertBefore(uiContainer, tekstveld.nextSibling);
