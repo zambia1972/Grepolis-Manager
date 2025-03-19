@@ -839,7 +839,7 @@
                     check();
                 });
             };
-
+        
             const injectUI = () => {
                 try {
                     // Controleer of we op het juiste forum zijn
@@ -847,23 +847,23 @@
                     if (!forumTitel?.textContent.toLowerCase().includes('algemeen')) {
                         return;
                     }
-
+        
                     // Controleer of we in het afwezigheidstopic zitten
                     const topicTitel = document.querySelector("#forum_thread_name_span_text_admin > span");
                     if (!topicTitel?.textContent.toLowerCase().includes('afwezig')) {
                         return;
                     }
-
+        
                     // Zoek het tekstveld en voeg UI toe
                     const tekstveld = document.querySelector("#postlist");
-
+        
                     const uiExists = document.getElementById('afwezigheid-ui');
                     if (!tekstveld || uiExists) {
                         console.log('[DEBUG] Injectie stopreden:',
                                     !tekstveld ? 'Geen tekstveld' : `UI al aanwezig (ID: ${uiExists?.id})`);
                         return;
                     }
-
+        
                     // Maak container voor UI elementen
                     const uiContainer = document.createElement('div');
                     uiContainer.id = 'afwezigheid-ui';
@@ -879,10 +879,10 @@
                         border-radius: 5px;
                         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
                     `;
-
-                    // Plaats UI boven het tekstveld
-                    tekstveld.parentNode.insertBefore(uiContainer, tekstveld);
-
+        
+                    // Plaats UI onderaan het topic-veld
+                    tekstveld.appendChild(uiContainer);
+        
                     // Spelersnaamveld
                     let naamVeld = uiContainer.querySelector('#afw-speler');
                     if (!naamVeld) {
@@ -892,38 +892,35 @@
                         naamVeld.style.gridColumn = 'span 2';
                         uiContainer.appendChild(naamVeld);
                     }
-
+        
                     // Datumvelden
                     const startDatum = document.createElement('input');
                     startDatum.type = 'date';
                     startDatum.required = true;
-
+        
                     const eindDatum = document.createElement('input');
                     eindDatum.type = 'date';
                     eindDatum.required = true;
-
+        
                     // VM Checkbox
                     const vmCheck = document.createElement('input');
                     vmCheck.type = 'checkbox';
                     vmCheck.style.margin = 'auto';
-
+        
                     // Opmerkingenveld
                     const opmerkingen = document.createElement('input');
                     opmerkingen.type = 'text';
                     opmerkingen.placeholder = 'Opmerkingen (optioneel)';
-
+        
                     // Voeg toe knop
                     const voegToeKnop = document.createElement('button');
                     voegToeKnop.textContent = 'Voeg toe';
                     voegToeKnop.style.backgroundColor = '#5a5a5a';
                     voegToeKnop.style.color = 'white';
-
+        
                     // Voeg elementen toe aan container
                     uiContainer.append(startDatum, eindDatum, vmCheck, opmerkingen, voegToeKnop);
-
-                    // Plaats UI onder het tekstveld
-                    tekstveld.parentNode.insertBefore(uiContainer, tekstveld.nextSibling);
-
+        
                     // Voeg functionaliteit toe aan knop
                     voegToeKnop.addEventListener('click', async (e) => {
                         if (!startDatum.value || !eindDatum.value) {
@@ -935,37 +932,37 @@
                             const isEditKnop = a.textContent.toLowerCase().includes('bewerken');
                             return postIdMatch && isEditKnop;
                         });
-
+        
                         if (volgendeKnop) {
                             volgendeKnop.click();
                         }
-
+        
                         const tekstveld = await waitForElement("#forum_post_textarea:not([style*='display: none'])", 5000);
-
+        
                         if (tekstveld) {
                             // Genereer tabelrij
                             const tabelRij = `[*][player]${naamVeld.value}[/player][|]${startDatum.value}[|]${eindDatum.value}[|]${vmCheck.checked ? 'Ja' : 'Nee'}[|]${opmerkingen.value || '-'}[/*]\n`;
-
+        
                             // Probeer in te voegen in bestaande tabel
                             const nieuweTekst = tekstveld.value.replace(
                                 /(\[\/\*\*\]\s*\n)(.*?)(\n\[\*\]\[\|)/s,
                                 `$1$2\n${tabelRij}$3`
                             );
-
+        
                             // Update alleen als er een wijziging is
                             if (nieuweTekst !== tekstveld.value) {
                                 tekstveld.value = nieuweTekst;
                             }
-
+        
                             tekstveld.dispatchEvent(new Event('input', { bubbles: true }));
-
+        
                             // Opslaan
                             const opslaanKnop = document.querySelector("#post_save_form > a:nth-child(6)", 3000);
                             if (opslaanKnop) {
                                 opslaanKnop.click();
                             }
                         }
-
+        
                         // Reset velden
                         startDatum.value = '';
                         eindDatum.value = '';
@@ -976,23 +973,23 @@
                     console.error('[DEBUG] Fout:', error);
                 }
             };
-
+        
             // Initialisatie
             const init = () => {
                 // Controleer of het juiste forum en topic zijn geladen
                 const checkForumAndTopic = () => {
                     const forumTitel = document.querySelector('.forum_menu');
                     const topicTitel = document.querySelector("#forum_thread_name_span_text_admin > span");
-
+        
                     if (forumTitel?.textContent.toLowerCase().includes('algemeen') &&
                         topicTitel?.textContent.toLowerCase().includes('afwezig')) {
                         injectUI();
                     }
                 };
-
+        
                 // Voer de controle uit bij het laden van de pagina
                 checkForumAndTopic();
-
+        
                 // Voeg een MutationObserver toe om wijzigingen in de DOM te detecteren
                 new MutationObserver((mutations) => {
                     mutations.forEach(mutation => {
@@ -1007,7 +1004,7 @@
                     characterData: false
                 });
             };
-
+        
             if (document.readyState === 'complete') {
                 init();
             } else {
