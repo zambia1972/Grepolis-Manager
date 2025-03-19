@@ -14,15 +14,16 @@
 (function() {
     'use strict';
 
+    // Voeg deze code toe aan het begin van je script om passive event listeners af te dwingen
     EventTarget.prototype.addEventListener = (function(original) {
         return function(type, listener, options) {
-            if (type === 'touchstart' || type === 'touchmove' || type === 'wheel') {
+            if (type === 'touchstart' || type === 'touchmove' || type === 'wheel' || type === 'scroll' || type === 'mousewheel') {
                 options = Object.assign({}, options, { passive: true });
             }
             return original.call(this, type, listener, options);
         };
     })(EventTarget.prototype.addEventListener);
-
+    
     const scripts = [
         'https://github.com/zambia1972/Grepolis-Manager/raw/refs/heads/main/scripts/Grepolis%20Spelersnaam%20en%20Player-ID%20Ophalen%20(localStorage)-1.3.user.js',
         'https://github.com/zambia1972/Grepolis-Manager/raw/refs/heads/main/scripts/DIO-TOOLS-David1327-4.36.user.js',
