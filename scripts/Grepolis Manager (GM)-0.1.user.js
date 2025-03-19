@@ -880,8 +880,8 @@
                 box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             `;
 
-            // Plaats UI onderaan het topic-veld, na alle bestaande inhoud
-            tekstveld.appendChild(uiContainer);
+            // Plaats UI buiten het topic-veld, onderaan de pagina
+            tekstveld.parentNode.insertBefore(uiContainer, tekstveld.nextSibling);
 
             // Spelersnaamveld
             let naamVeld = uiContainer.querySelector('#afw-speler');
