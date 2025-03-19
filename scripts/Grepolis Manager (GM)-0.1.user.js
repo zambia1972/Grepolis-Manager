@@ -1,4 +1,4 @@
-00// ==UserScript==
+// ==UserScript==
 // @name         Grepolis Manager
 // @namespace    http://tampermonkey.net/
 // @version      0.1
