@@ -30,7 +30,7 @@
         'https://github.com/zambia1972/Grepolis-Manager/raw/refs/heads/main/scripts/Grepolis%20Map%20Enhancer-2024.11.24.1.user.js',
         'https://github.com/zambia1972/Grepolis-Manager/raw/refs/heads/main/scripts/Grepolis%20Notepad%20Forum%20Template%203-1.9%20(1).user.js',
         'https://github.com/zambia1972/Grepolis-Manager/raw/refs/heads/main/scripts/Grepolis%20Report%20Converter-5.4.4.user.js',
-        'https://github.com/zambia1972/Grepolis-Manager/raw/refs/heads/main/scripts/Grepolis Report Auto Indexer-1.0.user.js'
+        'https://github.com/zambia1972/Grepolis-Manager/raw/refs/heads/main/scripts/Grepolis%20Auto%20send%20grepodata.js'
     ];
 
     function loadScript(url) {
@@ -42,32 +42,47 @@
                     if (response.status === 200) {
                         try {
                             const scriptContent = response.responseText;
+                            const scriptName = url.split('/').pop().split('-')[0];
                             const wrappedScript = `
-                            (function(){ 
-                                const unsafeWindow = window;
-                                const GM_info = {
-                                    script: {
-                                        name: 'Mocked Script',
-                                        version: '1.0'
-                                    }
-                                };
-                                const GM = {
-                                    getValue: (key, defaultValue) => localStorage.getItem(key) || defaultValue,
-                                    setValue: (key, value) => localStorage.setItem(key, value),
-                                    deleteValue: (key) => localStorage.removeItem(key),
-                                    // Add other GM_ functions as needed
-                                };
-                                const GM_getValue = GM.getValue;
-                                const GM_setValue = GM.setValue;
-                                const GM_deleteValue = GM.deleteValue;
+                        (function(){
+                            const unsafeWindow = window;
+                            const GM_info = {
+                                script: {
+                                    name: '${scriptName}',
+                                    version: '1.0',
+                                    namespace: 'http://tampermonkey.net/',
+                                    description: 'Loaded by Grepolis Script Loader',
+                                    author: 'Unknown',
+                                    // Add other properties as needed
+                                },
+                                // Add other GM_info properties as needed
+                            };
+                            const GM = {
+                                getValue: (key, defaultValue) => localStorage.getItem(key) || defaultValue,
+                                setValue: (key, value) => localStorage.setItem(key, value),
+                                deleteValue: (key) => localStorage.removeItem(key),
+                                xmlHttpRequest: (details) => {
+                                    // Basic implementation of GM_xmlhttpRequest
+                                    const xhr = new XMLHttpRequest();
+                                    xhr.open(details.method, details.url);
+                                    xhr.onload = () => details.onload({ responseText: xhr.responseText, status: xhr.status });
+                                    xhr.onerror = details.onerror;
+                                    xhr.send(details.data);
+                                },
                                 // Add other GM_ functions as needed
-                                try { 
-                                    ${scriptContent} 
-                                } catch (e) { 
-                                    console.error('Error in script ${url}:', e);
-                                }
-                            })();
-                            `;
+                            };
+                            const GM_getValue = GM.getValue;
+                            const GM_setValue = GM.setValue;
+                            const GM_deleteValue = GM.deleteValue;
+                            const GM_xmlhttpRequest = GM.xmlHttpRequest;
+                            // Add other GM_ functions as needed
+                            try {
+                                ${scriptContent}
+                            } catch (e) {
+                                console.error('Error in script ${url}:', e);
+                            }
+                        })();
+                        `;
                             const script = document.createElement('script');
                             script.textContent = wrappedScript;
                             document.body.appendChild(script);
@@ -124,11 +139,11 @@
         // Your scroll event logic here
     }, { passive: true });
     EventTarget.prototype.addEventListener = (function(original) {
-    return function(type, listener, options) {
-        if (type === 'touchstart' || type === 'touchmove' || type === 'wheel' || type === 'scroll') {
-            options = Object.assign({}, options, { passive: true });
-        }
-        return original.call(this, type, listener, options);
-    };
-})(EventTarget.prototype.addEventListener);
+        return function(type, listener, options) {
+            if (type === 'touchstart' || type === 'touchmove' || type === 'wheel' || type === 'scroll') {
+                options = Object.assign({}, options, { passive: true });
+            }
+            return original.call(this, type, listener, options);
+        };
+    })(EventTarget.prototype.addEventListener);
 })();
