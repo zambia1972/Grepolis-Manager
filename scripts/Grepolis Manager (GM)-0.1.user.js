@@ -983,41 +983,28 @@
         }
             };
             // Initialisatie
-            const init = () => {
-                // Controleer of het juiste forum en topic zijn geladen
-                const checkForumAndTopic = () => {
-                    const forumTitel = document.querySelector('.forum_menu');
-                    const topicTitel = document.querySelector("#forum_thread_name_span_text_admin > span");
+    const init = () => {
+        injectUI();
+        new MutationObserver((mutations) => {
+            // Filter alleen relevante DOM wijzigingen
+            const needsInject = mutations.some(mutation =>
+                                               mutation.addedNodes.length > 0 &&
+                                               document.querySelector('.forum_menu') // Alleen triggeren als forum menu aanwezig is
+                                              );
+            if (needsInject) injectUI();
+        }).observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: false,
+            characterData: false
+        });
+    };
 
-                    if (forumTitel?.textContent.toLowerCase().includes('algemeen') &&
-                        topicTitel?.textContent.toLowerCase().includes('afwezig')) {
-                        injectUI();
-                    }
-                };
-
-                // Voer de controle uit bij het laden van de pagina
-                checkForumAndTopic();
-
-                // Voeg een MutationObserver toe om wijzigingen in de DOM te detecteren
-                new MutationObserver((mutations) => {
-                    mutations.forEach(mutation => {
-                        if (mutation.addedNodes.length > 0) {
-                            checkForumAndTopic();
-                        }
-                    });
-                }).observe(document.body, {
-                    childList: true,
-                    subtree: true,
-                    attributes: false,
-                    characterData: false
-                });
-            };
-
-            if (document.readyState === 'complete') {
-                init();
-            } else {
-                window.addEventListener('load', init);
-            }
+    if (document.readyState === 'complete') {
+        init();
+    } else {
+        window.addEventListener('load', init);
+    }
         }
     }
         // Initialiseer de ForumManager
