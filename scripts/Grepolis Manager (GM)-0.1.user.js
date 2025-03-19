@@ -880,7 +880,7 @@
                         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
                     `;
         
-                    // Plaats UI onderaan het topic-veld
+                    // Plaats UI onderaan het topic-veld, na alle bestaande inhoud
                     tekstveld.appendChild(uiContainer);
         
                     // Spelersnaamveld
