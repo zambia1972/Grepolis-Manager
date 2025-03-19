@@ -47,45 +47,40 @@
                             const scriptContent = response.responseText;
                             const scriptName = url.split('/').pop().split('-')[0];
                             const wrappedScript = `
-                        (function(){
-                            const unsafeWindow = window;
-                            const GM_info = {
-                                script: {
-                                    name: '${scriptName}',
-                                    version: '1.0',
-                                    namespace: 'http://tampermonkey.net/',
-                                    description: 'Loaded by Grepolis Script Loader',
-                                    author: 'Unknown',
-                                    // Add other properties as needed
-                                },
-                                // Add other GM_info properties as needed
-                            };
-                            const GM = {
-                                getValue: (key, defaultValue) => localStorage.getItem(key) || defaultValue,
-                                setValue: (key, value) => localStorage.setItem(key, value),
-                                deleteValue: (key) => localStorage.removeItem(key),
-                                xmlHttpRequest: (details) => {
-                                    // Basic implementation of GM_xmlhttpRequest
-                                    const xhr = new XMLHttpRequest();
-                                    xhr.open(details.method, details.url);
-                                    xhr.onload = () => details.onload({ responseText: xhr.responseText, status: xhr.status });
-                                    xhr.onerror = details.onerror;
-                                    xhr.send(details.data);
-                                },
-                                // Add other GM_ functions as needed
-                            };
-                            const GM_getValue = GM.getValue;
-                            const GM_setValue = GM.setValue;
-                            const GM_deleteValue = GM.deleteValue;
-                            const GM_xmlhttpRequest = GM.xmlHttpRequest;
-                            // Add other GM_ functions as needed
-                            try {
-                                ${scriptContent}
-                            } catch (e) {
-                                console.error('Error in script ${url}:', e);
-                            }
-                        })();
-                        `;
+                            (function(){
+                                const unsafeWindow = window;
+                                const GM_info = {
+                                    script: {
+                                        name: '${scriptName}',
+                                        version: '1.0',
+                                        namespace: 'http://tampermonkey.net/',
+                                        description: 'Loaded by Grepolis Script Loader',
+                                        author: 'Unknown',
+                                    },
+                                };
+                                const GM = {
+                                    getValue: (key, defaultValue) => localStorage.getItem(key) || defaultValue,
+                                    setValue: (key, value) => localStorage.setItem(key, value),
+                                    deleteValue: (key) => localStorage.removeItem(key),
+                                    xmlHttpRequest: (details) => {
+                                        const xhr = new XMLHttpRequest();
+                                        xhr.open(details.method, details.url);
+                                        xhr.onload = () => details.onload({ responseText: xhr.responseText, status: xhr.status });
+                                        xhr.onerror = details.onerror;
+                                        xhr.send(details.data);
+                                    },
+                                };
+                                const GM_getValue = GM.getValue;
+                                const GM_setValue = GM.setValue;
+                                const GM_deleteValue = GM.deleteValue;
+                                const GM_xmlhttpRequest = GM.xmlHttpRequest;
+                                try {
+                                    ${scriptContent}
+                                } catch (e) {
+                                    console.error('Error in script ${url}:', e);
+                                }
+                            })();
+                            `;
                             const script = document.createElement('script');
                             script.textContent = wrappedScript;
                             document.body.appendChild(script);
