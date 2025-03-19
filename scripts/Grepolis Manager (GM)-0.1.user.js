@@ -872,7 +872,9 @@
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 5px;
-            position: relative;
+            position: fixed; /* Gebruik 'fixed' voor een vaste positie */
+            bottom: 20px; /* 20px vanaf de onderkant van het venster */
+            right: 20px; /* 20px vanaf de rechterkant van het venster */
             z-index: 9999;
             background: #f5f5f5;
             padding: 10px;
