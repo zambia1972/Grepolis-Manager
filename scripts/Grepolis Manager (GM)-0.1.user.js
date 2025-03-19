@@ -923,58 +923,73 @@
 
         // Voeg functionaliteit toe aan knop
             voegToeKnop.addEventListener('click', async (e) => {
-                if (!startDatum.value || !eindDatum.value) {
-                    alert('Vul start- en einddatum in!');
-                    return;
-                }
-                const volgendeKnop = Array.from(document.querySelectorAll('a[onclick*="Forum.postEdit"]')).find(a => {
-                    const postIdMatch = a.getAttribute('onclick')?.match(/Forum\.postEdit\((\d+),/);
-                    const isEditKnop = a.textContent.toLowerCase().includes('bewerken');
-                    return postIdMatch && isEditKnop;
-                });
+    console.log('Knop geklikt, start proces...');
 
-                if (volgendeKnop) {
-                    volgendeKnop.click();
-                }
+    if (!startDatum.value || !eindDatum.value) {
+        alert('Vul start- en einddatum in!');
+        return;
+    }
 
-                const tekstveld = await waitForElement("#forum_post_textarea:not([style*='display: none'])", 5000);
+    console.log('Zoek volgende knop...');
+    const volgendeKnop = Array.from(document.querySelectorAll('a[onclick*="Forum.postEdit"]')).find(a => {
+        const postIdMatch = a.getAttribute('onclick')?.match(/Forum\.postEdit\((\d+),/);
+        const isEditKnop = a.textContent.toLowerCase().includes('bewerken');
+        return postIdMatch && isEditKnop;
+    });
 
-                if (tekstveld) {
+    if (volgendeKnop) {
+        console.log('Volgende knop gevonden, klik erop...');
+        volgendeKnop.click();
+    } else {
+        console.error('Volgende knop niet gevonden!');
+        return;
+    }
 
-                    // Genereer tabelrij
-                    const tabelRij = `[*][player]${naamVeld.value}[/player][|]${startDatum.value}[|]${eindDatum.value}[|]${vmCheck.checked ? 'Ja' : 'Nee'}[|]${opmerkingen.value || '-'}[/*]\n`;
+    console.log('Wacht op tekstveld...');
+    const tekstveld = await waitForElement("#forum_post_textarea:not([style*='display: none'])", 5000);
 
-                    // Probeer in te voegen in bestaande tabel
-                    const nieuweTekst = tekstveld.value.replace(
-                        /(\[\/\*\*\]\s*\n)(.*?)(\n\[\*\]\[\|)/s,
-                        `$1$2\n${tabelRij}$3`
-                    );
+    if (tekstveld) {
+        console.log('Tekstveld gevonden:', tekstveld);
 
-                    // Update alleen als er een wijziging is
-                    if (nieuweTekst !== tekstveld.value) {
-                        tekstveld.value = nieuweTekst;
-                    }
+        const tabelRij = `[*][player]${naamVeld.value}[/player][|]${startDatum.value}[|]${eindDatum.value}[|]${vmCheck.checked ? 'Ja' : 'Nee'}[|]${opmerkingen.value || '-'}[/*]\n`;
+        console.log('Gegenereerde tabelrij:', tabelRij);
 
-                    tekstveld.dispatchEvent(new Event('input', { bubbles: true }));
+        const nieuweTekst = tekstveld.value.replace(
+            /(\[\/\*\*\]\s*\n)(.*?)(\n\[\*\]\[\|)/s,
+            `$1$2\n${tabelRij}$3`
+        );
 
-                    // Opslaan
-                    const opslaanKnop = document.querySelector("#post_save_form > a:nth-child(6)", 3000);
-                    if (opslaanKnop) {
-                        opslaanKnop.click();
-                    }
-                }
-                // Voeg deze code toe na het opslaan:
-                setTimeout(() => {
-                    isUIInjected = false; // Reset flag om herinjectie mogelijk te maken
-                    injectUI(); // Probeer UI opnieuw te injecteren
-                }, 1000);
+        if (nieuweTekst !== tekstveld.value) {
+            console.log('Nieuwe tekst:', nieuweTekst);
+            tekstveld.value = nieuweTekst;
+            tekstveld.dispatchEvent(new Event('input', { bubbles: true }));
+        } else {
+            console.error('Geen wijzigingen in tekstveld!');
+        }
 
-                // Reset velden
-                startDatum.value = '';
-                eindDatum.value = '';
-                vmCheck.checked = false;
-                opmerkingen.value = '';
-            });
+        console.log('Zoek opslaan-knop...');
+        const opslaanKnop = document.querySelector("#post_save_form > a:nth-child(6)", 3000);
+        if (opslaanKnop) {
+            console.log('Opslaan-knop gevonden, klik erop...');
+            opslaanKnop.click();
+        } else {
+            console.error('Opslaan-knop niet gevonden!');
+        }
+    } else {
+        console.error('Tekstveld niet gevonden!');
+    }
+
+    console.log('Reset velden en probeer UI opnieuw te injecteren...');
+    setTimeout(() => {
+        isUIInjected = false;
+        injectUI();
+    }, 1000);
+
+    startDatum.value = '';
+    eindDatum.value = '';
+    vmCheck.checked = false;
+    opmerkingen.value = '';
+});
             // Na succesvolle injectie:
             isUIInjected = true;
             console.log('[DEBUG] UI gemarkeerd als geïnjecteerd');
