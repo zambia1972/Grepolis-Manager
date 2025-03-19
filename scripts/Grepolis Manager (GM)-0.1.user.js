@@ -17,15 +17,15 @@
             this.playerName = ''; // Spelersnaam opslaan
             this.server = ''; // Server opslaan
             this.fora = [
-                { name: "Algemeen", description: "Algemene discussies" },
-                { name: "ROOD", description: "Noodmeldingen en verdediging" },
-                { name: "Deff", description: "Verdedigingsstrategieën" },
-                { name: "Offens", description: "Offensieve strategieën" },
-                { name: "Massa_Aanval", description: "Massa-aanvallen" },
-                { name: "Interne_Overnames", description: "Interne overnames" },
-                { name: "Cluster", description: "Clusterbeheer" },
-                { name: "Kroeg", description: "Informele discussies" },
-                { name: "Leiding", description: "Leidinggevenden" },
+                {name: "Algemeen", description: "Algemene discussies"},
+                {name: "ROOD", description: "Noodmeldingen en verdediging"},
+                {name: "Deff", description: "Verdedigingsstrategieën"},
+                {name: "Offens", description: "Offensieve strategieën"},
+                {name: "Massa_Aanval", description: "Massa-aanvallen"},
+                {name: "Interne_Overnames", description: "Interne overnames"},
+                {name: "Cluster", description: "Clusterbeheer"},
+                {name: "Kroeg", description: "Informele discussies"},
+                {name: "Leiding", description: "Leidinggevenden"},
             ];
             this.topicsData = {
                 Algemeen: [
@@ -43,7 +43,8 @@
                             "                            Het Grepolis Forum Team 🏛️✨"
                     },
                     {
-                        title: "Te volgen regels", content: "🏛️ Alliantie Reglement – Samen Sterk, Samen Onverslaanbaar! 🏛️\n" +
+                        title: "Te volgen regels",
+                        content: "🏛️ Alliantie Reglement – Samen Sterk, Samen Onverslaanbaar! 🏛️\n" +
                             "Welkom bij de alliantie! 🎉 We zijn hier niet alleen om een beetje rond te dobberen, maar om samen de vijand tot stof te reduceren. Dit reglement is geen bureaucratische onzin, maar een handleiding voor totale dominantie. Volg het, en we overleven. Negeer het, en de vijand lacht ons uit – en laten we eerlijk zijn, dat is gewoon gênant.\n" +
                             "\n" +
                             "1️⃣ Afwezigheid – Niet Stiekem Verdwijnen!\n" +
@@ -303,9 +304,10 @@
             checkForPlayerInfo();
         }
 
-        initializeScript() {
+        initialize() {
             this.addMainButton();
             this.injectStyles();
+            this.injectAfwezigheidsassistent();
         }
 
         addMainButton() {
@@ -762,7 +764,7 @@
             const field = await this.waitForElement(selector, timeout);
             if (!field) throw new Error(`Veld niet gevonden: ${selector}`);
             field.value = value;
-            field.dispatchEvent(new Event('change', { bubbles: true }));
+            field.dispatchEvent(new Event('change', {bubbles: true}));
         }
 
         async waitForElement(selector, timeout = 20000, retries = 3) {
@@ -860,7 +862,7 @@
                     const uiExists = document.getElementById('afwezigheid-ui');
                     if (!tekstveld || uiExists) {
                         console.log('[DEBUG] Injectie stopreden:',
-                                    !tekstveld ? 'Geen tekstveld' : `UI al aanwezig (ID: ${uiExists?.id})`);
+                            !tekstveld ? 'Geen tekstveld' : `UI al aanwezig (ID: ${uiExists?.id})`);
                         return;
                     }
 
@@ -957,7 +959,7 @@
                                 tekstveld.value = nieuweTekst;
                             }
 
-                            tekstveld.dispatchEvent(new Event('input', { bubbles: true }));
+                            tekstveld.dispatchEvent(new Event('input', {bubbles: true}));
 
                             // Opslaan
                             const opslaanKnop = document.querySelector("#post_save_form > a:nth-child(6)", 3000);
@@ -1015,7 +1017,10 @@
             }
         }
     }
+    // Wacht tot het document volledig is geladen voordat we de ForumManager initialiseren
+    document.addEventListener('DOMContentLoaded', () => {
+        window.forumManager = new ForumManager();
+        window.forumManager.initialize();
+    });
 
-        // Initialiseer de ForumManager
-        const forumManager = new ForumManager();
 })();
