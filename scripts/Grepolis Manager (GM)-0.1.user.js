@@ -564,6 +564,14 @@
             // Debugging: Log de ontvangen data
             console.log('Militaire gegevens:', data);
 
+            if (data.towns.length === 0) {
+                content.innerHTML = `
+                    <h2>Militaire Gegevens voor ${data.playerName}</h2>
+                    <p style="color: red;">Geen steden gevonden voor deze speler.</p>
+                `;
+                return;
+            }
+
             // Maak de tabel en converteer deze naar een HTML-string
             const tableElement = this.militaryManager.createTable(data.towns);
             const tableHTML = tableElement.outerHTML;
@@ -1271,7 +1279,11 @@
             const towns = await this.loadTowns();
             console.log('Alle steden:', towns); // Debugging: Log alle steden
 
-            const playerTowns = Object.values(towns).filter(town => town.player_name === playerName);
+            const playerTowns = Object.values(towns).filter(town => {
+                const townPlayerName = town.player_name || town.playerName; // Controleer beide mogelijke velden
+                return townPlayerName?.toLowerCase() === playerName.toLowerCase();
+            });
+
             console.log('Steden van speler:', playerTowns); // Debugging: Log steden van de speler
 
             if (playerTowns.length === 0) {
