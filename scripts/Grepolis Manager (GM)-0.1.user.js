@@ -540,7 +540,7 @@
                 link.addEventListener('click', async (e) => {
                     e.preventDefault();
                     const playerName = link.getAttribute('data-player');
-                    const playerId = link.getAttribute('data-player-id');
+                    const playerId = parseInt(link.getAttribute('data-player-id'), 10);
                     if (this.militaryManager) {
                         const militaryData = await this.militaryManager.getMilitaryDataForPlayer(playerName, playerId);
                         this.showMilitaryData(militaryData);
@@ -1279,11 +1279,23 @@
             const towns = await this.loadTowns();
             console.log('Alle steden (volledig object):', towns); // Debugging: Log het volledige town-object
 
-            const playerTowns = Object.values(towns).filter(town => {
-                // Debugging: Log alle eigenschappen van de stad
-                console.log('Town eigenschappen:', Object.keys(town));
+            // Haal de alliantieledenlijst op
+            const allianceMembers = await this.loadAllianceMembers();
+            console.log('Alliantieleden:', allianceMembers);
 
-                // Gebruik de playerId om de steden van de speler te vinden
+            // Zoek de speler in de alliantieledenlijst
+            const player = allianceMembers.find(member => member.id === playerId);
+            if (!player) {
+                console.error('Speler niet gevonden in alliantieledenlijst:', playerName);
+                return {
+                    playerName: playerName,
+                    towns: []
+                };
+            }
+
+            // Haal de steden van de speler op
+            const playerTowns = Object.values(towns).filter(town => {
+                // Gebruik de stadseigenschappen om de speler te identificeren
                 const townPlayerId = town.player_id || town.player?.id;
                 return townPlayerId === playerId;
             });
@@ -1305,6 +1317,21 @@
                 playerName: playerName,
                 towns: townData
             };
+        }
+
+        async loadAllianceMembers() {
+            return new Promise((resolve, reject) => {
+                const check = (attempts = 0) => {
+                    if (uw.IAlliance?.members) {
+                        resolve(uw.IAlliance.members);
+                    } else if (attempts < 20) {
+                        setTimeout(() => check(attempts + 1), 250);
+                    } else {
+                        reject('Kon alliantieleden niet laden');
+                    }
+                };
+                check();
+            });
         }
 
         async loadTowns() {
