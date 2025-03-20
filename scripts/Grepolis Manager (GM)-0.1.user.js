@@ -540,13 +540,18 @@
                 link.addEventListener('click', async (e) => {
                     e.preventDefault();
                     const playerName = link.getAttribute('data-player');
-                    const militaryData = await this.militaryManager.getMilitaryDataForPlayer(playerName);
-                    this.showMilitaryData(militaryData);
+                    if (this.militaryManager) { // Controleer of militaryManager bestaat
+                        const militaryData = await this.militaryManager.getMilitaryDataForPlayer(playerName);
+                        this.showMilitaryData(militaryData);
+                    } else {
+                        console.error('MilitaryManager is niet geïnitialiseerd.');
+                    }
                 });
             });
 
             console.log('Player list displayed successfully.');
         }
+
 
         // Toon militaire gegevens in het popup-venster
         showMilitaryData(data) {
