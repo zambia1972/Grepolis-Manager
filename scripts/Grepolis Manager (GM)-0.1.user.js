@@ -560,13 +560,19 @@
                 console.error('Popup-content element niet gevonden.');
                 return;
             }
+
+            // Maak de tabel en converteer deze naar een HTML-string
+            const tableElement = this.militaryManager.createTable(data.towns);
+            const tableHTML = tableElement.outerHTML;
+
             content.innerHTML = `
                 <h2>Militaire Gegevens voor ${data.playerName}</h2>
                 <div style="overflow-x: auto;">
-                    ${this.militaryManager.createTable(data.towns)}
+                    ${tableHTML}
                 </div>
             `;
         }
+
 
 
         // Haal de spelerslijst op
@@ -1268,6 +1274,76 @@
                 playerName: playerName,
                 towns: townData
             };
+        }
+
+        // Maak een tabel en retourneer deze als HTML-element
+        createTable(data) {
+            const table = document.createElement('table');
+            table.style.cssText = `
+                width: 100%;
+                border-collapse: collapse;
+                margin: 10px 0;
+                font-family: Arial, sans-serif;
+                color: white;
+            `;
+
+            table.appendChild(this.createHeader());
+            table.appendChild(this.createBody(data));
+            return table;
+        }
+
+        createHeader() {
+            const tr = document.createElement('tr');
+            const columns = ['Stad', 'ID', 'God', 'Muur', 'Toren', 'Aanval', 'Verdediging', 'Belegering', 'Speciale Eenheden', 'Ontwikkelingen'];
+            columns.forEach(col => {
+                const th = document.createElement('th');
+                th.textContent = col;
+                th.style.cssText = `
+                    padding: 12px 15px;
+                    background: #2d2d2d;
+                    position: sticky;
+                    top: 0;
+                    text-align: left;
+                    border-bottom: 2px solid #4CAF50;
+                `;
+                tr.appendChild(th);
+            });
+            return tr;
+        }
+
+        createBody(data) {
+            const tbody = document.createElement('tbody');
+            data.forEach(town => {
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid #333';
+
+                const columns = ['Stad', 'ID', 'God', 'Muur', 'Toren', 'Aanval', 'Verdediging', 'Belegering', 'Speciale Eenheden', 'Ontwikkelingen'];
+                columns.forEach(col => {
+                    const td = document.createElement('td');
+                    td.style.padding = '8px 15px';
+                    td.innerHTML = this.getCellContent(col, town);
+                    tr.appendChild(td);
+                });
+
+                tbody.appendChild(tr);
+            });
+            return tbody;
+        }
+
+        getCellContent(column, town) {
+            const contentMap = {
+                'Stad': town.basic.name,
+                'ID': town.basic.id,
+                'God': town.god,
+                'Muur': town.wall,
+                'Toren': town.tower,
+                'Aanval': town.attack,
+                'Verdediging': town.defense,
+                'Belegering': town.siege,
+                'Speciale Eenheden': town.specials,
+                'Ontwikkelingen': town.developments
+            };
+            return contentMap[column] || '-';
         }
 
         async handleClick() {
