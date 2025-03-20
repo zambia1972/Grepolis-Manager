@@ -561,6 +561,9 @@
                 return;
             }
 
+            // Debugging: Log de ontvangen data
+            console.log('Militaire gegevens:', data);
+
             // Maak de tabel en converteer deze naar een HTML-string
             const tableElement = this.militaryManager.createTable(data.towns);
             const tableHTML = tableElement.outerHTML;
@@ -572,8 +575,6 @@
                 </div>
             `;
         }
-
-
 
         // Haal de spelerslijst op
         getPlayers() {
@@ -1268,8 +1269,22 @@
 
         async getMilitaryDataForPlayer(playerName) {
             const towns = await this.loadTowns();
+            console.log('Alle steden:', towns); // Debugging: Log alle steden
+
             const playerTowns = Object.values(towns).filter(town => town.player_name === playerName);
+            console.log('Steden van speler:', playerTowns); // Debugging: Log steden van de speler
+
+            if (playerTowns.length === 0) {
+                console.error('Geen steden gevonden voor speler:', playerName);
+                return {
+                    playerName: playerName,
+                    towns: []
+                };
+            }
+
             const townData = await this.processTowns(playerTowns);
+            console.log('Verwerkte stedengegevens:', townData); // Debugging: Log verwerkte gegevens
+
             return {
                 playerName: playerName,
                 towns: townData
@@ -1373,7 +1388,7 @@
 
         async processTowns(towns) {
             return Promise.all(
-                Object.values(towns).map(async town => ({
+                towns.map(async town => ({
                     basic: town,
                     ...await this.getTownDetails(town.id)
                 }))
@@ -1383,7 +1398,10 @@
         async getTownDetails(townId) {
             try {
                 const town = uw.ITowns.getTown(townId);
-                if (!town) return this.getFallbackData();
+                if (!town) {
+                    console.error(`Stad met ID ${townId} niet gevonden.`);
+                    return this.getFallbackData();
+                }
 
                 const buildings = town.buildings?.() || {};
                 const units = town.units?.() || {};
@@ -1495,6 +1513,7 @@
             };
             return contentMap[column] || '-';
         }
+
 
         showPopup(content) {
             const existing = document.getElementById('grepolis-military-popup');
