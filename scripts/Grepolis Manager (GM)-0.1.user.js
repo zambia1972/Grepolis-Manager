@@ -1277,14 +1277,19 @@
 
         async getMilitaryDataForPlayer(playerName) {
             const towns = await this.loadTowns();
-            console.log('Alle steden:', towns); // Debugging: Log alle steden
+            console.log('Alle steden (volledig object):', towns); // Debugging: Log het volledige town-object
 
             const playerTowns = Object.values(towns).filter(town => {
-                const townPlayerName = town.player_name || town.playerName; // Controleer beide mogelijke velden
+                // Debugging: Log alle eigenschappen van de stad
+                console.log('Town eigenschappen:', Object.keys(town));
+
+                // Zoek naar het veld met de spelersnaam (mogelijke opties)
+                const townPlayerName = town.player_name || town.playerName || town.owner?.name || town.player?.name;
                 return townPlayerName?.toLowerCase() === playerName.toLowerCase();
             });
 
-            console.log('Steden van speler:', playerTowns); // Debugging: Log steden van de speler
+            console.log('Steden van speler (na filtering):', playerTowns);
+
 
             if (playerTowns.length === 0) {
                 console.error('Geen steden gevonden voor speler:', playerName);
