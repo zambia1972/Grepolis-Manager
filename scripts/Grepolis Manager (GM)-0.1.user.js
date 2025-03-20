@@ -2,16 +2,19 @@
 // @name         Grepolis Manager
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  Popup met werkbalk en buttons, inclusief Afwezigheidsassistent
+// @description  Popup met werkbalk en buttons, inclusief Afwezigheidsassistent en Militaire Manager
 // @author       You
 // @match        *://*.grepolis.com/*
 // @grant        GM_addStyle
+// @grant        GM_xmlhttpRequest
+// @grant        unsafeWindow
 // ==/UserScript==
 
 (function () {
     'use strict';
 
     let isUIInjected = false; // Globale variabele om bij te houden of de UI al is geïnjecteerd
+    const uw = unsafeWindow;
 
     class ForumManager {
         constructor() {
@@ -276,6 +279,13 @@
             this.initializeScript();
             this.fetchPlayerInfo();
             this.injectAfwezigheidsassistent();
+            this.integrateMilitaryManager();
+        }
+
+        // Voeg de Militaire Manager functionaliteit toe
+        integrateMilitaryManager() {
+            const militaryManager = new MilitaryManager();
+            militaryManager.init();
         }
 
         fetchPlayerList() {
@@ -1174,6 +1184,282 @@
             } else {
                 window.addEventListener('load', init);
             }
+        }
+    }
+
+    class MilitaryManager {
+        constructor() {
+            this.UNIT_CONFIG = {
+                aanval: {
+                    slinger: 'Slingeraars',
+                    hoplite: 'Hoplieten',
+                    rider: 'Ruiters',
+                    catapult: 'Katapult'
+                },
+                verdediging: {
+                    swordsman: 'Zwaardvechters',
+                    archer: 'Boogschutters',
+                    chariot: 'Strijdwagens',
+                    colonist: 'Kolonisten'
+                },
+                belegering: {
+                    bireme: 'Biremen',
+                    trireme: 'Triremen',
+                    attack_ship: 'Vuurschepen',
+                    colonize_ship: 'kolo'
+                },
+                speciaal: {
+                    godsent: 'Godgezanten',
+                    pegasus: 'Pegasus',
+                    cerberus: 'Cerberus',
+                    calydonian_boar: 'Wilde Zwijnen'
+                }
+            };
+        }
+
+        init() {
+            this.addMilitaryButton();
+        }
+
+        addMilitaryButton() {
+            const button = document.createElement('button');
+            button.textContent = '⚔️ Militaire Info';
+            button.style = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 1000;
+                padding: 10px 20px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 3px;
+                cursor: pointer;
+                font-size: 14px;
+            `;
+            button.addEventListener('click', () => this.handleClick());
+            document.body.appendChild(button);
+        }
+
+        async handleClick() {
+            try {
+                const towns = await this.loadTowns();
+                const townData = await this.processTowns(towns);
+                this.showPopup(this.createTable(townData));
+            } catch (error) {
+                this.showError(error.toString());
+            }
+        }
+
+        async loadTowns() {
+            return new Promise((resolve, reject) => {
+                const check = (attempts = 0) => {
+                    if (uw.ITowns?.towns) {
+                        resolve(uw.ITowns.towns);
+                    } else if (attempts < 20) {
+                        setTimeout(() => check(attempts + 1), 250);
+                    } else {
+                        reject('Kon stedendata niet laden');
+                    }
+                };
+                check();
+            });
+        }
+
+        async processTowns(towns) {
+            return Promise.all(
+                Object.values(towns).map(async town => ({
+                    basic: town,
+                    ...await this.getTownDetails(town.id)
+                }))
+            );
+        }
+
+        async getTownDetails(townId) {
+            try {
+                const town = uw.ITowns.getTown(townId);
+                if (!town) return this.getFallbackData();
+
+                const buildings = town.buildings?.() || {};
+                const units = town.units?.() || {};
+                const researches = town.researches?.()?.attributes || {};
+
+                return {
+                    god: town.god?.() || 'Onbekend',
+                    wall: buildings.getBuildingLevel?.('wall') ?? '?',
+                    tower: buildings.getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
+                    developments: this.formatResearches(researches),
+                    ...this.getUnits(units)
+                };
+            } catch (error) {
+                console.error(`Fout bij stad ${townId}:`, error);
+                return this.getFallbackData();
+            }
+        }
+
+        formatResearches(researches) {
+            return [
+                researches.phalanx && 'Falanx',
+                researches.ram && 'Stormram',
+                researches.divine_selection && 'Goddelijke Selectie',
+                researches.conscription && 'Dienstplicht'
+            ].filter(Boolean).join(', ') || 'Geen';
+        }
+
+        getUnits(units) {
+            return {
+                attack: this.formatUnitGroup(units, this.UNIT_CONFIG.aanval),
+                defense: this.formatUnitGroup(units, this.UNIT_CONFIG.verdediging),
+                siege: this.formatUnitGroup(units, this.UNIT_CONFIG.belegering),
+                specials: this.formatUnitGroup(units, this.UNIT_CONFIG.speciaal)
+            };
+        }
+
+        formatUnitGroup(units, unitTypes) {
+            return Object.entries(unitTypes)
+                .map(([key, name]) => (units[key] > 0 ? `${units[key]} ${name}` : null))
+                .filter(Boolean)
+                .join('<br>') || '-';
+        }
+
+        createTable(data) {
+            const table = document.createElement('table');
+            table.style.cssText = `
+                width: 100%;
+                border-collapse: collapse;
+                margin: 10px 0;
+                font-family: Arial, sans-serif;
+                color: white;
+            `;
+
+            table.appendChild(this.createHeader());
+            table.appendChild(this.createBody(data));
+            return table;
+        }
+
+        createHeader() {
+            const tr = document.createElement('tr');
+            const columns = ['Stad', 'ID', 'God', 'Muur', 'Toren', 'Aanval', 'Verdediging', 'Belegering', 'Speciale Eenheden', 'Ontwikkelingen'];
+            columns.forEach(col => {
+                const th = document.createElement('th');
+                th.textContent = col;
+                th.style.cssText = `
+                    padding: 12px 15px;
+                    background: #2d2d2d;
+                    position: sticky;
+                    top: 0;
+                    text-align: left;
+                    border-bottom: 2px solid #4CAF50;
+                `;
+                tr.appendChild(th);
+            });
+            return tr;
+        }
+
+        createBody(data) {
+            const tbody = document.createElement('tbody');
+            data.forEach(town => {
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid #333';
+
+                const columns = ['Stad', 'ID', 'God', 'Muur', 'Toren', 'Aanval', 'Verdediging', 'Belegering', 'Speciale Eenheden', 'Ontwikkelingen'];
+                columns.forEach(col => {
+                    const td = document.createElement('td');
+                    td.style.padding = '8px 15px';
+                    td.innerHTML = this.getCellContent(col, town);
+                    tr.appendChild(td);
+                });
+
+                tbody.appendChild(tr);
+            });
+            return tbody;
+        }
+
+        getCellContent(column, town) {
+            const contentMap = {
+                'Stad': town.basic.name,
+                'ID': town.basic.id,
+                'God': town.god,
+                'Muur': town.wall,
+                'Toren': town.tower,
+                'Aanval': town.attack,
+                'Verdediging': town.defense,
+                'Belegering': town.siege,
+                'Speciale Eenheden': town.specials,
+                'Ontwikkelingen': town.developments
+            };
+            return contentMap[column] || '-';
+        }
+
+        showPopup(content) {
+            const existing = document.getElementById('grepolis-military-popup');
+            if (existing) existing.remove();
+
+            const popup = document.createElement('div');
+            popup.id = 'grepolis-military-popup';
+            popup.style.cssText = `
+                position: fixed;
+                bottom: 60px;
+                right: 130px;
+                width: 1000px;
+                maxHeight: 70vh;
+                background-color: rgba(0,0,0,0.97);
+                color: white;
+                padding: 20px;
+                overflow-y: auto;
+                border: 2px solid #4CAF50;
+                border-radius: 8px;
+                z-index: 1001;
+                box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            `;
+            popup.appendChild(content);
+
+            const closeButton = document.createElement('button');
+            closeButton.textContent = '×';
+            closeButton.style.cssText = `
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                background: none;
+                border: none;
+                color: white;
+                font-size: 24px;
+                cursor: pointer;
+            `;
+            closeButton.onclick = () => popup.remove();
+            popup.appendChild(closeButton);
+
+            document.body.appendChild(popup);
+        }
+
+        showError(error) {
+            const errorDiv = document.createElement('div');
+            errorDiv.innerHTML = `
+                <div style="
+                    color: #ff4444;
+                    padding: 15px;
+                    border: 1px solid #ff4444;
+                    border-radius: 5px;
+                    margin: 10px 0;
+                ">
+                    <strong>⚠️ Foutmelding:</strong>
+                    <pre style="white-space: pre-wrap;">${error}</pre>
+                </div>
+            `;
+            this.showPopup(errorDiv);
+        }
+
+        getFallbackData() {
+            return {
+                god: 'Onbekend',
+                wall: '?',
+                tower: 'Nee',
+                developments: 'Geen',
+                attack: '-',
+                defense: '-',
+                siege: '-',
+                specials: '-'
+            };
         }
     }
 
