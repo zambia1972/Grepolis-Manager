@@ -512,7 +512,7 @@
                 const statusText = this.determineStatus(player.status);
                 const statusIcon = this.getStatusIcon(statusText);
                 html += '<tr>';
-                html += `<td><a class="player-name-link" href="#" data-player="${player.name}">${player.name}</a></td>`;
+                html += `<td><a class="player-name-link" href="#" data-player="${player.name}" data-player-id="${player.id}">${player.name}</a></td>`;
                 html += `<td>${player.rank}</td>`;
                 html += `<td>${player.points}</td>`;
                 html += `<td>${player.cities}</td>`;
@@ -540,8 +540,9 @@
                 link.addEventListener('click', async (e) => {
                     e.preventDefault();
                     const playerName = link.getAttribute('data-player');
-                    if (this.militaryManager) { // Controleer of militaryManager bestaat
-                        const militaryData = await this.militaryManager.getMilitaryDataForPlayer(playerName);
+                    const playerId = link.getAttribute('data-player-id');
+                    if (this.militaryManager) {
+                        const militaryData = await this.militaryManager.getMilitaryDataForPlayer(playerName, playerId);
                         this.showMilitaryData(militaryData);
                     } else {
                         console.error('MilitaryManager is niet geïnitialiseerd.');
@@ -551,7 +552,6 @@
 
             console.log('Player list displayed successfully.');
         }
-
 
         // Toon militaire gegevens in het popup-venster
         showMilitaryData(data) {
@@ -1275,7 +1275,7 @@
             };
         }
 
-        async getMilitaryDataForPlayer(playerName) {
+        async getMilitaryDataForPlayer(playerName, playerId) {
             const towns = await this.loadTowns();
             console.log('Alle steden (volledig object):', towns); // Debugging: Log het volledige town-object
 
@@ -1283,13 +1283,12 @@
                 // Debugging: Log alle eigenschappen van de stad
                 console.log('Town eigenschappen:', Object.keys(town));
 
-                // Zoek naar het veld met de spelersnaam (mogelijke opties)
-                const townPlayerName = town.player_name || town.playerName || town.owner?.name || town.player?.name;
-                return townPlayerName?.toLowerCase() === playerName.toLowerCase();
+                // Gebruik de playerId om de steden van de speler te vinden
+                const townPlayerId = town.player_id || town.player?.id;
+                return townPlayerId === playerId;
             });
 
             console.log('Steden van speler (na filtering):', playerTowns);
-
 
             if (playerTowns.length === 0) {
                 console.error('Geen steden gevonden voor speler:', playerName);
@@ -1300,7 +1299,7 @@
             }
 
             const townData = await this.processTowns(playerTowns);
-            console.log('Verwerkte stedengegevens:', townData); // Debugging: Log verwerkte gegevens
+            console.log('Verwerkte stedengegevens:', townData);
 
             return {
                 playerName: playerName,
