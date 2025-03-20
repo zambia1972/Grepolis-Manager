@@ -603,7 +603,7 @@
             return button;
         }
 
-        function waitForTableAndShowPlayerList() {
+        waitForTableAndShowPlayerList() {
             const observer = new MutationObserver((mutations, obs) => {
                 const table = document.querySelector('.alliance-members-table'); // Update this selector
                 if (table) {
@@ -620,7 +620,7 @@
         }
 
         // Call this function when the "Spelerslijst" button is clicked
-        const showPlayerListButton = document.getElementById('show-player-list');
+        showPlayerListButton = document.getElementById('show-player-list');
         if (showPlayerListButton) {
             showPlayerListButton.addEventListener('click', waitForTableAndShowPlayerList);
         }
