@@ -282,62 +282,7 @@
             this.injectAfwezigheidsassistent();
         }
 
-        fetchPlayerList() {
-            // Klik op het alliantie menu
-            const allianceMenu = document.querySelector('#ui_box > div.nui_main_menu > div.middle > div.content > ul > li.alliance.main_menu_item > span > span.name_wrapper > span');
-            if (allianceMenu) {
-                allianceMenu.click();
-
-                // Wacht tot het menu geladen is en klik op de ledenlijst
-                setTimeout(() => {
-                    const membersButton = document.querySelector('#alliance-members_show > span > span > span');
-                    if (membersButton) {
-                        membersButton.click();
-
-                        // Wacht tot de ledenlijst geladen is en haal de gegevens op
-                        setTimeout(() => {
-                            this.showPlayerList(); // Display the player list
-
-                            // Sluit het dialoogvenster na het ophalen van de gegevens
-                            const closeDialogButton = document.querySelector('body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-draggable.ui-resizable.js-window-main-container > div.ui-dialog-titlebar.ui-corner-all.ui-widget-header.ui-helper-clearfix.ui-draggable-handle > button');
-                            if (closeDialogButton) {
-                                closeDialogButton.click();
-                            }
-                        }, 100); // Wacht 100ms voor de ledenlijst om te laden
-                    }
-                }, 100); // Wacht 100ms voor het menu om te laden
-            } else {
-                console.error('Alliance menu not found.');
-            }
-        }
-
-        fetchPlayerInfo() {
-            const maxAttempts = 10; // Maximaal aantal pogingen
-            let attempts = 0;
-
-            const checkForPlayerInfo = () => {
-                // Haal de gegevens op uit localStorage
-                const playerId = localStorage.getItem('grepolisPlayerId');
-                const playerName = localStorage.getItem('grepolisPlayerName');
-
-                if (playerId && playerName) {
-                    this.playerId = playerId;
-                    this.playerName = playerName;
-                    console.log('Player-ID gevonden via localStorage:', this.playerId);
-                    console.log('Spelersnaam gevonden via localStorage:', this.playerName);
-                } else if (attempts < maxAttempts) {
-                    attempts++;
-                    console.log(`Poging ${attempts}: Geen spelersgegevens gevonden in localStorage. Opnieuw proberen...`);
-                    setTimeout(checkForPlayerInfo, 1000); // Probeer opnieuw na 1 seconde
-                } else {
-                    console.log('Geen spelersgegevens gevonden in localStorage na meerdere pogingen.');
-                }
-            };
-
-            // Start de controle
-            checkForPlayerInfo();
-        }
-
+        // Initialiseer het script
         initializeScript() {
             this.addMainButton();
             this.injectStyles();
@@ -534,6 +479,62 @@
             }
             content.innerHTML = html;
 
+            fetchPlayerList() {
+            // Klik op het alliantie menu
+            const allianceMenu = document.querySelector('#ui_box > div.nui_main_menu > div.middle > div.content > ul > li.alliance.main_menu_item > span > span.name_wrapper > span');
+            if (allianceMenu) {
+                allianceMenu.click();
+
+                // Wacht tot het menu geladen is en klik op de ledenlijst
+                setTimeout(() => {
+                    const membersButton = document.querySelector('#alliance-members_show > span > span > span');
+                    if (membersButton) {
+                        membersButton.click();
+
+                        // Wacht tot de ledenlijst geladen is en haal de gegevens op
+                        setTimeout(() => {
+                            this.showPlayerList(); // Display the player list
+
+                            // Sluit het dialoogvenster na het ophalen van de gegevens
+                            const closeDialogButton = document.querySelector('body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-draggable.ui-resizable.js-window-main-container > div.ui-dialog-titlebar.ui-corner-all.ui-widget-header.ui-helper-clearfix.ui-draggable-handle > button');
+                            if (closeDialogButton) {
+                                closeDialogButton.click();
+                            }
+                        }, 100); // Wacht 100ms voor de ledenlijst om te laden
+                    }
+                }, 100); // Wacht 100ms voor het menu om te laden
+            } else {
+                console.error('Alliance menu not found.');
+            }
+        }
+
+        fetchPlayerInfo() {
+            const maxAttempts = 10; // Maximaal aantal pogingen
+            let attempts = 0;
+
+            const checkForPlayerInfo = () => {
+                // Haal de gegevens op uit localStorage
+                const playerId = localStorage.getItem('grepolisPlayerId');
+                const playerName = localStorage.getItem('grepolisPlayerName');
+
+                if (playerId && playerName) {
+                    this.playerId = playerId;
+                    this.playerName = playerName;
+                    console.log('Player-ID gevonden via localStorage:', this.playerId);
+                    console.log('Spelersnaam gevonden via localStorage:', this.playerName);
+                } else if (attempts < maxAttempts) {
+                    attempts++;
+                    console.log(`Poging ${attempts}: Geen spelersgegevens gevonden in localStorage. Opnieuw proberen...`);
+                    setTimeout(checkForPlayerInfo, 1000); // Probeer opnieuw na 1 seconde
+                } else {
+                    console.log('Geen spelersgegevens gevonden in localStorage na meerdere pogingen.');
+                }
+            };
+
+            // Start de controle
+            checkForPlayerInfo();
+        }
+
             // Voeg event listeners toe aan de spelersnamen
             const playerLinks = content.querySelectorAll('.player-name-link');
             playerLinks.forEach(link => {
@@ -560,9 +561,6 @@
                 console.error('Popup-content element niet gevonden.');
                 return;
             }
-
-            // Debugging: Log de ontvangen data
-            console.log('Militaire gegevens:', data);
 
             if (data.towns.length === 0) {
                 content.innerHTML = `
