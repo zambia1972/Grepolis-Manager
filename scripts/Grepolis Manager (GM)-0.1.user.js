@@ -276,15 +276,10 @@
                     {title: "Leidinggevenden", content: "Inhoud van Leidinggevenden..."},
                 ],
             };
+            this.militaryManager = new MilitaryManager(); // Initialiseer militaryManager hier
             this.initializeScript();
             this.fetchPlayerInfo();
             this.injectAfwezigheidsassistent();
-            this.integrateMilitaryManager();
-        }
-
-        // Voeg de Militaire Manager functionaliteit toe
-        integrateMilitaryManager() {
-            const militaryManager = new MilitaryManager();
         }
 
         fetchPlayerList() {
@@ -486,9 +481,14 @@
             }
         }
 
-        // Pas de showPlayerList-methode aan om militaire gegevens weer te geven
+        // Pas de showPlayerList-methode aan om de spelerslijst correct op te halen
         showPlayerList() {
             const players = this.getPlayers();
+            if (!players || players.length === 0) {
+                console.error('Geen spelers gevonden of de lijst is leeg.');
+                return;
+            }
+
             const headers = [
                 'Naam', 'Rang', 'Punten', 'Steden', 'Status',
                 '<img src="https://gpnl.innogamescdn.com/images/game/ally/founder.png" alt="Oprichter" width="16" height="16">',
@@ -508,30 +508,30 @@
             headers.forEach(header => html += `<th>${header}</th>`);
             html += '</tr></thead><tbody>';
 
-            if (players.length === 0) {
-                html += `<tr><td colspan="${headers.length}" style="text-align: center; color: red;">Geen spelers gevonden.</td></tr>`;
-            } else {
-                players.forEach(player => {
-                    const statusText = this.determineStatus(player.status);
-                    const statusIcon = this.getStatusIcon(statusText);
-                    html += '<tr>';
-                    html += `<td><a class="player-name-link" href="#" data-player="${player.name}">${player.name}</a></td>`;
-                    html += `<td>${player.rank}</td>`;
-                    html += `<td>${player.points}</td>`;
-                    html += `<td>${player.cities}</td>`;
-                    if (player.status === "online.png" || player.status === "vacation.png") {
-                        html += `<td>${statusIcon} ${statusText}</td>`;
-                    } else {
-                        html += `<td>${statusIcon}</td>`;
-                    }
-                    player.rights.forEach(right => html += `<td>${right}</td>`);
-                    html += `<td></td>`; // Placeholder for "Geplande Inactiviteit"
-                    html += '</tr>';
-                });
-            }
+            players.forEach(player => {
+                const statusText = this.determineStatus(player.status);
+                const statusIcon = this.getStatusIcon(statusText);
+                html += '<tr>';
+                html += `<td><a class="player-name-link" href="#" data-player="${player.name}">${player.name}</a></td>`;
+                html += `<td>${player.rank}</td>`;
+                html += `<td>${player.points}</td>`;
+                html += `<td>${player.cities}</td>`;
+                if (player.status === "online.png" || player.status === "vacation.png") {
+                    html += `<td>${statusIcon} ${statusText}</td>`;
+                } else {
+                    html += `<td>${statusIcon}</td>`;
+                }
+                player.rights.forEach(right => html += `<td>${right}</td>`);
+                html += `<td></td>`; // Placeholder for "Geplande Inactiviteit"
+                html += '</tr>';
+            });
 
             html += '</tbody></table>';
             const content = document.getElementById('popup-content');
+            if (!content) {
+                console.error('Popup-content element niet gevonden.');
+                return;
+            }
             content.innerHTML = html;
 
             // Voeg event listeners toe aan de spelersnamen
@@ -556,6 +556,10 @@
         // Toon militaire gegevens in het popup-venster
         showMilitaryData(data) {
             const content = document.getElementById('popup-content');
+            if (!content) {
+                console.error('Popup-content element niet gevonden.');
+                return;
+            }
             content.innerHTML = `
                 <h2>Militaire Gegevens voor ${data.playerName}</h2>
                 <div style="overflow-x: auto;">
@@ -565,16 +569,27 @@
         }
 
 
+        // Haal de spelerslijst op
         getPlayers() {
             const players = [];
             const rows = document.querySelectorAll('#ally_members_body tr[id^="alliance_player_"]');
 
+            if (!rows || rows.length === 0) {
+                console.error('Geen rijen gevonden in de spelerslijst.');
+                return players;
+            }
+
             rows.forEach(row => {
                 const nameLink = row.querySelector('.ally_name a');
-                const name = nameLink.textContent.trim();
-                const statusImg = nameLink.querySelector('img');
+                const name = nameLink?.textContent.trim();
+                const statusImg = nameLink?.querySelector('img');
                 const status = statusImg ? statusImg.src.split('/').pop() : null; // Haal de status afbeelding op
                 const cells = row.cells;
+
+                if (!cells || cells.length < 12) {
+                    console.error('Ongeldige rij in de spelerslijst:', row);
+                    return;
+                }
 
                 const rights = [];
                 for (let i = 4; i <= 11; i++) { // Pas de index aan om de kolom "Donaties" over te slaan
