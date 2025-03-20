@@ -291,13 +291,20 @@
         addMainButton() {
             const button = document.createElement('button');
             button.id = 'open-forum-popup';
+            button.textContent = 'GFM';
             button.style = `
-        width: 50px;
-        height: 50px;
-        background: url('https://imgur.com/FJ6vHi1.png') no-repeat center center;
-        background-size: cover;
+        width: 60px;
+        height: 60px;
+        background: black;
+        color: white;
+        border: 2px solid #FF0000;
         border-radius: 50%;
         box-shadow: 0 0 10px #FF0000;
+        font-size: 18px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
         position: fixed;
         bottom: 80px;
@@ -305,6 +312,7 @@
         z-index: 9999;
     `;
 
+            button.addEventListener('click', () => this.createPopup());
             document.body.appendChild(button);
         }
 
