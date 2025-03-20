@@ -285,7 +285,6 @@
         // Voeg de Militaire Manager functionaliteit toe
         integrateMilitaryManager() {
             const militaryManager = new MilitaryManager();
-            militaryManager.init();
         }
 
         fetchPlayerList() {
@@ -487,6 +486,7 @@
             }
         }
 
+        // Pas de showPlayerList-methode aan om militaire gegevens weer te geven
         showPlayerList() {
             const players = this.getPlayers();
             const headers = [
@@ -534,8 +534,31 @@
             const content = document.getElementById('popup-content');
             content.innerHTML = html;
 
-            console.log('Player list displayed successfully.'); // Debug log
+            // Voeg event listeners toe aan de spelersnamen
+            const playerLinks = content.querySelectorAll('.player-name-link');
+            playerLinks.forEach(link => {
+                link.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const playerName = link.getAttribute('data-player');
+                    const militaryData = await this.militaryManager.getMilitaryDataForPlayer(playerName);
+                    this.showMilitaryData(militaryData);
+                });
+            });
+
+            console.log('Player list displayed successfully.');
         }
+
+        // Toon militaire gegevens in het popup-venster
+        showMilitaryData(data) {
+            const content = document.getElementById('popup-content');
+            content.innerHTML = `
+                <h2>Militaire Gegevens voor ${data.playerName}</h2>
+                <div style="overflow-x: auto;">
+                    ${this.militaryManager.createTable(data.towns)}
+                </div>
+            `;
+        }
+
 
         getPlayers() {
             const players = [];
@@ -1217,28 +1240,14 @@
             };
         }
 
-        init() {
-            this.addMilitaryButton();
-        }
-
-        addMilitaryButton() {
-            const button = document.createElement('button');
-            button.textContent = '⚔️ Militaire Info';
-            button.style = `
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                z-index: 1000;
-                padding: 10px 20px;
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                border-radius: 3px;
-                cursor: pointer;
-                font-size: 14px;
-            `;
-            button.addEventListener('click', () => this.handleClick());
-            document.body.appendChild(button);
+        async getMilitaryDataForPlayer(playerName) {
+            const towns = await this.loadTowns();
+            const playerTowns = Object.values(towns).filter(town => town.player_name === playerName);
+            const townData = await this.processTowns(playerTowns);
+            return {
+                playerName: playerName,
+                towns: townData
+            };
         }
 
         async handleClick() {
