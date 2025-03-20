@@ -292,11 +292,10 @@
             const button = document.createElement('button');
             button.id = 'open-forum-popup';
             button.style = `
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
         background: url('https://imgur.com/FJ6vHi1.png') no-repeat center center;
         background-size: cover;
-        border: 2px solid #FF0000;
         border-radius: 50%;
         box-shadow: 0 0 10px #FF0000;
         cursor: pointer;
