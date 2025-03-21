@@ -1334,7 +1334,26 @@
             }
         }
 
-        async loadTowns() {
+        async processTowns(towns) {
+            try {
+                const processed = await Promise.all(
+                    towns.map(town => this.getTownDetails(town.id))
+                );
+                return { success: true, towns: processed };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        async initializeTowns() { // CORRECT
+            try {
+                this.towns = await this.loadTowns();
+            } catch (error) {
+                console.error('Fout bij initialiseren steden:', error);
+            }
+        }
+
+        async loadTowns() { // CORRECT
             return new Promise((resolve, reject) => {
                 const check = (attempts = 0) => {
                     if (uw.ITowns?.towns) {
@@ -1349,23 +1368,11 @@
             });
         }
 
-        async processTowns(towns) {
-            try {
-                const processed = await Promise.all(
-                    towns.map(town => this.getTownDetails(town.id))
-                );
-                return { success: true, towns: processed };
-            } catch (error) {
-                return { success: false, error: error.message };
-            }
-        }
-
-        async initializeTowns() { // Verbeterde syntax
-            try {
-                this.towns = await this.loadTowns();
-            } catch (error) {
-                console.error('Error initializing towns:', error);
-            }
+        filterTowns(towns, targetPlayerId) { // GOED GEDEFINIEERD
+            return Object.values(towns).filter(town => {
+                const townPlayerId = town.player_id || town.player?.id;
+                return townPlayerId?.toString() === targetPlayerId.toString();
+            });
         }
 
         async processTowns(towns) {
