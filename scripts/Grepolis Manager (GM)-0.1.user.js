@@ -1352,34 +1352,15 @@
             }
         }
 
-        async
-        initializeTowns()
-        {
+        async initializeTowns() { // Verbeterde syntax
             try {
                 this.towns = await this.loadTowns();
-                // Remove the call to filterTowns if it's not defined
-                // this.towns = filterTowns(this.towns);
             } catch (error) {
                 console.error('Error initializing towns:', error);
             }
         }
 
-        async
-        loadTowns()
-        {
-            return new Promise((resolve, reject) => {
-                const check = (attempts = 0) => {
-                    uw.ITowns?.towns ? resolve(uw.ITowns.towns) :
-                    attempts < 20 ? setTimeout(() => check(attempts + 1), 250) :
-                    reject('Stedendata niet geladen');
-                };
-                check();
-            });
-        }
-
-        async
-        processTowns(towns)
-        {
+        async processTowns(towns) {
             return Promise.all(
                 Object.values(towns).map(async town => ({
                     basic: town,
@@ -1387,11 +1368,10 @@
                 })));
         }
 
-        getTownDetails(townId)
-        {
+        getTownDetails(townId) {
             try {
                 const town = uw.ITowns.getTown(townId);
-                if (!town) return getFallbackData();
+                if (!town) return this.getFallbackData(); // Voeg 'this' toe
 
                 const buildings = town.buildings?.() || {};
                 const units = town.units?.() || {};
@@ -1401,12 +1381,11 @@
                     god: town.god?.() || 'Onbekend',
                     wall: buildings.getBuildingLevel?.('wall') ?? '?',
                     tower: buildings.getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
-                    developments: formatResearches(researches),
-                    ...getUnits(units)
+                    developments: this.formatResearches(researches), // Voeg 'this' toe
+                    ...this.getUnits(units) // Voeg 'this' toe
                 };
             } catch (error) {
-                console.error(`Fout bij stad ${townId}:`, error);
-                return getFallbackData();
+                return this.getFallbackData();
             }
         }
 
