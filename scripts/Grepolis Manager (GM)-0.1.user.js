@@ -1244,206 +1244,173 @@
     }
 
     class MilitaryManager {
-        constructor() {
-            this.UNIT_CONFIG = {
-                aanval: {
-                    slinger: 'Slingeraars',
-                    hoplite: 'Hoplieten',
-                    rider: 'Ruiters',
-                    catapult: 'Katapult'
-                },
-                verdediging: {
-                    swordsman: 'Zwaardvechters',
-                    archer: 'Boogschutters',
-                    chariot: 'Strijdwagens',
-                    colonist: 'Kolonisten'
-                },
-                belegering: {
-                    bireme: 'Biremen',
-                    trireme: 'Triremen',
-                    attack_ship: 'Vuurschepen',
-                    colonize_ship: 'kolo'
-                },
-                speciaal: {
-                    godsent: 'Godgezanten',
-                    pegasus: 'Pegasus',
-                    cerberus: 'Cerberus',
-                    calydonian_boar: 'Wilde Zwijnen'
-                }
-            };
-        }
-
-        async getMilitaryDataForPlayer(playerName, playerId) {
-            const towns = await this.loadTowns();
-            console.log('Alle steden (volledig object):', towns); // Debugging: Log het volledige town-object
-
-            // Haal de alliantieledenlijst op
-            const allianceMembers = await this.loadAllianceMembers();
-            console.log('Alliantieleden:', allianceMembers);
-
-            // Zoek de speler in de alliantieledenlijst
-            const player = allianceMembers.find(member => member.id === playerId);
-            if (!player) {
-                console.error('Speler niet gevonden in alliantieledenlijst:', playerName);
-                return {
-                    playerName: playerName,
-                    towns: []
-                };
+    constructor() {
+        this.UNIT_CONFIG = {
+            aanval: {
+                slinger: 'Slingeraars',
+                hoplite: 'Hoplieten',
+                rider: 'Ruiters',
+                catapult: 'Katapult'
+            },
+            verdediging: {
+                swordsman: 'Zwaardvechters',
+                archer: 'Boogschutters',
+                chariot: 'Strijdwagens',
+                colonist: 'Kolonisten'
+            },
+            belegering: {
+                bireme: 'Biremen',
+                trireme: 'Triremen',
+                attack_ship: 'Vuurschepen',
+                colonize_ship: 'kolo'
+            },
+            speciaal: {
+                godsent: 'Godgezanten',
+                pegasus: 'Pegasus',
+                cerberus: 'Cerberus',
+                calydonian_boar: 'Wilde Zwijnen'
             }
+        };
+    }
 
-            // Haal de steden van de speler op
-            const playerTowns = Object.values(towns).filter(town => {
-                // Gebruik de stadseigenschappen om de speler te identificeren
-                const townPlayerId = town.player_id || town.player?.id;
-                return townPlayerId === playerId;
-            });
+    async getMilitaryDataForPlayer(playerName, playerId) {
+        const towns = await this.loadTowns();
+        console.log('Alle steden (volledig object):', towns);
 
-            console.log('Steden van speler (na filtering):', playerTowns);
+        // Haal de alliantieledenlijst op
+        const allianceMembers = await this.loadAllianceMembers();
+        console.log('Alliantieleden:', allianceMembers);
 
-            if (playerTowns.length === 0) {
-                console.error('Geen steden gevonden voor speler:', playerName);
-                return {
-                    playerName: playerName,
-                    towns: []
-                };
-            }
-
-            const townData = await this.processTowns(playerTowns);
-            console.log('Verwerkte stedengegevens:', townData);
-
+        // Zoek de speler in de alliantieledenlijst
+        const player = allianceMembers.find(member => member.id === playerId);
+        if (!player) {
+            console.error('Speler niet gevonden in alliantieledenlijst:', playerName);
             return {
                 playerName: playerName,
-                towns: townData
+                towns: []
             };
         }
 
-        async loadAllianceMembers() {
-            return new Promise((resolve, reject) => {
-                // Open de alliantiepagina
-                const allianceMenu = document.querySelector('#ui_box > div.nui_main_menu > div.middle > div.content > ul > li.alliance.main_menu_item > span > span.name_wrapper > span');
-                if (allianceMenu) {
-                    allianceMenu.click();
+        // Haal de steden van de speler op
+        const playerTowns = Object.values(towns).filter(town => {
+            const townPlayerId = town.player_id || town.player?.id;
+            return townPlayerId === playerId;
+        });
 
-                    // Wacht tot de ledenlijst is geladen
-                    setTimeout(() => {
-                        const membersButton = document.querySelector('#alliance-members_show > span > span > span');
-                        if (membersButton) {
-                            membersButton.click();
+        console.log('Steden van speler (na filtering):', playerTowns);
 
-                            // Wacht tot de ledenlijst is geladen
-                            setTimeout(() => {
-                                const members = [];
-                                const rows = document.querySelectorAll('#ally_members_body tr[id^="alliance_player_"]');
-                                rows.forEach(row => {
-                                    const nameLink = row.querySelector('.ally_name a');
-                                    const name = nameLink?.textContent.trim();
-                                    const idMatch = nameLink?.href.match(/player\/(\d+)/);
-                                    const id = idMatch ? parseInt(idMatch[1], 10) : null;
-                                    if (name && id) {
-                                        members.push({ name, id });
-                                    }
-                                });
+        if (playerTowns.length === 0) {
+            console.error('Geen steden gevonden voor speler:', playerName);
+            return {
+                playerName: playerName,
+                towns: []
+            };
+        }
 
-                                if (members.length > 0) {
-                                    console.log('Alliantieleden gevonden:', members);
-                                    resolve(members);
-                                } else {
-                                    reject('Geen alliantieleden gevonden in de DOM.');
-                                }
+        const townData = await this.processTowns(playerTowns);
+        console.log('Verwerkte stedengegevens:', townData);
 
-                                // Sluit het dialoogvenster
-                                const closeButton = document.querySelector('body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-draggable.ui-resizable.js-window-main-container > div.ui-dialog-titlebar.ui-corner-all.ui-widget-header.ui-helper-clearfix.ui-draggable-handle > button');
-                                if (closeButton) {
-                                    closeButton.click();
-                                }
-                            }, 1000); // Wacht 1 seconde voor de ledenlijst om te laden
-                        } else {
-                            reject('Kon de ledenlijstknop niet vinden.');
-                        }
-                    }, 1000); // Wacht 1 seconde voor het menu om te laden
+        return {
+            playerName: playerName,
+            towns: townData
+        };
+    }
+
+    async loadAllianceMembers() {
+        return new Promise((resolve, reject) => {
+            const check = (attempts = 0) => {
+                console.log(`Poging ${attempts + 1}: Controleren van IAlliance object...`);
+                if (uw.IAlliance?.members) {
+                    console.log('Alliantieleden gevonden:', uw.IAlliance.members);
+                    resolve(uw.IAlliance.members);
+                } else if (attempts < 20) {
+                    setTimeout(() => check(attempts + 1), 250);
                 } else {
-                    reject('Kon het alliantiemenu niet vinden.');
+                    console.error('IAlliance object of members niet gevonden na 20 pogingen.');
+                    reject('Kon alliantieleden niet laden');
                 }
-            });
-        }
+            };
+            check();
+        });
+    }
 
-        async loadTowns() {
-            return new Promise((resolve, reject) => {
-                const check = (attempts = 0) => {
-                    if (uw.ITowns?.towns) {
-                        resolve(uw.ITowns.towns);
-                    } else if (attempts < 20) {
-                        setTimeout(() => check(attempts + 1), 250);
-                    } else {
-                        reject('Kon stedendata niet laden');
-                    }
-                };
-                check();
-            });
-        }
-
-        async processTowns(towns) {
-            return Promise.all(
-                towns.map(async town => ({
-                    basic: town,
-                    ...await this.getTownDetails(town.id)
-                }))
-            );
-        }
-
-        async getTownDetails(townId) {
-            try {
-                const town = uw.ITowns.getTown(townId);
-                if (!town) {
-                    console.error(`Stad met ID ${townId} niet gevonden.`);
-                    return this.getFallbackData();
+    async loadTowns() {
+        return new Promise((resolve, reject) => {
+            const check = (attempts = 0) => {
+                if (uw.ITowns?.towns) {
+                    resolve(uw.ITowns.towns);
+                } else if (attempts < 20) {
+                    setTimeout(() => check(attempts + 1), 250);
+                } else {
+                    reject('Kon stedendata niet laden');
                 }
+            };
+            check();
+        });
+    }
 
-                const buildings = town.buildings?.() || {};
-                const units = town.units?.() || {};
-                const researches = town.researches?.()?.attributes || {};
+    async processTowns(towns) {
+        return Promise.all(
+            towns.map(async town => ({
+                basic: town,
+                ...await this.getTownDetails(town.id)
+            }))
+        );
+    }
 
-                return {
-                    god: town.god?.() || 'Onbekend',
-                    wall: buildings.getBuildingLevel?.('wall') ?? '?',
-                    tower: buildings.getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
-                    developments: this.formatResearches(researches),
-                    ...this.getUnits(units)
-                };
-            } catch (error) {
-                console.error(`Fout bij stad ${townId}:`, error);
+    async getTownDetails(townId) {
+        try {
+            const town = uw.ITowns.getTown(townId);
+            if (!town) {
+                console.error(`Stad met ID ${townId} niet gevonden.`);
                 return this.getFallbackData();
             }
-        }
 
-        formatResearches(researches) {
-            return [
-                researches.phalanx && 'Falanx',
-                researches.ram && 'Stormram',
-                researches.divine_selection && 'Goddelijke Selectie',
-                researches.conscription && 'Dienstplicht'
-            ].filter(Boolean).join(', ') || 'Geen';
-        }
+            const buildings = town.buildings?.() || {};
+            const units = town.units?.() || {};
+            const researches = town.researches?.()?.attributes || {};
 
-        getUnits(units) {
             return {
-                attack: this.formatUnitGroup(units, this.UNIT_CONFIG.aanval),
-                defense: this.formatUnitGroup(units, this.UNIT_CONFIG.verdediging),
-                siege: this.formatUnitGroup(units, this.UNIT_CONFIG.belegering),
-                specials: this.formatUnitGroup(units, this.UNIT_CONFIG.speciaal)
+                god: town.god?.() || 'Onbekend',
+                wall: buildings.getBuildingLevel?.('wall') ?? '?',
+                tower: buildings.getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
+                developments: this.formatResearches(researches),
+                ...this.getUnits(units)
             };
+        } catch (error) {
+            console.error(`Fout bij stad ${townId}:`, error);
+            return this.getFallbackData();
         }
+    }
 
-        formatUnitGroup(units, unitTypes) {
-            return Object.entries(unitTypes)
-                .map(([key, name]) => (units[key] > 0 ? `${units[key]} ${name}` : null))
-                .filter(Boolean)
-                .join('<br>') || '-';
-        }
+    formatResearches(researches) {
+        return [
+            researches.phalanx && 'Falanx',
+            researches.ram && 'Stormram',
+            researches.divine_selection && 'Goddelijke Selectie',
+            researches.conscription && 'Dienstplicht'
+        ].filter(Boolean).join(', ') || 'Geen';
+    }
 
-        createTable(data) {
-            const table = document.createElement('table');
-            table.style.cssText = `
+    getUnits(units) {
+        return {
+            attack: this.formatUnitGroup(units, this.UNIT_CONFIG.aanval),
+            defense: this.formatUnitGroup(units, this.UNIT_CONFIG.verdediging),
+            siege: this.formatUnitGroup(units, this.UNIT_CONFIG.belegering),
+            specials: this.formatUnitGroup(units, this.UNIT_CONFIG.speciaal)
+        };
+    }
+
+    formatUnitGroup(units, unitTypes) {
+        return Object.entries(unitTypes)
+            .map(([key, name]) => (units[key] > 0 ? `${units[key]} ${name}` : null))
+            .filter(Boolean)
+            .join('<br>') || '-';
+    }
+
+    createTable(data) {
+        const table = document.createElement('table');
+        table.style.cssText = `
             width: 100%;
             border-collapse: collapse;
             margin: 10px 0;
@@ -1451,18 +1418,18 @@
             color: white;
         `;
 
-            table.appendChild(this.createHeader());
-            table.appendChild(this.createBody(data));
-            return table;
-        }
+        table.appendChild(this.createHeader());
+        table.appendChild(this.createBody(data));
+        return table;
+    }
 
-        createHeader() {
-            const tr = document.createElement('tr');
-            const columns = ['Stad', 'ID', 'God', 'Muur', 'Toren', 'Aanval', 'Verdediging', 'Belegering', 'Speciale Eenheden', 'Ontwikkelingen'];
-            columns.forEach(col => {
-                const th = document.createElement('th');
-                th.textContent = col;
-                th.style.cssText = `
+    createHeader() {
+        const tr = document.createElement('tr');
+        const columns = ['Stad', 'ID', 'God', 'Muur', 'Toren', 'Aanval', 'Verdediging', 'Belegering', 'Speciale Eenheden', 'Ontwikkelingen'];
+        columns.forEach(col => {
+            const th = document.createElement('th');
+            th.textContent = col;
+            th.style.cssText = `
                 padding: 12px 15px;
                 background: #2d2d2d;
                 position: sticky;
@@ -1470,59 +1437,59 @@
                 text-align: left;
                 border-bottom: 2px solid #4CAF50;
             `;
-                tr.appendChild(th);
-            });
-            return tr;
-        }
-
-        createBody(data) {
-            const tbody = document.createElement('tbody');
-            data.forEach(town => {
-                const tr = document.createElement('tr');
-                tr.style.borderBottom = '1px solid #333';
-
-                const columns = ['Stad', 'ID', 'God', 'Muur', 'Toren', 'Aanval', 'Verdediging', 'Belegering', 'Speciale Eenheden', 'Ontwikkelingen'];
-                columns.forEach(col => {
-                    const td = document.createElement('td');
-                    td.style.padding = '8px 15px';
-                    td.innerHTML = this.getCellContent(col, town);
-                    tr.appendChild(td);
-                });
-
-                tbody.appendChild(tr);
-            });
-            return tbody;
-        }
-
-        getCellContent(column, town) {
-            const contentMap = {
-                'Stad': town.basic.name,
-                'ID': town.basic.id,
-                'God': town.god,
-                'Muur': town.wall,
-                'Toren': town.tower,
-                'Aanval': town.attack,
-                'Verdediging': town.defense,
-                'Belegering': town.siege,
-                'Speciale Eenheden': town.specials,
-                'Ontwikkelingen': town.developments
-            };
-            return contentMap[column] || '-';
-        }
-
-        getFallbackData() {
-            return {
-                god: 'Onbekend',
-                wall: '?',
-                tower: 'Nee',
-                developments: 'Geen',
-                attack: '-',
-                defense: '-',
-                siege: '-',
-                specials: '-'
-            };
-        }
+            tr.appendChild(th);
+        });
+        return tr;
     }
+
+    createBody(data) {
+        const tbody = document.createElement('tbody');
+        data.forEach(town => {
+            const tr = document.createElement('tr');
+            tr.style.borderBottom = '1px solid #333';
+
+            const columns = ['Stad', 'ID', 'God', 'Muur', 'Toren', 'Aanval', 'Verdediging', 'Belegering', 'Speciale Eenheden', 'Ontwikkelingen'];
+            columns.forEach(col => {
+                const td = document.createElement('td');
+                td.style.padding = '8px 15px';
+                td.innerHTML = this.getCellContent(col, town);
+                tr.appendChild(td);
+            });
+
+            tbody.appendChild(tr);
+        });
+        return tbody;
+    }
+
+    getCellContent(column, town) {
+        const contentMap = {
+            'Stad': town.basic.name,
+            'ID': town.basic.id,
+            'God': town.god,
+            'Muur': town.wall,
+            'Toren': town.tower,
+            'Aanval': town.attack,
+            'Verdediging': town.defense,
+            'Belegering': town.siege,
+            'Speciale Eenheden': town.specials,
+            'Ontwikkelingen': town.developments
+        };
+        return contentMap[column] || '-';
+    }
+
+    getFallbackData() {
+        return {
+            god: 'Onbekend',
+            wall: '?',
+            tower: 'Nee',
+            developments: 'Geen',
+            attack: '-',
+            defense: '-',
+            siege: '-',
+            specials: '-'
+        };
+    }
+}
     // Initialiseer de ForumManager
     const forumManager = new ForumManager();
 })();
