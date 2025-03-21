@@ -1409,12 +1409,12 @@
         createTable(data) {
             const table = document.createElement('table');
             table.style.cssText = `
-        width: 100%;
-        border-collapse: collapse;
-        margin: 10px 0;
-        font-family: Arial, sans-serif;
-        color: white;
-    `;
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-family: Arial, sans-serif;
+            color: white;
+        `;
 
             table.appendChild(this.createHeader());
             table.appendChild(this.createBody(data));
@@ -1428,13 +1428,13 @@
                 const th = document.createElement('th');
                 th.textContent = col;
                 th.style.cssText = `
-            padding: 12px 15px;
-            background: #2d2d2d;
-            position: sticky;
-            top: 0;
-            text-align: left;
-            border-bottom: 2px solid #4CAF50;
-        `;
+                padding: 12px 15px;
+                background: #2d2d2d;
+                position: sticky;
+                top: 0;
+                text-align: left;
+                border-bottom: 2px solid #4CAF50;
+            `;
                 tr.appendChild(th);
             });
             return tr;
@@ -1474,6 +1474,7 @@
             };
             return contentMap[column] || '-';
         }
+
         getFallbackData() {
             return {
                 god: 'Onbekend',
@@ -1487,7 +1488,6 @@
             };
         }
     }
-
     // Initialiseer de ForumManager
     const forumManager = new ForumManager();
 })();
