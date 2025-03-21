@@ -512,13 +512,10 @@
             playerLinks.forEach(link => {
                 link.addEventListener('click', async (e) => {
                     e.preventDefault();
-                    const playerName = link.getAttribute('data-player');
                     const playerId = parseInt(link.getAttribute('data-player-id'), 10);
                     if (this.militaryManager) {
-                        const militaryData = await this.militaryManager.getMilitaryDataForPlayer(playerName, playerId);
+                        const militaryData = await this.militaryManager.getMilitaryData(playerId); // <- Aangepaste aanroep
                         this.showMilitaryData(militaryData);
-                    } else {
-                        console.error('MilitaryManager is niet geïnitialiseerd.');
                     }
                 });
             });
@@ -1281,14 +1278,14 @@
             };
         }
 
-        async getMilitaryData(playerId) {
+        async getMilitaryData(playerId) {  // <- CORRECTE FUNCTIENAAM
             try {
                 const towns = await this.loadTowns();
                 const playerTowns = this.filterTowns(towns, playerId);
                 return await this.processTowns(playerTowns);
             } catch (error) {
                 console.error('Militaire data ophalen mislukt:', error);
-                return [];
+                return { towns: [] }; // Zorg voor consistente return structuur
             }
         }
 
