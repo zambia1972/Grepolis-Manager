@@ -1274,14 +1274,21 @@
 
         async getMilitaryData(playerId) {
             try {
+                console.log("[DEBUG] Opvragen militaire data voor speler ID:", playerId);
+
                 const towns = await this.loadTowns();
+                console.log("[DEBUG] Geladen steden:", towns);
+
                 const playerTowns = this.filterTowns(towns, playerId);
+                console.log("[DEBUG] Gefilterde steden voor speler:", playerTowns);
+
                 return {
                     success: true,
-                    towns: await this.processTowns(playerTowns)
+                    towns: await this.processTowns(playerTowns),
+                    playerId: playerId
                 };
             } catch (error) {
-                console.error('Fout bij ophalen militaire data:', error);
+                console.error("[DEBUG] Fout in getMilitaryData:", error);
                 return {
                     success: false,
                     towns: [],
@@ -1289,6 +1296,38 @@
                 };
             }
         }
+        
+        async loadTowns() {
+        return new Promise((resolve, reject) => {
+            const check = (attempts = 0) => {
+                if (uw.ITowns?.towns) {
+                    console.log("[DEBUG] Stedendata succesvol geladen");
+                    resolve(uw.ITowns.towns);
+                } else if (attempts < 30) { // Verhoogde timeout
+                    setTimeout(() => check(attempts + 1), 500);
+                } else {
+                    reject("Stedendata niet beschikbaar na 15 seconden");
+                }
+            };
+            check();
+        });
+    }
+
+    filterTowns(towns, targetPlayerId) {
+        return Object.values(towns).filter(town => {
+            const townPlayerId = town.player_id || town.player?.id;
+            console.log("[DEBUG] Town ID:", town.id, "Player ID:", townPlayerId);
+            return townPlayerId?.toString() === targetPlayerId.toString();
+        });
+    }
+
+    filterTowns(towns, targetPlayerId) {
+        return Object.values(towns).filter(town => {
+            const townPlayerId = town.player_id || town.player?.id;
+            console.log("[DEBUG] Town ID:", town.id, "Player ID:", townPlayerId);
+            return townPlayerId?.toString() === targetPlayerId.toString();
+        });
+    }
 
         async loadTowns() {
             return new Promise((resolve, reject) => {
