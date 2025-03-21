@@ -1312,18 +1312,26 @@
         async getMilitaryData(playerId) {
             try {
                 const towns = await this.loadTowns();
+                console.log('Geladen steden:', towns); // Debug log
+
                 const filteredTowns = this.filterTowns(towns, playerId);
+                console.log('Gefilterde steden:', filteredTowns); // Debug log
+
+                if (filteredTowns.length === 0) {
+                    return { 
+                        success: false, 
+                        error: `Geen steden gevonden voor speler ID ${playerId}`
+                    };
+                }
+
                 return this.processTowns(filteredTowns);
             } catch (error) {
-                return { success: false, error: error.message };
+                console.error('Fout in getMilitaryData:', error);
+                return { 
+                    success: false, 
+                    error: error.message 
+                };
             }
-        }
-
-        filterTowns(towns, targetPlayerId) {
-            return Object.values(towns).filter(town => {
-                const townPlayerId = town.player_id || town.player?.id;
-                return townPlayerId?.toString() === targetPlayerId.toString();
-            });
         }
 
         async loadTowns() {
@@ -1371,32 +1379,32 @@
         getTownDetails(townId) {
             try {
                 const town = uw.ITowns.getTown(townId);
-                if (!town) return this.getFallbackData(); // Voeg 'this' toe
+                if (!town) {
+                    console.warn(`Stad ${townId} niet gevonden in ITowns`);
+                    return this.getFallbackData();
+                }
 
-                const buildings = town.buildings?.() || {};
-                const units = town.units?.() || {};
-                const researches = town.researches?.()?.attributes || {};
+                // Debug logs voor stadseigenschappen
+                console.log(`Details voor stad ${townId}:`, {
+                    buildings: town.buildings?.(), 
+                    units: town.units?.(), 
+                    researches: town.researches?.()
+                });
 
                 return {
                     god: town.god?.() || 'Onbekend',
-                    wall: buildings.getBuildingLevel?.('wall') ?? '?',
-                    tower: buildings.getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
-                    developments: this.formatResearches(researches), // Voeg 'this' toe
-                    ...this.getUnits(units) // Voeg 'this' toe
+                    wall: town.buildings?.().getBuildingLevel?.('wall') ?? '?',
+                    tower: town.buildings?.().getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
+                    attack: this.formatUnitGroup(town.units?.(), this.UNIT_CONFIG.aanval),
+                    defense: this.formatUnitGroup(town.units?.(), this.UNIT_CONFIG.verdediging),
+                    siege: this.formatUnitGroup(town.units?.(), this.UNIT_CONFIG.belegering),
+                    specials: this.formatUnitGroup(town.units?.(), this.UNIT_CONFIG.speciaal),
+                    developments: this.formatResearches(town.researches?.()?.attributes || {})
                 };
             } catch (error) {
+                console.error(`Fout bij ophalen stad ${townId}:`, error);
                 return this.getFallbackData();
             }
-        }
-
-        getUnits(units)
-        {
-            return {
-                attack: this.formatUnitGroup(units, this.UNIT_CONFIG.aanval),
-                defense: this.formatUnitGroup(units, this.UNIT_CONFIG.verdediging),
-                siege: this.formatUnitGroup(units, this.UNIT_CONFIG.belegering),
-                specials: this.formatUnitGroup(units, this.UNIT_CONFIG.speciaal)
-            };
         }
 
         formatUnitGroup(units, types)
