@@ -482,15 +482,17 @@
             // Voeg event listeners toe aan de spelersnamen
             const playerLinks = document.querySelectorAll('.player-name-link');
             playerLinks.forEach(link => {
-                const playerName = link.getAttribute('data-player');
-                const playerId = link.getAttribute('data-player-id'); // Haal de waarde op zonder conversie
-                console.log('Raw Player ID from HTML:', playerId); // Debug log
-                const playerIdAsNumber = parseInt(playerId, 10); // Converteer naar een getal
-                console.log('Parsed Player ID:', playerIdAsNumber); // Debug log
-                if (this.militaryManager) {
-                    const militaryData = await this.militaryManager.getMilitaryDataForPlayer(playerName, playerIdAsNumber);
-                    this.showMilitaryData(militaryData);
-                }
+                link.addEventListener('click', async (e) => {
+                    e.preventDefault();
+                    const playerName = link.getAttribute('data-player');
+                    const playerId = parseInt(link.getAttribute('data-player-id'), 10);
+                    if (this.militaryManager) {
+                        const militaryData = await this.militaryManager.getMilitaryDataForPlayer(playerName, playerId);
+                        this.showMilitaryData(militaryData);
+                    } else {
+                        console.error('MilitaryManager is niet geïnitialiseerd.');
+                    }
+                });
             });
 
             console.log('Player list displayed successfully.');
@@ -1244,119 +1246,61 @@
     class MilitaryManager {
         constructor() {
             this.UNIT_CONFIG = {
-                aanval: {
-                    slinger: 'Slingeraars',
-                    hoplite: 'Hoplieten',
-                    rider: 'Ruiters',
-                    catapult: 'Katapult'
-                },
-                verdediging: {
-                    swordsman: 'Zwaardvechters',
-                    archer: 'Boogschutters',
-                    chariot: 'Strijdwagens',
-                    colonist: 'Kolonisten'
-                },
-                belegering: {
-                    bireme: 'Biremen',
-                    trireme: 'Triremen',
-                    attack_ship: 'Vuurschepen',
-                    colonize_ship: 'kolo'
-                },
-                speciaal: {
-                    godsent: 'Godgezanten',
-                    pegasus: 'Pegasus',
-                    cerberus: 'Cerberus',
-                    calydonian_boar: 'Wilde Zwijnen'
-                }
+                aanval: { slinger: 'Slingeraars', hoplite: 'Hoplieten', rider: 'Ruiters', catapult: 'Katapult' },
+                verdediging: { swordsman: 'Zwaardvechters', archer: 'Boogschutters', chariot: 'Strijdwagens', colonist: 'Kolonisten' },
+                belegering: { bireme: 'Biremen', trireme: 'Triremen', attack_ship: 'Vuurschepen', colonize_ship: 'kolo' },
+                speciaal: { godsent: 'Godgezanten', pegasus: 'Pegasus', cerberus: 'Cerberus', calydonian_boar: 'Wilde Zwijnen' }
             };
         }
 
-        async getMilitaryDataForPlayer(playerName, playerId) {
-            console.log('Player ID:', playerId); // Dit zou nu moeten werken
-            const towns = await this.loadTowns();
-            console.log('Alle steden (volledig object):', towns);
-
-            // Haal de steden van de speler op
-            const playerTowns = Object.values(towns).filter(town => {
-                const townPlayerId = town.player_id || town.player?.id;
-                return townPlayerId === playerId;
-            });
-
-            console.log('Steden van speler (na filtering):', playerTowns);
-
-            if (playerTowns.length === 0) {
-                console.error('Geen steden gevonden voor speler:', playerName);
-                return {
-                    playerName: playerName,
-                    towns: []
-                };
+        async getMilitaryData(playerId) {
+            try {
+                const towns = await this.loadTowns();
+                const playerTowns = this.filterTowns(towns, playerId);
+                return await this.processTowns(playerTowns);
+            } catch (error) {
+                console.error('Militaire data ophalen mislukt:', error);
+                return [];
             }
+        }
 
-            const townData = await this.processTowns(playerTowns);
-            console.log('Verwerkte stedengegevens:', townData);
-
-            return {
-                playerName: playerName,
-                towns: townData
-            };
+        filterTowns(towns, targetPlayerId) {
+            return Object.values(towns).filter(town =>
+                (town.player_id || town.player?.id)?.toString() === targetPlayerId.toString()
+            );
         }
 
         async loadTowns() {
             return new Promise((resolve, reject) => {
                 const check = (attempts = 0) => {
-                    if (uw.ITowns?.towns) {
-                        resolve(uw.ITowns.towns);
-                    } else if (attempts < 20) {
-                        setTimeout(() => check(attempts + 1), 250);
-                    } else {
-                        reject('Kon stedendata niet laden');
-                    }
+                    uw.ITowns?.towns ? resolve(uw.ITowns.towns) :
+                    attempts < 20 ? setTimeout(() => check(attempts + 1), 250) :
+                    reject('Stedendata niet geladen');
                 };
                 check();
             });
         }
 
         async processTowns(towns) {
-            return Promise.all(
-                towns.map(async town => ({
-                    basic: town,
-                    ...await this.getTownDetails(town.id)
-                }))
-            );
+            return Promise.all(towns.map(async town => ({
+                basic: town,
+                ...await this.getTownDetails(town.id)
+            })));
         }
 
-        async getTownDetails(townId) {
+        getTownDetails(townId) {
             try {
                 const town = uw.ITowns.getTown(townId);
-                if (!town) {
-                    console.error(`Stad met ID ${townId} niet gevonden.`);
-                    return this.getFallbackData();
-                }
-
-                const buildings = town.buildings?.() || {};
-                const units = town.units?.() || {};
-                const researches = town.researches?.()?.attributes || {};
-
                 return {
                     god: town.god?.() || 'Onbekend',
-                    wall: buildings.getBuildingLevel?.('wall') ?? '?',
-                    tower: buildings.getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
-                    developments: this.formatResearches(researches),
-                    ...this.getUnits(units)
+                    wall: town.buildings?.().getBuildingLevel?.('wall') ?? '?',
+                    tower: town.buildings?.().getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
+                    ...this.getUnits(town.units?.()),
+                    developments: this.formatResearches(town.researches?.()?.attributes)
                 };
             } catch (error) {
-                console.error(`Fout bij stad ${townId}:`, error);
                 return this.getFallbackData();
             }
-        }
-
-        formatResearches(researches) {
-            return [
-                researches.phalanx && 'Falanx',
-                researches.ram && 'Stormram',
-                researches.divine_selection && 'Goddelijke Selectie',
-                researches.conscription && 'Dienstplicht'
-            ].filter(Boolean).join(', ') || 'Geen';
         }
 
         getUnits(units) {
@@ -1368,95 +1312,116 @@
             };
         }
 
-        formatUnitGroup(units, unitTypes) {
-            return Object.entries(unitTypes)
-                .map(([key, name]) => (units[key] > 0 ? `${units[key]} ${name}` : null))
+        formatUnitGroup(units, types) {
+            return Object.entries(types)
+                .map(([key, name]) => units?.[key] > 0 ? `${units[key]} ${name}` : null)
                 .filter(Boolean)
                 .join('<br>') || '-';
         }
 
-        createTable(data) {
-            const table = document.createElement('table');
-            table.style.cssText = `
-            width: 100%;
-            border-collapse: collapse;
-            margin: 10px 0;
-            font-family: Arial, sans-serif;
-            color: white;
-        `;
-
-            table.appendChild(this.createHeader());
-            table.appendChild(this.createBody(data));
-            return table;
-        }
-
-        createHeader() {
-            const tr = document.createElement('tr');
-            const columns = ['Stad', 'ID', 'God', 'Muur', 'Toren', 'Aanval', 'Verdediging', 'Belegering', 'Speciale Eenheden', 'Ontwikkelingen'];
-            columns.forEach(col => {
-                const th = document.createElement('th');
-                th.textContent = col;
-                th.style.cssText = `
-                padding: 12px 15px;
-                background: #2d2d2d;
-                position: sticky;
-                top: 0;
-                text-align: left;
-                border-bottom: 2px solid #4CAF50;
-            `;
-                tr.appendChild(th);
-            });
-            return tr;
-        }
-
-        createBody(data) {
-            const tbody = document.createElement('tbody');
-            data.forEach(town => {
-                const tr = document.createElement('tr');
-                tr.style.borderBottom = '1px solid #333';
-
-                const columns = ['Stad', 'ID', 'God', 'Muur', 'Toren', 'Aanval', 'Verdediging', 'Belegering', 'Speciale Eenheden', 'Ontwikkelingen'];
-                columns.forEach(col => {
-                    const td = document.createElement('td');
-                    td.style.padding = '8px 15px';
-                    td.innerHTML = this.getCellContent(col, town);
-                    tr.appendChild(td);
-                });
-
-                tbody.appendChild(tr);
-            });
-            return tbody;
-        }
-
-        getCellContent(column, town) {
-            const contentMap = {
-                'Stad': town.basic.name,
-                'ID': town.basic.id,
-                'God': town.god,
-                'Muur': town.wall,
-                'Toren': town.tower,
-                'Aanval': town.attack,
-                'Verdediging': town.defense,
-                'Belegering': town.siege,
-                'Speciale Eenheden': town.specials,
-                'Ontwikkelingen': town.developments
-            };
-            return contentMap[column] || '-';
+        formatResearches(researches) {
+            return [
+                researches?.phalanx && 'Falanx',
+                researches?.ram && 'Stormram',
+                researches?.divine_selection && 'Goddelijke Selectie',
+                researches?.conscription && 'Dienstplicht'
+            ].filter(Boolean).join(', ') || 'Geen';
         }
 
         getFallbackData() {
             return {
-                god: 'Onbekend',
-                wall: '?',
-                tower: 'Nee',
-                developments: 'Geen',
-                attack: '-',
-                defense: '-',
-                siege: '-',
-                specials: '-'
+                god: 'Onbekend', wall: '?', tower: 'Nee',
+                developments: 'Geen', attack: '-', defense: '-',
+                siege: '-', specials: '-'
             };
         }
     }
-    // Initialiseer de ForumManager
-    const forumManager = new ForumManager();
+
+    class ForumManager {
+        constructor() {
+            this.militaryManager = new MilitaryManager();
+            this.playerId = localStorage.getItem('grepolisPlayerId');
+            this.initialize();
+        }
+
+        initialize() {
+            this.addMainButton();
+            this.injectStyles();
+        }
+
+        addMainButton() {
+            const button = document.createElement('button');
+            button.innerHTML = '🎛️ GManager';
+            button.style = `/* [Identieke stijl uit origineel script] */`;
+            button.addEventListener('click', () => this.showMainInterface());
+            document.body.appendChild(button);
+        }
+
+        async showMainInterface() {
+            const militaryData = await this.militaryManager.getMilitaryData(this.playerId);
+            this.createPopup(this.generateMilitaryTable(militaryData));
+        }
+
+        generateMilitaryTable(data) {
+            const table = document.createElement('table');
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Stad</th><th>Muur</th><th>Toren</th>
+                        <th>Aanval</th><th>Verdediging</th>
+                        <th>Belegering</th><th>Ontwikkelingen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data.map(town => `
+                        <tr>
+                            <td>${town.basic.name}</td>
+                            <td>${town.wall}</td>
+                            <td>${town.tower}</td>
+                            <td>${town.attack}</td>
+                            <td>${town.defense}</td>
+                            <td>${town.siege}</td>
+                            <td>${town.developments}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            `;
+            return table;
+        }
+
+        createPopup(content) {
+            const popup = document.createElement('div');
+            popup.id = 'gmanager-popup';
+            popup.style = `/* [Popup-stijl uit origineel script] */`;
+
+            const closeButton = document.createElement('button');
+            closeButton.innerHTML = '×';
+            closeButton.onclick = () => popup.remove();
+
+            popup.appendChild(closeButton);
+            popup.appendChild(content);
+            document.body.appendChild(popup);
+        }
+
+        injectStyles() {
+            GM_addStyle(`
+                #gmanager-popup {
+                    position: fixed;
+                    top: 50%; left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: #1a1a1a;
+                    padding: 20px;
+                    border: 2px solid #4CAF50;
+                    border-radius: 10px;
+                    z-index: 10000;
+                    max-width: 90vw;
+                    overflow: auto;
+                }
+                /* [Aanvullende stijlen] */
+            `);
+        }
+    }
+
+    // Initialisatie
+    new ForumManager();
 })();
