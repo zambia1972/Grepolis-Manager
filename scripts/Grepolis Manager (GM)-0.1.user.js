@@ -1312,34 +1312,32 @@
         async getMilitaryData(playerId) {
             try {
                 const towns = await this.loadTowns();
-                console.log('Geladen steden:', towns); // Debug log
-
-                const filteredTowns = this.filterTowns(towns, playerId);
-                console.log('Gefilterde steden:', filteredTowns); // Debug log
-
-                if (filteredTowns.length === 0) {
-                    return {
-                        success: false,
-                        error: `Geen steden gevonden voor speler ID ${playerId}`
-                    };
-                }
-
-                return this.processTowns(filteredTowns);
+                return this.processTowns(Object.values(towns)); // Toon alle steden
             } catch (error) {
-                console.error('Fout in getMilitaryData:', error);
-                return {
-                    success: false,
-                    error: error.message
+                return { 
+                    success: false, 
+                    error: error.message || 'Fout bij laden steden' 
                 };
             }
+        }
+
+        async loadTowns() {
+            return new Promise((resolve, reject) => {
+                const check = (attempts = 0) => {
+                    uw.ITowns?.towns ? resolve(uw.ITowns.towns) :
+                    attempts < 20 ? setTimeout(() => check(attempts + 1), 250) :
+                    reject(new Error('Kon stedendata niet laden'));
+                };
+                check();
+            });
         }
 
         async processTowns(towns) {
             try {
                 const processed = await Promise.all(
-                    towns.map(async (town) => ({ // 👈 Voeg async toe hier
+                    towns.map(async town => ({
                         basic: town,
-                        ...await this.getTownDetails(town.id) // 👈 Voeg this. toe
+                        ...await this.getTownDetails(town.id)
                     }))
                 );
                 return { success: true, towns: processed };
@@ -1348,72 +1346,20 @@
             }
         }
 
-        async initializeTowns() { // CORRECT
-            try {
-                this.towns = await this.loadTowns();
-            } catch (error) {
-                console.error('Fout bij initialiseren steden:', error);
-            }
-        }
-
-        async loadTowns() { // CORRECT
-            return new Promise((resolve, reject) => {
-                const check = (attempts = 0) => {
-                    if (uw.ITowns?.towns) {
-                        resolve(uw.ITowns.towns);
-                    } else if (attempts < 20) {
-                        setTimeout(() => check(attempts + 1), 250);
-                    } else {
-                        reject(new Error('Kon stedendata niet laden'));
-                    }
-                };
-                check();
-            });
-        }
-
-        filterTowns(towns, targetPlayerId) {
-            return Object.values(towns).filter(town => {
-                // Aangepaste property access voor Grepolis 2.9+
-                const townPlayerId = town.player?.id || town.player_id;
-                return townPlayerId == targetPlayerId; // Losse vergelijking
-            });
-        }
-
-        async processTowns(towns) {
-            return Promise.all(
-                Object.values(towns).map(async town => ({
-                    basic: town,
-                    ...await getTownDetails(town.id)
-                })));
-        }
-
         getTownDetails(townId) {
             try {
                 const town = uw.ITowns.getTown(townId);
-                if (!town) {
-                    console.warn(`Stad ${townId} niet gevonden in ITowns`);
-                    return this.getFallbackData();
-                }
-
-                // Debug logs voor stadseigenschappen
-                console.log(`Details voor stad ${townId}:`, {
-                    buildings: town.buildings?.(),
-                    units: town.units?.(),
-                    researches: town.researches?.()
-                });
-
                 return {
-                    god: town.god?.() || 'Onbekend',
-                    wall: town.buildings?.().getBuildingLevel?.('wall') ?? '?',
-                    tower: town.buildings?.().getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
-                    attack: this.formatUnitGroup(town.units?.(), this.UNIT_CONFIG.aanval),
-                    defense: this.formatUnitGroup(town.units?.(), this.UNIT_CONFIG.verdediging),
-                    siege: this.formatUnitGroup(town.units?.(), this.UNIT_CONFIG.belegering),
-                    specials: this.formatUnitGroup(town.units?.(), this.UNIT_CONFIG.speciaal),
-                    developments: this.formatResearches(town.researches?.()?.attributes || {})
+                    god: town?.god?.() || 'Onbekend',
+                    wall: town?.buildings?.().getBuildingLevel?.('wall') ?? '?',
+                    tower: town?.buildings?.().getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
+                    attack: this.formatUnitGroup(town?.units?.(), this.UNIT_CONFIG.aanval),
+                    defense: this.formatUnitGroup(town?.units?.(), this.UNIT_CONFIG.verdediging),
+                    siege: this.formatUnitGroup(town?.units?.(), this.UNIT_CONFIG.belegering),
+                    specials: this.formatUnitGroup(town?.units?.(), this.UNIT_CONFIG.speciaal),
+                    developments: this.formatResearches(town?.researches?.()?.attributes || {})
                 };
             } catch (error) {
-                console.error(`Fout bij ophalen stad ${townId}:`, error);
                 return this.getFallbackData();
             }
         }
