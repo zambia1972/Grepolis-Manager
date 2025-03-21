@@ -582,29 +582,23 @@
         // Toon militaire gegevens in het popup-venster
         showMilitaryData(data) {
             const content = document.getElementById('popup-content');
-            if (!content) {
-                console.error('Popup-content element niet gevonden.');
-                return;
-            }
+            if (!content) return;
 
-            if (data.towns.length === 0) {
+            if (!data.success || !data.towns?.length) {
                 content.innerHTML = `
-            <h2>Militaire Gegevens voor ${data.playerName}</h2>
-            <p style="color: red;">Geen steden gevonden voor deze speler.</p>
-        `;
+                <h2>Militaire Gegevens</h2>
+                <p style="color: #ff4444;">
+                    ${data.error || 'Geen militaire data gevonden'}
+                </p>
+            `;
                 return;
             }
 
-            // Maak de tabel en converteer deze naar een HTML-string
-            const tableElement = this.militaryManager.createTable(data.towns);
-            const tableHTML = tableElement.outerHTML;
-
+            const tableHTML = this.militaryManager.createTable(data.towns).outerHTML;
             content.innerHTML = `
-        <h2>Militaire Gegevens voor ${data.playerName}</h2>
-        <div style="overflow-x: auto;">
-            ${tableHTML}
-        </div>
-    `;
+            <h2>Militaire Gegevens</h2>
+            <div style="overflow-x: auto;">${tableHTML}</div>
+        `;
         }
 
         // Haal de spelerslijst op
@@ -1278,14 +1272,21 @@
             };
         }
 
-        async getMilitaryData(playerId) {  // <- CORRECTE FUNCTIENAAM
+        async getMilitaryData(playerId) {
             try {
                 const towns = await this.loadTowns();
                 const playerTowns = this.filterTowns(towns, playerId);
-                return await this.processTowns(playerTowns);
+                return {
+                    success: true,
+                    towns: await this.processTowns(playerTowns)
+                };
             } catch (error) {
-                console.error('Militaire data ophalen mislukt:', error);
-                return { towns: [] }; // Zorg voor consistente return structuur
+                console.error('Fout bij ophalen militaire data:', error);
+                return {
+                    success: false,
+                    towns: [],
+                    error: error.message
+                };
             }
         }
 
