@@ -1369,11 +1369,10 @@
         }
 
         filterTowns(towns, targetPlayerId) {
-            console.log('Filteren op speler ID:', targetPlayerId);
             return Object.values(towns).filter(town => {
-                const townPlayerId = town.player_id || town.player?.id;
-                console.log(`Stad ${town.id} heeft speler ID:`, townPlayerId);
-                return townPlayerId?.toString() === targetPlayerId.toString();
+                // Aangepaste property access voor Grepolis 2.9+
+                const townPlayerId = town.player?.id || town.player_id;
+                return townPlayerId == targetPlayerId; // Losse vergelijking
             });
         }
 
