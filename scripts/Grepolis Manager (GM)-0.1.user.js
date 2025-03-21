@@ -1290,12 +1290,6 @@
             }
         }
 
-        filterTowns(towns, targetPlayerId) {
-            return Object.values(towns).filter(town =>
-                (town.player_id || town.player?.id)?.toString() === targetPlayerId.toString()
-            );
-        }
-
         async loadTowns() {
             return new Promise((resolve, reject) => {
                 const check = (attempts = 0) => {
