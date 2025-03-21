@@ -517,8 +517,12 @@
                     e.preventDefault();
                     const playerId = parseInt(link.getAttribute('data-player-id'), 10);
                     if (this.militaryManager) {
-                        const militaryData = await this.militaryManager.getMilitaryData(playerId); // <- Aangepaste aanroep
-                        this.showMilitaryData(militaryData);
+                        try {
+                            const militaryData = await this.militaryManager.getMilitaryData(playerId);
+                            this.showMilitaryData(militaryData);
+                        } catch (error) {
+                            console.error('Fout bij ophalen militaire data:', error);
+                        }
                     }
                 });
             });
@@ -1304,19 +1308,29 @@
                 ],
             }
 
-
-            async function getMilitaryData(playerId) {
+            async getMilitaryData(playerId) {
                 try {
-                    const towns = await loadTowns();
-                    const townData = await processTowns(towns);
-                    showPopup(createTable(townData));
+                    const response = await fetch(`https://example.com/api/military/${playerId}`);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    return { success: true, towns: data.towns };
                 } catch (error) {
-                    showError(error.toString());
+                    console.error('Error fetching military data:', error);
+                    return { success: false, error: error.message };
                 }
             }
 
+            filterTowns(towns, targetPlayerId) {
+                return Object.values(towns).filter(town => {
+                    const townPlayerId = town.player_id || town.player?.id;
+                    return townPlayerId?.toString() === targetPlayerId.toString();
+                });
+            }
+
             // Dataverwerking
-            async function loadTowns() {
+            async loadTowns() {
                 return new Promise((resolve, reject) => {
                     const check = (attempts = 0) => {
                         if (uw.ITowns?.towns) {
@@ -1324,30 +1338,24 @@
                         } else if (attempts < 20) {
                             setTimeout(() => check(attempts + 1), 250);
                         } else {
-                            reject('Kon stedendata niet laden');
+                            reject(new Error('Kon stedendata niet laden'));
                         }
                     };
                     check();
                 });
             }
 
-            filterTowns(towns, targetPlayerId)
-            {
-                return Object.values(towns).filter(town => {
-                    const townPlayerId = town.player_id || town.player?.id;
-                    console.log("[DEBUG] Town ID:", town.id, "Player ID:", townPlayerId);
-                    return townPlayerId?.toString() === targetPlayerId.toString();
-                });
+            async processTowns(towns) {
+                try {
+                    const processed = await Promise.all(
+                        towns.map(town => this.getTownDetails(town.id))
+                    );
+                    return { success: true, towns: processed };
+                } catch (error) {
+                    return { success: false, error: error.message };
+                }
             }
 
-            filterTowns(towns, targetPlayerId)
-            {
-                return Object.values(towns).filter(town => {
-                    const townPlayerId = town.player_id || town.player?.id;
-                    console.log("[DEBUG] Town ID:", town.id, "Player ID:", townPlayerId);
-                    return townPlayerId?.toString() === targetPlayerId.toString();
-                });
-            }
             this.towns = [];
             this.initializeTowns();
 
@@ -1448,6 +1456,6 @@
             }
         }
     }
-        // Initialisatie
-        new ForumManager();
-    })();
+    // Initialisatie
+    new ForumManager();
+})();
