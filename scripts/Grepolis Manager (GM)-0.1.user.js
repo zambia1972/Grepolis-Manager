@@ -36,97 +36,97 @@
                 Algemeen: [
                     {
                         title: "Welkom bij de alliantie", content: "Hallo strijders van de oude wereld!\n" +
-                        "\n" +
-                        "                            We zijn ontzettend blij dat jullie hier zijn, op ons forum waar de goden en godinnen van de strategie samenkomen! Of je nu een doorgewinterde held bent of net je eerste stad hebt veroverd, hier is de plek waar we elkaar kunnen ontmoeten, tips kunnen uitwisselen en natuurlijk kunnen lachen om onze meest epische blunders (ja, we hebben allemaal wel eens een stad verloren aan een stelletje boze kippen).\n" +
-                        "                            \n" +
-                        "                            Voordat je je zwaarden en schilden opbergt, willen we je vragen om jezelf even kort voor te stellen. Vertel ons wie je bent, waar je vandaan komt en wat je favoriete strategie is. En als je een hilarisch verhaal hebt over een mislukte aanval of een onverwachte alliantie, deel dat vooral! We zijn hier om elkaar te steunen, maar ook om samen te lachen.\n" +
-                        "                            \n" +
-                        "                            Dus, trek je toga aan, neem een slok van je ambrosia en laat ons weten wie je bent! We kunnen niet wachten om je te leren kennen en samen de wereld van Grepolis te veroveren!\n" +
-                        "                            \n" +
-                        "                            Met strijdlustige groet,\n" +
-                        "                            \n" +
-                        "                            Het Grepolis Forum Team 🏛️✨"
+                            "\n" +
+                            "                            We zijn ontzettend blij dat jullie hier zijn, op ons forum waar de goden en godinnen van de strategie samenkomen! Of je nu een doorgewinterde held bent of net je eerste stad hebt veroverd, hier is de plek waar we elkaar kunnen ontmoeten, tips kunnen uitwisselen en natuurlijk kunnen lachen om onze meest epische blunders (ja, we hebben allemaal wel eens een stad verloren aan een stelletje boze kippen).\n" +
+                            "                            \n" +
+                            "                            Voordat je je zwaarden en schilden opbergt, willen we je vragen om jezelf even kort voor te stellen. Vertel ons wie je bent, waar je vandaan komt en wat je favoriete strategie is. En als je een hilarisch verhaal hebt over een mislukte aanval of een onverwachte alliantie, deel dat vooral! We zijn hier om elkaar te steunen, maar ook om samen te lachen.\n" +
+                            "                            \n" +
+                            "                            Dus, trek je toga aan, neem een slok van je ambrosia en laat ons weten wie je bent! We kunnen niet wachten om je te leren kennen en samen de wereld van Grepolis te veroveren!\n" +
+                            "                            \n" +
+                            "                            Met strijdlustige groet,\n" +
+                            "                            \n" +
+                            "                            Het Grepolis Forum Team 🏛️✨"
                     },
                     {
                         title: "Te volgen regels", content: "🏛️ Alliantie Reglement – Samen Sterk, Samen Onverslaanbaar! 🏛️\n" +
-                        "Welkom bij de alliantie! 🎉 We zijn hier niet alleen om een beetje rond te dobberen, maar om samen de vijand tot stof te reduceren. Dit reglement is geen bureaucratische onzin, maar een handleiding voor totale dominantie. Volg het, en we overleven. Negeer het, en de vijand lacht ons uit – en laten we eerlijk zijn, dat is gewoon gênant.\n" +
-                        "\n" +
-                        "1️⃣ Afwezigheid – Niet Stiekem Verdwijnen!\n" +
-                        "Ga je langer dan 18 uur weg? Meld het op het forum. Laat ons ook weten of je de vakantiemodus aanzet.\n" +
-                        "Geen melding = automatisch IO voor clustersteden, en geloof ons, dat wil je niet.\n" +
-                        "\n" +
-                        "👀 “Ik was even mijn kat zoeken” is geen excuus. We willen duidelijke communicatie.\n" +
-                        "\n" +
-                        "2️⃣ Opstand ([color=#FF0000]Rood[/color]) – Alarmfase Rood!\n" +
-                        "Als je stad in opstand staat, panikeer niet (of doe dat stilletjes), maar maak een Rood-topic met de juiste informatie.\n" +
-                        "\n" +
-                        "📢 Verlies je een stad zonder iets te zeggen? Dan zetten we je op de lijst voor een gratis IO-abonnement, geen terugbetaling mogelijk.\n" +
-                        "\n" +
-                        "Extra tip: Geef updates over muurstand, inkomende aanvallen en spreuken. We zijn goed, maar we kunnen helaas nog geen gedachten lezen.\n" +
-                        "\n" +
-                        "3️⃣ Trips – Een Kleine Stap voor Jou, Een Grote Stap voor de Alliantie\n" +
-                        "Plaats altijd trips bij je eilandgenoten. Een trip is 3 def lt per stad.\n" +
-                        "\n" +
-                        "💡 Denk eraan: geen trips plaatsen is als je huis openlaten voor inbrekers en zeggen: “Kom maar binnen, koffie staat klaar!”\n" +
-                        "\n" +
-                        "Vernieuw gesneuvelde trips en plaats een rapport in het trips-topic op het def-forum.\n" +
-                        "\n" +
-                        "4️⃣ Hulp Vragen & Elkaar Steunen – We Doen Dit Samen\n" +
-                        "Vraag op tijd om hulp. Het is geen schande om hulp te vragen, het is een schande om stil te zijn en dan keihard onderuit te gaan. Gebruik forum, Discord of PM.\n" +
-                        "\n" +
-                        "Help! Mijn stad brandt! is trouwens een prima bericht. Sneller reageren we niet, maar het is wel dramatisch.\n" +
-                        "\n" +
-                        "5️⃣ Reservaties – Geen Vage Claims, Gewoon Doen\n" +
-                        "Claim pas als je een kolo en een slotje hebt. Een claim is binnen 2 dagen overnemen, geen eindeloze bezetting van de stoel zoals een kleuter die niet van de schommel wil.\n" +
-                        "\n" +
-                        "🔴 PRIO-steden? Dan tellen claims niet. Pak het, of de vijand doet het. Simpel.\n" +
-                        "\n" +
-                        "6️⃣ Overzicht & Communicatie – Niet Raden, Gewoon Weten\n" +
-                        "Gebruik BB-codes of zorg dat iemand het voor je doet. Anders proberen we je bericht zu ontcijferen alsof het een oude schatkaart is.\n" +
-                        "\n" +
-                        "🔍 Eilandcodes uit het Cluster Plan-topic gebruiken = dikke pluspunten.\n" +
-                        "\n" +
-                        "7️⃣ Offensief – Oorlog met Stijl\n" +
-                        "🚫 Geen transportboten als aanval – tenzij je de vijand wilt laten lachen.\n" +
-                        "🎯 VS voor je LT-aanval timen = slim.\n" +
-                        "💥 Geen def lt of bir gebruiken bij aanvallen. Anders krijg je een cursus “Hoe val ik wél aan” gratis op het forum.\n" +
-                        "\n" +
-                        "🌙 Nachtbonus? Alleen aanvallen op inactieve spelers, lege steden of als je écht durft.\n" +
-                        "\n" +
-                        "8️⃣ TTA’s & Berichten – Reacties Zijn Belangrijker dan Je Ex\n" +
-                        "Antwoord op TTA’s, berichten en Discord @’s. Geen reactie? Dan nemen we aan dat je ondergedoken bent en nemen we je clustersteden voor je eigen veiligheid over.\n" +
-                        "\n" +
-                        "Dus tenzij je graag een stadsloze kluizenaar wordt: reageren aub!\n" +
-                        "\n" +
-                        "9️⃣ Steden & Collectieve Verplichtingen – Iedereen Doet Mee\n" +
-                        "Elke speler heeft minimaal 1 def lt-stad en 1 bir-stad.\n" +
-                        "📌 Cluster Plan volgen = essentieel. Overnemen pas na 1 stad per cluster eiland (inclusief rotsen, ja, ook die lelijke).\n" +
-                        "\n" +
-                        "🔟 Rotsen & Gunstfarmen – Klein Maar Fijn\n" +
-                        "Heb je een rotsstad? Zorg dat je actief bent en alarm aanzet. Anders is die rots sneller weg dan een gratis biertje op een festival.\n" +
-                        "\n" +
-                        "Gunst is belangrijk. Zonder gunst geen razende aanvallen. Zonder razende aanvallen? Nou ja, dan win je niet.\n" +
-                        "\n" +
-                        "Waarom deze regels?\n" +
-                        "We zijn niet de alliantie van de vrije interpretatie. We zijn een goed geoliede machine die vijanden verslindt.\n" +
-                        "🚀 Duidelijke afspraken = een sterke alliantie = Winst.\n" +
-                        "\n" +
-                        "Hou je eraan, dan maken we gehakt van de tegenstanders. Negeer ze? Dan krijg je een persoonlijke uitnodiging voor de IO van de Maand-competitie.\n" +
-                        "\n" +
-                        "💪 SAMEN DOMINEREN WE!\n" +
-                        "\n" +
-                        "Met strijdlustige groeten,\n" +
-                        "🔥 De Leiding 🔥"
+                            "Welkom bij de alliantie! 🎉 We zijn hier niet alleen om een beetje rond te dobberen, maar om samen de vijand tot stof te reduceren. Dit reglement is geen bureaucratische onzin, maar een handleiding voor totale dominantie. Volg het, en we overleven. Negeer het, en de vijand lacht ons uit – en laten we eerlijk zijn, dat is gewoon gênant.\n" +
+                            "\n" +
+                            "1️⃣ Afwezigheid – Niet Stiekem Verdwijnen!\n" +
+                            "Ga je langer dan 18 uur weg? Meld het op het forum. Laat ons ook weten of je de vakantiemodus aanzet.\n" +
+                            "Geen melding = automatisch IO voor clustersteden, en geloof ons, dat wil je niet.\n" +
+                            "\n" +
+                            "👀 “Ik was even mijn kat zoeken” is geen excuus. We willen duidelijke communicatie.\n" +
+                            "\n" +
+                            "2️⃣ Opstand ([color=#FF0000]Rood[/color]) – Alarmfase Rood!\n" +
+                            "Als je stad in opstand staat, panikeer niet (of doe dat stilletjes), maar maak een Rood-topic met de juiste informatie.\n" +
+                            "\n" +
+                            "📢 Verlies je een stad zonder iets te zeggen? Dan zetten we je op de lijst voor een gratis IO-abonnement, geen terugbetaling mogelijk.\n" +
+                            "\n" +
+                            "Extra tip: Geef updates over muurstand, inkomende aanvallen en spreuken. We zijn goed, maar we kunnen helaas nog geen gedachten lezen.\n" +
+                            "\n" +
+                            "3️⃣ Trips – Een Kleine Stap voor Jou, Een Grote Stap voor de Alliantie\n" +
+                            "Plaats altijd trips bij je eilandgenoten. Een trip is 3 def lt per stad.\n" +
+                            "\n" +
+                            "💡 Denk eraan: geen trips plaatsen is als je huis openlaten voor inbrekers en zeggen: “Kom maar binnen, koffie staat klaar!”\n" +
+                            "\n" +
+                            "Vernieuw gesneuvelde trips en plaats een rapport in het trips-topic op het def-forum.\n" +
+                            "\n" +
+                            "4️⃣ Hulp Vragen & Elkaar Steunen – We Doen Dit Samen\n" +
+                            "Vraag op tijd om hulp. Het is geen schande om hulp te vragen, het is een schande om stil te zijn en dan keihard onderuit te gaan. Gebruik forum, Discord of PM.\n" +
+                            "\n" +
+                            "Help! Mijn stad brandt! is trouwens een prima bericht. Sneller reageren we niet, maar het is wel dramatisch.\n" +
+                            "\n" +
+                            "5️⃣ Reservaties – Geen Vage Claims, Gewoon Doen\n" +
+                            "Claim pas als je een kolo en een slotje hebt. Een claim is binnen 2 dagen overnemen, geen eindeloze bezetting van de stoel zoals een kleuter die niet van de schommel wil.\n" +
+                            "\n" +
+                            "🔴 PRIO-steden? Dan tellen claims niet. Pak het, of de vijand doet het. Simpel.\n" +
+                            "\n" +
+                            "6️⃣ Overzicht & Communicatie – Niet Raden, Gewoon Weten\n" +
+                            "Gebruik BB-codes of zorg dat iemand het voor je doet. Anders proberen we je bericht zu ontcijferen alsof het een oude schatkaart is.\n" +
+                            "\n" +
+                            "🔍 Eilandcodes uit het Cluster Plan-topic gebruiken = dikke pluspunten.\n" +
+                            "\n" +
+                            "7️⃣ Offensief – Oorlog met Stijl\n" +
+                            "🚫 Geen transportboten als aanval – tenzij je de vijand wilt laten lachen.\n" +
+                            "🎯 VS voor je LT-aanval timen = slim.\n" +
+                            "💥 Geen def lt of bir gebruiken bij aanvallen. Anders krijg je een cursus “Hoe val ik wél aan” gratis op het forum.\n" +
+                            "\n" +
+                            "🌙 Nachtbonus? Alleen aanvallen op inactieve spelers, lege steden of als je écht durft.\n" +
+                            "\n" +
+                            "8️⃣ TTA’s & Berichten – Reacties Zijn Belangrijker dan Je Ex\n" +
+                            "Antwoord op TTA’s, berichten en Discord @’s. Geen reactie? Dan nemen we aan dat je ondergedoken bent en nemen we je clustersteden voor je eigen veiligheid over.\n" +
+                            "\n" +
+                            "Dus tenzij je graag een stadsloze kluizenaar wordt: reageren aub!\n" +
+                            "\n" +
+                            "9️⃣ Steden & Collectieve Verplichtingen – Iedereen Doet Mee\n" +
+                            "Elke speler heeft minimaal 1 def lt-stad en 1 bir-stad.\n" +
+                            "📌 Cluster Plan volgen = essentieel. Overnemen pas na 1 stad per cluster eiland (inclusief rotsen, ja, ook die lelijke).\n" +
+                            "\n" +
+                            "🔟 Rotsen & Gunstfarmen – Klein Maar Fijn\n" +
+                            "Heb je een rotsstad? Zorg dat je actief bent en alarm aanzet. Anders is die rots sneller weg dan een gratis biertje op een festival.\n" +
+                            "\n" +
+                            "Gunst is belangrijk. Zonder gunst geen razende aanvallen. Zonder razende aanvallen? Nou ja, dan win je niet.\n" +
+                            "\n" +
+                            "Waarom deze regels?\n" +
+                            "We zijn niet de alliantie van de vrije interpretatie. We zijn een goed geoliede machine die vijanden verslindt.\n" +
+                            "🚀 Duidelijke afspraken = een sterke alliantie = Winst.\n" +
+                            "\n" +
+                            "Hou je eraan, dan maken we gehakt van de tegenstanders. Negeer ze? Dan krijg je een persoonlijke uitnodiging voor de IO van de Maand-competitie.\n" +
+                            "\n" +
+                            "💪 SAMEN DOMINEREN WE!\n" +
+                            "\n" +
+                            "Met strijdlustige groeten,\n" +
+                            "🔥 De Leiding 🔥"
                     },
                     {
                         title: "Afwezig", content: "Laat hier weten als je er even tussenuit bent.\n" +
-                        "\n" +
-                        "                            [table]\n" +
-                        "                            [**]Speler[||]Afwezig van[||]tem[||]VM[||]Opmerkingen[/**]\n" +
-                        "                            [*][|][|][|][|][/*]\n" +
-                        "                            [*][|][|][|][|][/*]\n" +
-                        "                            [*][|][|][|][|][/*]\n" +
-                        "                            [/table]\n"
+                            "\n" +
+                            "                            [table]\n" +
+                            "                            [**]Speler[||]Afwezig van[||]tem[||]VM[||]Opmerkingen[/**]\n" +
+                            "                            [*][|][|][|][|][/*]\n" +
+                            "                            [*][|][|][|][|][/*]\n" +
+                            "                            [*][|][|][|][|][/*]\n" +
+                            "                            [/table]\n"
                     },
                     {title: "Bondgenoten & NAP's", content: "Bondgenoten en NAP's worden hier besproken."},
                     {
@@ -135,126 +135,126 @@
                     },
                     {
                         title: "Discord en scripts", content: "[b][u]Kom langs op onze discord server.[/u][/b]\n" +
-                        "\n" +
-                        "[url]https://discord.gg/v53K97dD8a[/url]\n" +
-                        "\n" +
-                        "[b][u]grepodata city-indexer[/u][/b]\n" +
-                        "\n" +
-                        "[url]https://grepodata.com/invite/rhzuhr2n4yqwd7dhcc[/url]\n" +
-                        "\n" +
-                        "[b][u]Forum ROOD template generator[/u][/b]\n" +
-                        "\n" +
-                        "[url]https://greasyfork.org/nl/scripts/512594-grepolis-notepad-forum-template-3[/url]"
+                            "\n" +
+                            "[url]https://discord.gg/v53K97dD8a[/url]\n" +
+                            "\n" +
+                            "[b][u]grepodata city-indexer[/u][/b]\n" +
+                            "\n" +
+                            "[url]https://grepodata.com/invite/rhzuhr2n4yqwd7dhcc[/url]\n" +
+                            "\n" +
+                            "[b][u]Forum ROOD template generator[/u][/b]\n" +
+                            "\n" +
+                            "[url]https://greasyfork.org/nl/scripts/512594-grepolis-notepad-forum-template-3[/url]"
                     }
                 ],
                 ROOD: [
                     {
                         title: "Rood tabel", content: "Bij meer dan 5 aanvallen wordt de tabel actief.\n" +
-                        "                    [b][color=#FF0000]Bij een opstand éérst een eigen topic aanmaken in de juiste opmaak, [u]incl. tabelregel![/u][/color][/b]\n" +
-                        "                    Tabelregel:\n" +
-                        "                    [b][*]nr[|]OC[|]start F2[|]BB-code stad[|]muur[|]god[|]aanvaller(s)[|]BIR/LT[|]Aanwezige OS[|]Notes[/*][/b]\n" +
-                        "                    Vul de tabelregel in met de gegevens van jouw ROOD melding en plaats deze bovenaan in je topic.\n" +
-                        "                    muur -16 ➡️ alleen BIR sturen\n" +
-                        "                    muur +16 ➡️ alleen LT (landtroepen) sturen\n" +
-                        "                    Als de muur opgebouwd is én er geen reden op afbraak is, dan mag BIR omgezet worden naar LT.\n" +
-                        "                    ⚠️ Zet géén sterretje in de titel van je topic! Forum mods zetten een * in de titel als indicatie dat de melding is opgenomen in de ROOD tabel. Doe je dit zelf, komt je stad NIET in de tabel terecht.\n" +
-                        "                    [b]Mod van Dienst[/b]: [img]https://cdn.grcrt.net/emots2/girl_comp.gif[/img]\n" +
-                        "                    [player]joppie86[/player]\n" +
-                        "                    [table]\n" +
-                        "                    [**]Nr[||]OC[||]Start F2[||]BB-code stad[||]Muur[||]God[||]aanvaller(s)[||]BIR/LT[||]Aanwezig[||]Notes[/**]\n" +
-                        "                    [*][|][|][|][|][|][|][|][|][|][/*]\n" +
-                        "                    [/table]\n" +
-                        "                    [b][color=#FF2D2D][size=12]Dringend verzoek[/size]: Als je stad [b][u][size=12]safe[/size][/u][/b] is dit [u][size=12]melden[/size][/u] en de [u][size=12]OS terug sturen[/size][/u]! [/color][/b]"
+                            "                    [b][color=#FF0000]Bij een opstand éérst een eigen topic aanmaken in de juiste opmaak, [u]incl. tabelregel![/u][/color][/b]\n" +
+                            "                    Tabelregel:\n" +
+                            "                    [b][*]nr[|]OC[|]start F2[|]BB-code stad[|]muur[|]god[|]aanvaller(s)[|]BIR/LT[|]Aanwezige OS[|]Notes[/*][/b]\n" +
+                            "                    Vul de tabelregel in met de gegevens van jouw ROOD melding en plaats deze bovenaan in je topic.\n" +
+                            "                    muur -16 ➡️ alleen BIR sturen\n" +
+                            "                    muur +16 ➡️ alleen LT (landtroepen) sturen\n" +
+                            "                    Als de muur opgebouwd is én er geen reden op afbraak is, dan mag BIR omgezet worden naar LT.\n" +
+                            "                    ⚠️ Zet géén sterretje in de titel van je topic! Forum mods zetten een * in de titel als indicatie dat de melding is opgenomen in de ROOD tabel. Doe je dit zelf, komt je stad NIET in de tabel terecht.\n" +
+                            "                    [b]Mod van Dienst[/b]: [img]https://cdn.grcrt.net/emots2/girl_comp.gif[/img]\n" +
+                            "                    [player]joppie86[/player]\n" +
+                            "                    [table]\n" +
+                            "                    [**]Nr[||]OC[||]Start F2[||]BB-code stad[||]Muur[||]God[||]aanvaller(s)[||]BIR/LT[||]Aanwezig[||]Notes[/**]\n" +
+                            "                    [*][|][|][|][|][|][|][|][|][|][/*]\n" +
+                            "                    [/table]\n" +
+                            "                    [b][color=#FF2D2D][size=12]Dringend verzoek[/size]: Als je stad [b][u][size=12]safe[/size][/u][/b] is dit [u][size=12]melden[/size][/u] en de [u][size=12]OS terug sturen[/size][/u]! [/color][/b]"
                     },
                     {
                         title: "Kolo snipe", content: "Beste strijders,\n" +
-                        "                    Aan alle [u]Kolo-spotters[/u]," +
-                        "					 plaats in deze topic ASAP een bericht als je kolo hebt gespot.\n" +
-                        "                    meld je stadsnaam in BB en exacte tijd van aankomst kolo + tijd laatste aanval voor kolo.\n" +
-                        "                    Vb.:\n" +
-                        "                    [town]1[/town]\n" +
-                        "                    Kolo: 22:15:42\n" +
-                        "                    laatste voor kolo: 22:15:32\n" +
-                        "                    aan alle [u]Kolo-snipers[/u],\n" +
-                        "                    hou deze topic goed in de gaten voor kolo-spotters, zodat je vlug kan handelen indien er kolo is gespot.\n" +
-                        "                    [b]hoe timen:[/b]\n" +
-                        "                    zorg in je snipe steden voor:\n" +
-                        "                    * uiteraard BIR\n" +
-                        "                    * transportboot\n" +
-                        "                    * sirene\n" +
-                        "                    gebruik bij voorkeur je aanvalsplanner om je ondersteuning te timen:\n" +
-                        "                    poging 1: 1 tb + bir (min 50) check aankomsttijd en eventueel opnieuw proberen\n" +
-                        "                    poging 2: 60 BIR meerdere pogingen versturen kort na elkaar van 10 sec voor tot 10 sec na opstandtijd\n" +
-                        "                    poging 3: 1 sirene + Bir check aankomsttijd en eventueel opnieuw proberen\n" +
-                        "                    succes\n"
+                            "                    Aan alle [u]Kolo-spotters[/u]," +
+                            "					 plaats in deze topic ASAP een bericht als je kolo hebt gespot.\n" +
+                            "                    meld je stadsnaam in BB en exacte tijd van aankomst kolo + tijd laatste aanval voor kolo.\n" +
+                            "                    Vb.:\n" +
+                            "                    [town]1[/town]\n" +
+                            "                    Kolo: 22:15:42\n" +
+                            "                    laatste voor kolo: 22:15:32\n" +
+                            "                    aan alle [u]Kolo-snipers[/u],\n" +
+                            "                    hou deze topic goed in de gaten voor kolo-spotters, zodat je vlug kan handelen indien er kolo is gespot.\n" +
+                            "                    [b]hoe timen:[/b]\n" +
+                            "                    zorg in je snipe steden voor:\n" +
+                            "                    * uiteraard BIR\n" +
+                            "                    * transportboot\n" +
+                            "                    * sirene\n" +
+                            "                    gebruik bij voorkeur je aanvalsplanner om je ondersteuning te timen:\n" +
+                            "                    poging 1: 1 tb + bir (min 50) check aankomsttijd en eventueel opnieuw proberen\n" +
+                            "                    poging 2: 60 BIR meerdere pogingen versturen kort na elkaar van 10 sec voor tot 10 sec na opstandtijd\n" +
+                            "                    poging 3: 1 sirene + Bir check aankomsttijd en eventueel opnieuw proberen\n" +
+                            "                    succes\n"
                     },
                     {
                         title: "Rood Template",
                         content: "[*]nr[|]OC[|]start F2[|]aangevallen stad[|]muur[|]god[|]aanvallende speler[|]gewenste OS[|]aanwezig[|]Notes[/*]\n" +
-                        "                    Aangevallen stad: \n" +
-                        "                    God: \n" +
-                        "                    Muur: \n" +
-                        "                    Toren: \n" +
-                        "                    Held: \n" +
-                        "                    Ontwikkelingen: \n" +
-                        "                    OS aanwezig: \n" +
-                        "                    OS nodig: \n" +
-                        "                    Stadsbescherming: \n" +
-                        "                    Fase 2 begint om: \n" +
-                        "                    Fase 2 eindigt om: \n" +
-                        "                    [spoiler=Rapporten] \n" +
-                        "                    *Opstandsrapport(ten)!!!*\n" +
-                        "                    [/spoiler]\n"
+                            "                    Aangevallen stad: \n" +
+                            "                    God: \n" +
+                            "                    Muur: \n" +
+                            "                    Toren: \n" +
+                            "                    Held: \n" +
+                            "                    Ontwikkelingen: \n" +
+                            "                    OS aanwezig: \n" +
+                            "                    OS nodig: \n" +
+                            "                    Stadsbescherming: \n" +
+                            "                    Fase 2 begint om: \n" +
+                            "                    Fase 2 eindigt om: \n" +
+                            "                    [spoiler=Rapporten] \n" +
+                            "                    *Opstandsrapport(ten)!!!*\n" +
+                            "                    [/spoiler]\n"
                     }
                 ],
                 Deff: [
                     {
                         title: "Pre-deff", content: "Vraag hier je pre-deff aan voor belangrijke steden.\n" +
-                        "\n" +
-                        "                    Pre-deff kan je krijgen op voorwaarde dat je muur 25 is en Toren.\n" +
-                        "\n" +
-                        "                    hoe aanvragen:\n" +
-                        "                    stadsnaam: in BB\n" +
-                        "                    Muur Lv:\n" +
-                        "                    Toren:\n" +
-                        "                    aanwezige Lt:\n"
+                            "\n" +
+                            "                    Pre-deff kan je krijgen op voorwaarde dat je muur 25 is en Toren.\n" +
+                            "\n" +
+                            "                    hoe aanvragen:\n" +
+                            "                    stadsnaam: in BB\n" +
+                            "                    Muur Lv:\n" +
+                            "                    Toren:\n" +
+                            "                    aanwezige Lt:\n"
                     },
                 ],
                 Offens: [
                     {
                         title: "OFF. | Template", content: "Titel\n" +
-                        "                    VB: Oceaan | Te veroveren stadsnaam | Status\n" +
-                        "                    VB: 55 | 55-01 | Opstand/ VS clear nodig\n" +
-                        "\n" +
-                        "                    -------------------------------------------------------\n" +
-                        "\n" +
-                        "                    Alliantie:\n" +
-                        "                    Speler:\n" +
-                        "                    Stad:\n" +
-                        "\n" +
-                        "                    Gevraagde hulp: Spionage/ VS clear/ Zee clear\n" +
-                        "\n" +
-                        "                    [spoiler=Recentste spionage][/spoiler]\n" +
-                        "\n" +
-                        "                    [spoiler=Opstand aanval][/spoiler]\n"
+                            "                    VB: Oceaan | Te veroveren stadsnaam | Status\n" +
+                            "                    VB: 55 | 55-01 | Opstand/ VS clear nodig\n" +
+                            "\n" +
+                            "                    -------------------------------------------------------\n" +
+                            "\n" +
+                            "                    Alliantie:\n" +
+                            "                    Speler:\n" +
+                            "                    Stad:\n" +
+                            "\n" +
+                            "                    Gevraagde hulp: Spionage/ VS clear/ Zee clear\n" +
+                            "\n" +
+                            "                    [spoiler=Recentste spionage][/spoiler]\n" +
+                            "\n" +
+                            "                    [spoiler=Opstand aanval][/spoiler]\n"
                     },
                     {
                         title: "Opstand breken met Helena", content: "[b]Aan wie Helena bezit:[/b]\n" +
-                        "                Zorg dat Helena op Lv 20 is.\n" +
-                        "                meld hier in welke stad Helena zit.\n" +
-                        "                controleer hier regelmatig naar opstanden.\n" +
-                        "\n" +
-                        "                [b]Aan wie opstand heeft:[/b]\n" +
-                        "\n" +
-                        "                Laat hier onmiddellijk weten waar er opstand in een stad word gezet (zelfs indien je zeker bent van een opstand, nog voor die er is).\n" +
-                        "\n" +
-                        "                stad: in BB\n" +
-                        "                F2 tijd:\n" +
-                        "\n" +
-                        "                [table]\n" +
-                        "                [**]naam[||]lv[||]stad[||][/**]\n" +
-                        "                [*][|][|][|][/*]\n" +
-                        "                [/table]\n"
+                            "                Zorg dat Helena op Lv 20 is.\n" +
+                            "                meld hier in welke stad Helena zit.\n" +
+                            "                controleer hier regelmatig naar opstanden.\n" +
+                            "\n" +
+                            "                [b]Aan wie opstand heeft:[/b]\n" +
+                            "\n" +
+                            "                Laat hier onmiddellijk weten waar er opstand in een stad word gezet (zelfs indien je zeker bent van een opstand, nog voor die er is).\n" +
+                            "\n" +
+                            "                stad: in BB\n" +
+                            "                F2 tijd:\n" +
+                            "\n" +
+                            "                [table]\n" +
+                            "                [**]naam[||]lv[||]stad[||][/**]\n" +
+                            "                [*][|][|][|][/*]\n" +
+                            "                [/table]\n"
                     },
                     {
                         title: "Spionage rapporten", content: "Hier kan je alle recente spionage rapporten bekijken."
@@ -401,26 +401,29 @@
             // Toon het startscherm standaard
             this.showStartScreen();
         }
-        
+
         generateMilitaryTable(data) {
             const table = document.createElement('table');
             table.innerHTML = `
                 <thead>
                     <tr>
-                        <th>Stad</th><th>Muur</th><th>Toren</th>
+                        <th>Stad</th><th>ID</th><th>God</th><th>Muur</th><th>Toren</th>
                         <th>Aanval</th><th>Verdediging</th>
-                        <th>Belegering</th><th>Ontwikkelingen</th>
+                        <th>Schepen</th><th>Stad</th>speciale units<th>Ontwikkelingen</th>
                     </tr>
                 </thead>
                 <tbody>
                     ${data.map(town => `
                         <tr>
                             <td>${town.basic.name}</td>
+                            <td>${town.basic.id}</td>
+                            <td>${town.god}</td>
                             <td>${town.wall}</td>
                             <td>${town.tower}</td>
                             <td>${town.attack}</td>
                             <td>${town.defense}</td>
                             <td>${town.siege}</td>
+                            <td>${town.specials}</td>
                             <td>${town.developments}</td>
                         </tr>
                     `).join('')}
@@ -766,12 +769,12 @@
             <div style="display: flex; justify-content: center; gap: 20px; margin-top: 10px;">
                 <div>
                     <p style="font-size: 12px; font-weight: bold;">Elona</p>
-                    <img src="https://imgur.com/QxTgAHJ.png" alt="Elona Handtekening" style="width: 100px; height: auto; transform: rotate(${Math.floor(Math.random() * 30 - 15)}deg);">
-                </div>
+                    <img src="https://imgur.com/QxTgAHJ.png" alt="Elona Handtekening" style="width: 100px; height: auto; transform: rotate(\${Math.floor(Math.random() * 30 - 15)}deg);">
+                    </div>
                 <div>
                     <p style="font-size: 12px; font-weight: bold;">Zambia1972</p>
-                    <img src="https://imgur.com/uHRXM9u.png" alt="Zambia1972 Handtekening" style="width: 200px; height: auto; transform: rotate(${Math.floor(Math.random() * 30 - 15)}deg);">
-                </div>
+                    <img src="https://imgur.com/uHRXM9u.png" alt="Zambia1972 Handtekening" style="width: 200px; height: auto; transform: rotate(\${Math.floor(Math.random() * 30 - 15)}deg);">
+                    </div>
             </div>
         </div>
     `;
@@ -1113,7 +1116,7 @@
                     const uiExists = document.getElementById('afwezigheid-ui');
                     if (!tekstveld || uiExists) {
                         console.log('[DEBUG] Injectie stopreden:',
-                                    !tekstveld ? 'Geen tekstveld' : `UI al aanwezig (ID: ${uiExists?.id})`);
+                            !tekstveld ? 'Geen tekstveld' : `UI al aanwezig (ID: ${uiExists?.id})`);
                         return;
                     }
 
@@ -1242,9 +1245,9 @@
                 new MutationObserver((mutations) => {
                     // Filter alleen relevante DOM wijzigingen
                     const needsInject = mutations.some(mutation =>
-                                                       mutation.addedNodes.length > 0 &&
-                                                       document.querySelector('.forum_menu') // Alleen triggeren als forum menu aanwezig is
-                                                      );
+                        mutation.addedNodes.length > 0 &&
+                        document.querySelector('.forum_menu') // Alleen triggeren als forum menu aanwezig is
+                    );
                     if (needsInject) injectUI();
                 }).observe(document.body, {
                     childList: true,
@@ -1265,134 +1268,167 @@
     class MilitaryManager {
         constructor() {
             this.UNIT_CONFIG = {
-                aanval: { slinger: 'Slingeraars', hoplite: 'Hoplieten', rider: 'Ruiters', catapult: 'Katapult' },
-                verdediging: { swordsman: 'Zwaardvechters', archer: 'Boogschutters', chariot: 'Strijdwagens', colonist: 'Kolonisten' },
-                belegering: { bireme: 'Biremen', trireme: 'Triremen', attack_ship: 'Vuurschepen', colonize_ship: 'kolo' },
-                speciaal: { godsent: 'Godgezanten', pegasus: 'Pegasus', cerberus: 'Cerberus', calydonian_boar: 'Wilde Zwijnen' }
-            };
-        }
-
-        async getMilitaryData(playerId) {
-            try {
-                console.log("[DEBUG] Opvragen militaire data voor speler ID:", playerId);
-
-                const towns = await this.loadTowns();
-                console.log("[DEBUG] Geladen steden:", towns);
-
-                const playerTowns = this.filterTowns(towns, playerId);
-                console.log("[DEBUG] Gefilterde steden voor speler:", playerTowns);
-
-                return {
-                    success: true,
-                    towns: await this.processTowns(playerTowns),
-                    playerId: playerId
-                };
-            } catch (error) {
-                console.error("[DEBUG] Fout in getMilitaryData:", error);
-                return {
-                    success: false,
-                    towns: [],
-                    error: error.message
-                };
-            }
-        }
-        
-        async loadTowns() {
-        return new Promise((resolve, reject) => {
-            const check = (attempts = 0) => {
-                if (uw.ITowns?.towns) {
-                    console.log("[DEBUG] Stedendata succesvol geladen");
-                    resolve(uw.ITowns.towns);
-                } else if (attempts < 30) { // Verhoogde timeout
-                    setTimeout(() => check(attempts + 1), 500);
-                } else {
-                    reject("Stedendata niet beschikbaar na 15 seconden");
+                aanval: {
+                    slinger: 'Slingeraars',
+                    hoplite: 'Hoplieten',
+                    rider: 'Ruiters',
+                    catapult: 'Katapult'
+                },
+                verdediging: {
+                    swordsman: 'Zwaardvechters',
+                    archer: 'Boogschutters',
+                    chariot: 'Strijdwagens',
+                    colonist: 'Kolonisten'
+                },
+                belegering: {
+                    bireme: 'Biremen',
+                    trireme: 'Triremen',
+                    attack_ship: 'Vuurschepen',
+                    colonize_ship: 'kolo'
+                },
+                speciaal: {
+                    godsent: 'Godgezanten',
+                    pegasus: 'Pegasus',
+                    cerberus: 'Cerberus',
+                    calydonian_boar: 'Wilde Zwijnen'
                 }
             };
-            check();
-        });
-    }
 
-    filterTowns(towns, targetPlayerId) {
-        return Object.values(towns).filter(town => {
-            const townPlayerId = town.player_id || town.player?.id;
-            console.log("[DEBUG] Town ID:", town.id, "Player ID:", townPlayerId);
-            return townPlayerId?.toString() === targetPlayerId.toString();
-        });
-    }
-
-    filterTowns(towns, targetPlayerId) {
-        return Object.values(towns).filter(town => {
-            const townPlayerId = town.player_id || town.player?.id;
-            console.log("[DEBUG] Town ID:", town.id, "Player ID:", townPlayerId);
-            return townPlayerId?.toString() === targetPlayerId.toString();
-        });
-    }
-
-        async loadTowns() {
-            return new Promise((resolve, reject) => {
-                const check = (attempts = 0) => {
-                    uw.ITowns?.towns ? resolve(uw.ITowns.towns) :
-                    attempts < 20 ? setTimeout(() => check(attempts + 1), 250) :
-                    reject('Stedendata niet geladen');
-                };
-                check();
-            });
-        }
-
-        async processTowns(towns) {
-            return Promise.all(towns.map(async town => ({
-                basic: town,
-                ...await this.getTownDetails(town.id)
-            })));
-        }
-
-        getTownDetails(townId) {
-            try {
-                const town = uw.ITowns.getTown(townId);
-                return {
-                    god: town.god?.() || 'Onbekend',
-                    wall: town.buildings?.().getBuildingLevel?.('wall') ?? '?',
-                    tower: town.buildings?.().getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
-                    ...this.getUnits(town.units?.()),
-                    developments: this.formatResearches(town.researches?.()?.attributes)
-                };
-            } catch (error) {
-                return this.getFallbackData();
+            const CONFIG = {
+                columns: [
+                    'Stad', 'ID', 'God',
+                    'Muur', 'Toren',
+                    'Aanval', 'Verdediging',
+                    'Belegering', 'Speciale Eenheden',
+                    'Ontwikkelingen'
+                ],
             }
-        }
 
-        getUnits(units) {
-            return {
-                attack: this.formatUnitGroup(units, this.UNIT_CONFIG.aanval),
-                defense: this.formatUnitGroup(units, this.UNIT_CONFIG.verdediging),
-                siege: this.formatUnitGroup(units, this.UNIT_CONFIG.belegering),
-                specials: this.formatUnitGroup(units, this.UNIT_CONFIG.speciaal)
-            };
-        }
+            async function getMilitaryData(playerId) {
+                try {
+                    const towns = await loadTowns();
+                    const townData = await processTowns(towns);
+                } catch (error) {
+                    showError(error.toString());
+                }
+            }
 
-        formatUnitGroup(units, types) {
-            return Object.entries(types)
-                .map(([key, name]) => units?.[key] > 0 ? `${units[key]} ${name}` : null)
-                .filter(Boolean)
-                .join('<br>') || '-';
-        }
+            // Dataverwerking
+            async function loadTowns() {
+                return new Promise((resolve, reject) => {
+                    const check = (attempts = 0) => {
+                        if (uw.ITowns?.towns) {
+                            resolve(uw.ITowns.towns);
+                        } else if (attempts < 20) {
+                            setTimeout(() => check(attempts + 1), 250);
+                        } else {
+                            reject('Kon stedendata niet laden');
+                        }
+                    };
+                    check();
+                });
+            }
 
-        formatResearches(researches) {
-            return [
-                researches?.phalanx && 'Falanx',
-                researches?.ram && 'Stormram',
-                researches?.divine_selection && 'Goddelijke Selectie',
-                researches?.conscription && 'Dienstplicht'
-            ].filter(Boolean).join(', ') || 'Geen';
-        }
+            filterTowns(towns, targetPlayerId)
+            {
+                return Object.values(towns).filter(town => {
+                    const townPlayerId = town.player_id || town.player?.id;
+                    console.log("[DEBUG] Town ID:", town.id, "Player ID:", townPlayerId);
+                    return townPlayerId?.toString() === targetPlayerId.toString();
+                });
+            }
 
-        getFallbackData() {
-            return {
-                god: 'Onbekend', wall: '?', tower: 'Nee',
-                developments: 'Geen', attack: '-', defense: '-',
-                siege: '-', specials: '-'
-            };
+            filterTowns(towns, targetPlayerId)
+            {
+                return Object.values(towns).filter(town => {
+                    const townPlayerId = town.player_id || town.player?.id;
+                    console.log("[DEBUG] Town ID:", town.id, "Player ID:", townPlayerId);
+                    return townPlayerId?.toString() === targetPlayerId.toString();
+                });
+            }
+
+            async
+            loadTowns()
+            {
+                return new Promise((resolve, reject) => {
+                    const check = (attempts = 0) => {
+                        uw.ITowns?.towns ? resolve(uw.ITowns.towns) :
+                            attempts < 20 ? setTimeout(() => check(attempts + 1), 250) :
+                                reject('Stedendata niet geladen');
+                    };
+                    check();
+                });
+            }
+
+            async
+            processTowns(towns)
+            {
+                return Promise.all(
+                    Object.values(towns).map(async town => ({
+                        basic: town,
+                        ...await getTownDetails(town.id)
+                    })));
+            }
+
+            getTownDetails(townId)
+            {
+                try {
+                    const town = uw.ITowns.getTown(townId);
+                    if (!town) return getFallbackData();
+
+                    const buildings = town.buildings?.() || {};
+                    const units = town.units?.() || {};
+                    const researches = town.researches?.()?.attributes || {};
+
+                    return {
+                        god: town.god?.() || 'Onbekend',
+                        wall: buildings.getBuildingLevel?.('wall') ?? '?',
+                        tower: buildings.getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
+                        developments: formatResearches(researches),
+                        ...getUnits(units)
+                    };
+                } catch (error) {
+                    console.error(`Fout bij stad ${townId}:`, error);
+                    return getFallbackData();
+                }
+            }
+
+            getUnits(units)
+            {
+                return {
+                    attack: this.formatUnitGroup(units, this.UNIT_CONFIG.aanval),
+                    defense: this.formatUnitGroup(units, this.UNIT_CONFIG.verdediging),
+                    siege: this.formatUnitGroup(units, this.UNIT_CONFIG.belegering),
+                    specials: this.formatUnitGroup(units, this.UNIT_CONFIG.speciaal)
+                };
+            }
+
+            formatUnitGroup(units, types)
+            {
+                return Object.entries(types)
+                    .map(([key, name]) => units?.[key] > 0 ? `${units[key]} ${name}` : null)
+                    .filter(Boolean)
+                    .join('<br>') || '-';
+            }
+
+            formatResearches(researches)
+            {
+                return [
+                    researches?.phalanx && 'Falanx',
+                    researches?.ram && 'Stormram',
+                    researches?.divine_selection && 'Goddelijke Selectie',
+                    researches?.conscription && 'Dienstplicht'
+                ].filter(Boolean).join(', ') || 'Geen';
+            }
+
+            getFallbackData()
+            {
+                return {
+                    god: 'Onbekend', wall: '?', tower: 'Nee',
+                    developments: 'Geen', attack: '-', defense: '-',
+                    siege: '-', specials: '-'
+                };
+            }
         }
     }
     // Initialisatie
