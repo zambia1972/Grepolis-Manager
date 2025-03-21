@@ -1304,10 +1304,12 @@
                 ],
             }
 
+
             async function getMilitaryData(playerId) {
                 try {
                     const towns = await loadTowns();
                     const townData = await processTowns(towns);
+                    showPopup(createTable(townData));
                 } catch (error) {
                     showError(error.toString());
                 }
@@ -1345,6 +1347,21 @@
                     console.log("[DEBUG] Town ID:", town.id, "Player ID:", townPlayerId);
                     return townPlayerId?.toString() === targetPlayerId.toString();
                 });
+            }
+            this.towns = [];
+            this.initializeTowns();
+
+
+            async
+            initializeTowns()
+            {
+                try {
+                    this.towns = await this.loadTowns();
+                    // Remove the call to filterTowns if it's not defined
+                    // this.towns = filterTowns(this.towns);
+                } catch (error) {
+                    console.error('Error initializing towns:', error);
+                }
             }
 
             async
@@ -1431,6 +1448,6 @@
             }
         }
     }
-    // Initialisatie
-    new ForumManager();
-})();
+        // Initialisatie
+        new ForumManager();
+    })();
