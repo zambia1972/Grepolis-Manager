@@ -1319,19 +1319,51 @@
 
         async loadAllianceMembers() {
             return new Promise((resolve, reject) => {
-                const check = (attempts = 0) => {
-                    console.log(`Poging ${attempts + 1}: Controleren van IAlliance object...`);
-                    if (uw.IAlliance?.members) {
-                        console.log('Alliantieleden gevonden:', uw.IAlliance.members);
-                        resolve(uw.IAlliance.members);
-                    } else if (attempts < 20) {
-                        setTimeout(() => check(attempts + 1), 250);
-                    } else {
-                        console.error('IAlliance object of members niet gevonden na 20 pogingen.');
-                        reject('Kon alliantieleden niet laden');
-                    }
-                };
-                check();
+                // Open de alliantiepagina
+                const allianceMenu = document.querySelector('#ui_box > div.nui_main_menu > div.middle > div.content > ul > li.alliance.main_menu_item > span > span.name_wrapper > span');
+                if (allianceMenu) {
+                    allianceMenu.click();
+
+                    // Wacht tot de ledenlijst is geladen
+                    setTimeout(() => {
+                        const membersButton = document.querySelector('#alliance-members_show > span > span > span');
+                        if (membersButton) {
+                            membersButton.click();
+
+                            // Wacht tot de ledenlijst is geladen
+                            setTimeout(() => {
+                                const members = [];
+                                const rows = document.querySelectorAll('#ally_members_body tr[id^="alliance_player_"]');
+                                rows.forEach(row => {
+                                    const nameLink = row.querySelector('.ally_name a');
+                                    const name = nameLink?.textContent.trim();
+                                    const idMatch = nameLink?.href.match(/player\/(\d+)/);
+                                    const id = idMatch ? parseInt(idMatch[1], 10) : null;
+                                    if (name && id) {
+                                        members.push({ name, id });
+                                    }
+                                });
+
+                                if (members.length > 0) {
+                                    console.log('Alliantieleden gevonden:', members);
+                                    resolve(members);
+                                } else {
+                                    reject('Geen alliantieleden gevonden in de DOM.');
+                                }
+
+                                // Sluit het dialoogvenster
+                                const closeButton = document.querySelector('body > div.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-draggable.ui-resizable.js-window-main-container > div.ui-dialog-titlebar.ui-corner-all.ui-widget-header.ui-helper-clearfix.ui-draggable-handle > button');
+                                if (closeButton) {
+                                    closeButton.click();
+                                }
+                            }, 1000); // Wacht 1 seconde voor de ledenlijst om te laden
+                        } else {
+                            reject('Kon de ledenlijstknop niet vinden.');
+                        }
+                    }, 1000); // Wacht 1 seconde voor het menu om te laden
+                } else {
+                    reject('Kon het alliantiemenu niet vinden.');
+                }
             });
         }
 
