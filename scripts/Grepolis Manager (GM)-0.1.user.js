@@ -1337,7 +1337,10 @@
         async processTowns(towns) {
             try {
                 const processed = await Promise.all(
-                    towns.map(town => this.getTownDetails(town.id))
+                    towns.map(async (town) => ({ // 👈 Voeg async toe hier
+                        basic: town,
+                        ...await this.getTownDetails(town.id) // 👈 Voeg this. toe
+                    }))
                 );
                 return { success: true, towns: processed };
             } catch (error) {
