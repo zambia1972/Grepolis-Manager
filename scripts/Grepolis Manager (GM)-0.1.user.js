@@ -1274,6 +1274,7 @@
         }
 
         async getMilitaryDataForPlayer(playerName, playerId) {
+            console.log('Player ID:', playerId); // Dit zou nu moeten werken
             const towns = await this.loadTowns();
             console.log('Alle steden (volledig object):', towns);
 
