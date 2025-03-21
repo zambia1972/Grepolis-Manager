@@ -1320,11 +1320,14 @@
         async loadAllianceMembers() {
             return new Promise((resolve, reject) => {
                 const check = (attempts = 0) => {
+                    console.log(`Poging ${attempts + 1}: Controleren van IAlliance object...`);
                     if (uw.IAlliance?.members) {
+                        console.log('Alliantieleden gevonden:', uw.IAlliance.members);
                         resolve(uw.IAlliance.members);
                     } else if (attempts < 20) {
                         setTimeout(() => check(attempts + 1), 250);
                     } else {
+                        console.error('IAlliance object of members niet gevonden na 20 pogingen.');
                         reject('Kon alliantieleden niet laden');
                     }
                 };
