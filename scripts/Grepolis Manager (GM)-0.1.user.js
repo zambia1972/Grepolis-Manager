@@ -515,7 +515,13 @@
             playerLinks.forEach(link => {
                 link.addEventListener('click', async (e) => {
                     e.preventDefault();
-                    const playerId = parseInt(link.getAttribute('data-player-id'), 10);
+                    const playerId = link.getAttribute('data-player-id');
+                    console.log('Raw player ID:', playerId); // Debug log
+                    const numericPlayerId = Number(playerId);
+                    if (isNaN(numericPlayerId)) {
+                        console.error('Ongeldig speler-ID:', playerId);
+                        return;
+                    }
                     if (this.militaryManager) {
                         try {
                             const militaryData = await this.militaryManager.getMilitaryData(playerId);
@@ -1312,25 +1318,10 @@
         async getMilitaryData(playerId) {
             try {
                 const towns = await this.loadTowns();
-                console.log('Geladen steden:', towns); // Debug log
-
-                const filteredTowns = this.filterTowns(towns, playerId);
-                console.log('Gefilterde steden:', filteredTowns); // Debug log
-
-                if (filteredTowns.length === 0) {
-                    return { 
-                        success: false, 
-                        error: `Geen steden gevonden voor speler ID ${playerId}`
-                    };
-                }
-
-                return this.processTowns(filteredTowns);
+                // Tijdelijke bypass:
+                return this.processTowns(Object.values(towns)); 
             } catch (error) {
-                console.error('Fout in getMilitaryData:', error);
-                return { 
-                    success: false, 
-                    error: error.message 
-                };
+                return { success: false, error: error.message };
             }
         }
 
@@ -1368,9 +1359,11 @@
             });
         }
 
-        filterTowns(towns, targetPlayerId) { // GOED GEDEFINIEERD
+        filterTowns(towns, targetPlayerId) {
+            console.log('Filteren op speler ID:', targetPlayerId);
             return Object.values(towns).filter(town => {
                 const townPlayerId = town.player_id || town.player?.id;
+                console.log(`Stad ${town.id} heeft speler ID:`, townPlayerId);
                 return townPlayerId?.toString() === targetPlayerId.toString();
             });
         }
