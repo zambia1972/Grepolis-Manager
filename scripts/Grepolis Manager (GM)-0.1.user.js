@@ -1312,13 +1312,27 @@
         async getMilitaryData(playerId) {
             try {
                 const towns = await this.loadTowns();
-                // Tijdelijke bypass:
-                return this.processTowns(Object.values(towns)); 
+                console.log('Geladen steden:', towns); // Debug log
+
+                const filteredTowns = this.filterTowns(towns, playerId);
+                console.log('Gefilterde steden:', filteredTowns); // Debug log
+
+                if (filteredTowns.length === 0) {
+                    return {
+                        success: false,
+                        error: `Geen steden gevonden voor speler ID ${playerId}`
+                    };
+                }
+
+                return this.processTowns(filteredTowns);
             } catch (error) {
-                return { success: false, error: error.message };
+                console.error('Fout in getMilitaryData:', error);
+                return {
+                    success: false,
+                    error: error.message
+                };
             }
         }
-
 
         async processTowns(towns) {
             try {
@@ -1381,8 +1395,8 @@
 
                 // Debug logs voor stadseigenschappen
                 console.log(`Details voor stad ${townId}:`, {
-                    buildings: town.buildings?.(), 
-                    units: town.units?.(), 
+                    buildings: town.buildings?.(),
+                    units: town.units?.(),
                     researches: town.researches?.()
                 });
 
