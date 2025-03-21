@@ -1298,162 +1298,153 @@
                 }
             };
 
-            const CONFIG = {
+            this.CONFIG = {
                 columns: [
                     'Stad', 'ID', 'God',
                     'Muur', 'Toren',
                     'Aanval', 'Verdediging',
                     'Belegering', 'Speciale Eenheden',
                     'Ontwikkelingen'
-                ],
-            }
+                ]
+            };
+        }
 
-            async getMilitaryData(playerId) {
-                try {
-                    const response = await fetch(`https://example.com/api/military/${playerId}`);
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+        async getMilitaryData(playerId) {
+            try {
+                const towns = await this.loadTowns();
+                const filteredTowns = this.filterTowns(towns, playerId);
+                return this.processTowns(filteredTowns);
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+
+        filterTowns(towns, targetPlayerId) {
+            return Object.values(towns).filter(town => {
+                const townPlayerId = town.player_id || town.player?.id;
+                return townPlayerId?.toString() === targetPlayerId.toString();
+            });
+        }
+
+        async loadTowns() {
+            return new Promise((resolve, reject) => {
+                const check = (attempts = 0) => {
+                    if (uw.ITowns?.towns) {
+                        resolve(uw.ITowns.towns);
+                    } else if (attempts < 20) {
+                        setTimeout(() => check(attempts + 1), 250);
+                    } else {
+                        reject(new Error('Kon stedendata niet laden'));
                     }
-                    const data = await response.json();
-                    return { success: true, towns: data.towns };
-                } catch (error) {
-                    console.error('Error fetching military data:', error);
-                    return { success: false, error: error.message };
-                }
-            }
-
-            filterTowns(towns, targetPlayerId) {
-                return Object.values(towns).filter(town => {
-                    const townPlayerId = town.player_id || town.player?.id;
-                    return townPlayerId?.toString() === targetPlayerId.toString();
-                });
-            }
-
-            // Dataverwerking
-            async loadTowns() {
-                return new Promise((resolve, reject) => {
-                    const check = (attempts = 0) => {
-                        if (uw.ITowns?.towns) {
-                            resolve(uw.ITowns.towns);
-                        } else if (attempts < 20) {
-                            setTimeout(() => check(attempts + 1), 250);
-                        } else {
-                            reject(new Error('Kon stedendata niet laden'));
-                        }
-                    };
-                    check();
-                });
-            }
-
-            async processTowns(towns) {
-                try {
-                    const processed = await Promise.all(
-                        towns.map(town => this.getTownDetails(town.id))
-                    );
-                    return { success: true, towns: processed };
-                } catch (error) {
-                    return { success: false, error: error.message };
-                }
-            }
-
-            this.towns = [];
-            this.initializeTowns();
-
-
-            async
-            initializeTowns()
-            {
-                try {
-                    this.towns = await this.loadTowns();
-                    // Remove the call to filterTowns if it's not defined
-                    // this.towns = filterTowns(this.towns);
-                } catch (error) {
-                    console.error('Error initializing towns:', error);
-                }
-            }
-
-            async
-            loadTowns()
-            {
-                return new Promise((resolve, reject) => {
-                    const check = (attempts = 0) => {
-                        uw.ITowns?.towns ? resolve(uw.ITowns.towns) :
-                            attempts < 20 ? setTimeout(() => check(attempts + 1), 250) :
-                                reject('Stedendata niet geladen');
-                    };
-                    check();
-                });
-            }
-
-            async
-            processTowns(towns)
-            {
-                return Promise.all(
-                    Object.values(towns).map(async town => ({
-                        basic: town,
-                        ...await getTownDetails(town.id)
-                    })));
-            }
-
-            getTownDetails(townId)
-            {
-                try {
-                    const town = uw.ITowns.getTown(townId);
-                    if (!town) return getFallbackData();
-
-                    const buildings = town.buildings?.() || {};
-                    const units = town.units?.() || {};
-                    const researches = town.researches?.()?.attributes || {};
-
-                    return {
-                        god: town.god?.() || 'Onbekend',
-                        wall: buildings.getBuildingLevel?.('wall') ?? '?',
-                        tower: buildings.getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
-                        developments: formatResearches(researches),
-                        ...getUnits(units)
-                    };
-                } catch (error) {
-                    console.error(`Fout bij stad ${townId}:`, error);
-                    return getFallbackData();
-                }
-            }
-
-            getUnits(units)
-            {
-                return {
-                    attack: this.formatUnitGroup(units, this.UNIT_CONFIG.aanval),
-                    defense: this.formatUnitGroup(units, this.UNIT_CONFIG.verdediging),
-                    siege: this.formatUnitGroup(units, this.UNIT_CONFIG.belegering),
-                    specials: this.formatUnitGroup(units, this.UNIT_CONFIG.speciaal)
                 };
-            }
+                check();
+            });
+        }
 
-            formatUnitGroup(units, types)
-            {
-                return Object.entries(types)
-                    .map(([key, name]) => units?.[key] > 0 ? `${units[key]} ${name}` : null)
-                    .filter(Boolean)
-                    .join('<br>') || '-';
+        async processTowns(towns) {
+            try {
+                const processed = await Promise.all(
+                    towns.map(town => this.getTownDetails(town.id))
+                );
+                return { success: true, towns: processed };
+            } catch (error) {
+                return { success: false, error: error.message };
             }
+        }
 
-            formatResearches(researches)
-            {
-                return [
-                    researches?.phalanx && 'Falanx',
-                    researches?.ram && 'Stormram',
-                    researches?.divine_selection && 'Goddelijke Selectie',
-                    researches?.conscription && 'Dienstplicht'
-                ].filter(Boolean).join(', ') || 'Geen';
+        async
+        initializeTowns()
+        {
+            try {
+                this.towns = await this.loadTowns();
+                // Remove the call to filterTowns if it's not defined
+                // this.towns = filterTowns(this.towns);
+            } catch (error) {
+                console.error('Error initializing towns:', error);
             }
+        }
 
-            getFallbackData()
-            {
-                return {
-                    god: 'Onbekend', wall: '?', tower: 'Nee',
-                    developments: 'Geen', attack: '-', defense: '-',
-                    siege: '-', specials: '-'
+        async
+        loadTowns()
+        {
+            return new Promise((resolve, reject) => {
+                const check = (attempts = 0) => {
+                    uw.ITowns?.towns ? resolve(uw.ITowns.towns) :
+                    attempts < 20 ? setTimeout(() => check(attempts + 1), 250) :
+                    reject('Stedendata niet geladen');
                 };
+                check();
+            });
+        }
+
+        async
+        processTowns(towns)
+        {
+            return Promise.all(
+                Object.values(towns).map(async town => ({
+                    basic: town,
+                    ...await getTownDetails(town.id)
+                })));
+        }
+
+        getTownDetails(townId)
+        {
+            try {
+                const town = uw.ITowns.getTown(townId);
+                if (!town) return getFallbackData();
+
+                const buildings = town.buildings?.() || {};
+                const units = town.units?.() || {};
+                const researches = town.researches?.()?.attributes || {};
+
+                return {
+                    god: town.god?.() || 'Onbekend',
+                    wall: buildings.getBuildingLevel?.('wall') ?? '?',
+                    tower: buildings.getBuildingLevel?.('tower') ? 'Ja' : 'Nee',
+                    developments: formatResearches(researches),
+                    ...getUnits(units)
+                };
+            } catch (error) {
+                console.error(`Fout bij stad ${townId}:`, error);
+                return getFallbackData();
             }
+        }
+
+        getUnits(units)
+        {
+            return {
+                attack: this.formatUnitGroup(units, this.UNIT_CONFIG.aanval),
+                defense: this.formatUnitGroup(units, this.UNIT_CONFIG.verdediging),
+                siege: this.formatUnitGroup(units, this.UNIT_CONFIG.belegering),
+                specials: this.formatUnitGroup(units, this.UNIT_CONFIG.speciaal)
+            };
+        }
+
+        formatUnitGroup(units, types)
+        {
+            return Object.entries(types)
+                .map(([key, name]) => units?.[key] > 0 ? `${units[key]} ${name}` : null)
+                .filter(Boolean)
+                .join('<br>') || '-';
+        }
+
+        formatResearches(researches)
+        {
+            return [
+                researches?.phalanx && 'Falanx',
+                researches?.ram && 'Stormram',
+                researches?.divine_selection && 'Goddelijke Selectie',
+                researches?.conscription && 'Dienstplicht'
+            ].filter(Boolean).join(', ') || 'Geen';
+        }
+
+        getFallbackData()
+        {
+            return {
+                god: 'Onbekend', wall: '?', tower: 'Nee',
+                developments: 'Geen', attack: '-', defense: '-',
+                siege: '-', specials: '-'
+            };
         }
     }
     // Initialisatie
