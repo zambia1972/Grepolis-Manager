@@ -482,17 +482,15 @@
             // Voeg event listeners toe aan de spelersnamen
             const playerLinks = document.querySelectorAll('.player-name-link');
             playerLinks.forEach(link => {
-                link.addEventListener('click', async (e) => {
-                    e.preventDefault();
-                    const playerName = link.getAttribute('data-player');
-                    const playerId = parseInt(link.getAttribute('data-player-id'), 10);
-                    if (this.militaryManager) {
-                        const militaryData = await this.militaryManager.getMilitaryDataForPlayer(playerName, playerId);
-                        this.showMilitaryData(militaryData);
-                    } else {
-                        console.error('MilitaryManager is niet geïnitialiseerd.');
-                    }
-                });
+                const playerName = link.getAttribute('data-player');
+                const playerId = link.getAttribute('data-player-id'); // Haal de waarde op zonder conversie
+                console.log('Raw Player ID from HTML:', playerId); // Debug log
+                const playerIdAsNumber = parseInt(playerId, 10); // Converteer naar een getal
+                console.log('Parsed Player ID:', playerIdAsNumber); // Debug log
+                if (this.militaryManager) {
+                    const militaryData = await this.militaryManager.getMilitaryDataForPlayer(playerName, playerIdAsNumber);
+                    this.showMilitaryData(militaryData);
+                }
             });
 
             console.log('Player list displayed successfully.');
