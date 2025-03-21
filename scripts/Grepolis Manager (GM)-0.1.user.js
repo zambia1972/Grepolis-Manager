@@ -515,13 +515,7 @@
             playerLinks.forEach(link => {
                 link.addEventListener('click', async (e) => {
                     e.preventDefault();
-                    const playerId = link.getAttribute('data-player-id');
-                    console.log('Raw player ID:', playerId); // Debug log
-                    const numericPlayerId = Number(playerId);
-                    if (isNaN(numericPlayerId)) {
-                        console.error('Ongeldig speler-ID:', playerId);
-                        return;
-                    }
+                    const playerId = parseInt(link.getAttribute('data-player-id'), 10);
                     if (this.militaryManager) {
                         try {
                             const militaryData = await this.militaryManager.getMilitaryData(playerId);
@@ -1324,6 +1318,7 @@
                 return { success: false, error: error.message };
             }
         }
+
 
         async processTowns(towns) {
             try {
