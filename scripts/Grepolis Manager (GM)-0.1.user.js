@@ -278,6 +278,7 @@
             };
             this.militaryManager = new MilitaryManager(); // Initialiseer militaryManager hier
             this.initializeScript();
+            this.playerId = localStorage.getItem('grepolisPlayerId');
             this.fetchPlayerInfo();
             this.injectAfwezigheidsassistent();
         }
@@ -399,6 +400,33 @@
 
             // Toon het startscherm standaard
             this.showStartScreen();
+        }
+        
+        generateMilitaryTable(data) {
+            const table = document.createElement('table');
+            table.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Stad</th><th>Muur</th><th>Toren</th>
+                        <th>Aanval</th><th>Verdediging</th>
+                        <th>Belegering</th><th>Ontwikkelingen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data.map(town => `
+                        <tr>
+                            <td>${town.basic.name}</td>
+                            <td>${town.wall}</td>
+                            <td>${town.tower}</td>
+                            <td>${town.attack}</td>
+                            <td>${town.defense}</td>
+                            <td>${town.siege}</td>
+                            <td>${town.developments}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            `;
+            return table;
         }
 
         showLeadershipTools() {
@@ -1336,92 +1364,6 @@
             };
         }
     }
-
-    class ForumManager {
-        constructor() {
-            this.militaryManager = new MilitaryManager();
-            this.playerId = localStorage.getItem('grepolisPlayerId');
-            this.initialize();
-        }
-
-        initialize() {
-            this.addMainButton();
-            this.injectStyles();
-        }
-
-        addMainButton() {
-            const button = document.createElement('button');
-            button.innerHTML = '🎛️ GManager';
-            button.style = `/* [Identieke stijl uit origineel script] */`;
-            button.addEventListener('click', () => this.showMainInterface());
-            document.body.appendChild(button);
-        }
-
-        async showMainInterface() {
-            const militaryData = await this.militaryManager.getMilitaryData(this.playerId);
-            this.createPopup(this.generateMilitaryTable(militaryData));
-        }
-
-        generateMilitaryTable(data) {
-            const table = document.createElement('table');
-            table.innerHTML = `
-                <thead>
-                    <tr>
-                        <th>Stad</th><th>Muur</th><th>Toren</th>
-                        <th>Aanval</th><th>Verdediging</th>
-                        <th>Belegering</th><th>Ontwikkelingen</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${data.map(town => `
-                        <tr>
-                            <td>${town.basic.name}</td>
-                            <td>${town.wall}</td>
-                            <td>${town.tower}</td>
-                            <td>${town.attack}</td>
-                            <td>${town.defense}</td>
-                            <td>${town.siege}</td>
-                            <td>${town.developments}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            `;
-            return table;
-        }
-
-        createPopup(content) {
-            const popup = document.createElement('div');
-            popup.id = 'gmanager-popup';
-            popup.style = `/* [Popup-stijl uit origineel script] */`;
-
-            const closeButton = document.createElement('button');
-            closeButton.innerHTML = '×';
-            closeButton.onclick = () => popup.remove();
-
-            popup.appendChild(closeButton);
-            popup.appendChild(content);
-            document.body.appendChild(popup);
-        }
-
-        injectStyles() {
-            GM_addStyle(`
-                #gmanager-popup {
-                    position: fixed;
-                    top: 50%; left: 50%;
-                    transform: translate(-50%, -50%);
-                    background: #1a1a1a;
-                    padding: 20px;
-                    border: 2px solid #4CAF50;
-                    border-radius: 10px;
-                    z-index: 10000;
-                    max-width: 90vw;
-                    overflow: auto;
-                }
-                /* [Aanvullende stijlen] */
-            `);
-        }
-    }
-
     // Initialisatie
     new ForumManager();
 })();
