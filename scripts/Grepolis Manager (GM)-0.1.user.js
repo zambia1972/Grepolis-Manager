@@ -1309,6 +1309,43 @@
             };
         }
 
+        createTable(towns) {
+            const table = document.createElement('table');
+            table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>Stad</th>
+                    <th>ID</th>
+                    <th>God</th>
+                    <th>Muur</th>
+                    <th>Toren</th>
+                    <th>Aanval</th>
+                    <th>Verdediging</th>
+                    <th>Schepen</th>
+                    <th>Speciale units</th>
+                    <th>Ontwikkelingen</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${towns.map(town => `
+                    <tr>
+                        <td>${town.basic?.name || 'Onbekend'}</td>
+                        <td>${town.basic?.id || '?'}</td>
+                        <td>${town.god || 'Geen god'}</td>
+                        <td>${town.wall}</td>
+                        <td>${town.tower}</td>
+                        <td>${town.attack}</td>
+                        <td>${town.defense}</td>
+                        <td>${town.siege}</td>
+                        <td>${town.specials}</td>
+                        <td>${town.developments}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        `;
+            return table;
+        }
+    
         async getMilitaryData(playerId) {
             try {
                 const towns = await this.loadTowns();
