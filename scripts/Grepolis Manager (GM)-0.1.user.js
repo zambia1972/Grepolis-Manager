@@ -631,6 +631,12 @@
                 const status = statusImg ? statusImg.src.split('/').pop() : null; // Haal de status afbeelding op
                 const cells = row.cells;
 
+                // Speler-ID correct ophalen
+                const playerId = row.id.replace('alliance_player_', ''); // Correcte ID extractie
+
+                // Cultuurpunten ophalen (voorbeeld, aanpassen aan echte data)
+                const culturePoints = cells[5]?.textContent || '0'; // Pas index aan
+
                 if (!cells || cells.length < 12) {
                     console.error('Ongeldige rij in de spelerslijst:', row);
                     return;
@@ -648,11 +654,13 @@
                 }
 
                 players.push({
-                    name: name,
+                    id: playerId, // Nu correct ID
+                    name: nameLink.textContent.trim(),
+                    status: statusImg.src.split('/').pop(),
+                    culturePoints: parseInt(culturePoints),
                     rank: cells[1].textContent,
                     points: cells[2].textContent,
                     cities: cells[3].textContent,
-                    status: status, // Gebruik de status afbeelding om de inactiviteitsduur te bepalen
                     rights: rights
                 });
             });
@@ -674,14 +682,15 @@
 
         // Nieuwe status iconen
         getStatusIcon(status) {
-            const icons = {
-                active: '<div class="status-icon heart"></div>',          // Groen hartje
-                "12h": '<div class="status-icon square green"></div>',    // Groen vierkant
-                "24h": '<div class="status-icon square orange"></div>',   // Oranje vierkant
-                vacation: '<div class="status-icon umbrella"></div>',     // Blauwe paraplu
-                unknown: '<div class="status-icon square gray"></div>'    // Grijs vierkant
-            };
-            return icons[status.type] || icons.unknown;
+            // Verbeterde iconen met Font Awesome
+            return {
+                active: '<i class="fas fa-heart" style="color:green"></i>',
+                "12h": '<i class="fas fa-square" style="color:green"></i>',
+                "24h": '<i class="fas fa-square" style="color:orange"></i>',
+                inactive: '<i class="fas fa-square" style="color:red"></i>',
+                vacation: '<i class="fas fa-umbrella-beach" style="color:blue"></i>',
+                unknown: '<i class="fas fa-question-circle" style="color:gray"></i>'
+            }[status];
         }
 
         createToolbarButton(text, onClick) {
