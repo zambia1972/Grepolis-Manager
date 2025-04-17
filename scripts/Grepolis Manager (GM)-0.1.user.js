@@ -377,19 +377,19 @@
             const closeButton = document.createElement('button');
             closeButton.textContent = 'X';
             closeButton.style = `
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: black;
-        color: #FF0000;
-        font-size: 16px;
-        border: none;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        border-radius: 50%;
-        box-shadow: 0 0 5px #FF0000;
-    `;
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: black;
+                color: #FF0000;
+                font-size: 16px;
+                border: none;
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+                border-radius: 50%;
+                box-shadow: 0 0 5px #FF0000;
+            `;
             closeButton.addEventListener('click', () => {
                 this.popup.style.display = 'none';
                 console.log("Popup gesloten.");
@@ -397,10 +397,10 @@
 
             const toolbar = document.createElement('div');
             toolbar.style = `
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 20px;
-    `;
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            `;
 
             const button1 = this.createToolbarButton('Startscherm', () => this.showStartScreen());
             const button2 = this.createToolbarButton('Helper', () => this.showHelperTools());
@@ -417,12 +417,12 @@
             const content = document.createElement('div');
             content.id = 'popup-content';
             content.style = `
-        flex-grow: 1;
-        padding: 20px;
-        overflow-y: auto;
-        max-height: 300px;
-        position: relative;
-    `;
+                flex-grow: 1;
+                padding: 20px;
+                overflow-y: auto;
+                max-height: 300px;
+                position: relative;
+            `;
 
             this.popup.innerHTML = '';
             this.popup.appendChild(closeButton);
@@ -1580,32 +1580,36 @@
 
         injectStyles() {
             const css = `
-            .r_city_shield_blessing {
-                background: url(https://i.ibb.co/W05MsxT/dr-city-shield-blessing-a1471e5.png) no-repeat 0 0 !important;
-                width: 120px !important;
-                height: 72px !important;
-                pointer-events: none !important;
-            }
-            .o_city_shield_blessing {
-                background: url(https://i.ibb.co/X8cn1fK/r-city-shield-blessing-a1471e5.png) no-repeat 0 0 !important;
-                width: 120px !important;
-                height: 72px !important;
-                pointer-events: none !important;
-            }
-            .b_city_shield_blessing {
-                background: url(https://i.ibb.co/9crM5x6/b-city-shield-blessing-a1471e5.png) no-repeat 0 0 !important;
-                width: 120px !important;
-                height: 72px !important;
-                pointer-events: none !important;
-            }
-            .g_city_shield_blessing {
-                background: url(https://i.ibb.co/6YmdJVk/g-city-shield-blessing-a1471e5.png) no-repeat 0 0 !important;
-                width: 120px !important;
-                height: 72px !important;
-                pointer-events: none !important;
-            }
-        `;
-            GM_addStyle(css);
+                .r_city_shield_blessing {
+                    background: url(https://i.ibb.co/W05MsxT/dr-city-shield-blessing-a1471e5.png) no-repeat 0 0 !important;
+                    width: 120px !important;
+                    height: 72px !important;
+                    pointer-events: none !important;
+                }
+                .o_city_shield_blessing {
+                    background: url(https://i.ibb.co/X8cn1fK/r-city-shield-blessing-a1471e5.png) no-repeat 0 0 !important;
+                    width: 120px !important;
+                    height: 72px !important;
+                    pointer-events: none !important;
+                }
+                .b_city_shield_blessing {
+                    background: url(https://i.ibb.co/9crM5x6/b-city-shield-blessing-a1471e5.png) no-repeat 0 0 !important;
+                    width: 120px !important;
+                    height: 72px !important;
+                    pointer-events: none !important;
+                }
+                .g_city_shield_blessing {
+                    background: url(https://i.ibb.co/6YmdJVk/g-city-shield-blessing-a1471e5.png) no-repeat 0 0 !important;
+                    width: 120px !important;
+                    height: 72px !important;
+                    pointer-events: none !important;
+                }
+            `;
+            
+            // Alternatief voor GM_addStyle
+            const styleElement = document.createElement('style');
+            styleElement.textContent = css;
+            document.head.appendChild(styleElement);
         }
 
         toggle(state) {
