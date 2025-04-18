@@ -508,7 +508,7 @@
         button.style.cssText = `
             position: fixed;
             bottom: 60px;
-            right: 30px;
+            left: 30px;
             width: 60px;
             height: 60px;
             background-image: url('https://imgur.com/I62TXeo.png');
