@@ -503,32 +503,34 @@
         }
 
         addMainButton() {
-            const button = document.createElement('button');
-            button.id = 'open-forum-popup';
-            button.textContent = 'GM';
-            button.style = `
+             const button = document.createElement('div');
+    button.id = 'grepolis-manager-main-btn';
+    button.style.cssText = `
+        position: fixed;
+        bottom: 60px;
+        right: 30px;
         width: 60px;
         height: 60px;
-        background: black;
-        color: white;
-        border: 2px solid #FF0000;
+        background-image: url('https://imgur.com/I62TXeo.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
         border-radius: 50%;
-        box-shadow: 0 0 10px #FF0000;
-        font-size: 18px;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        border: 2px solid #caa35d;
+        box-shadow: 0 0 15px #caa35d;
         cursor: pointer;
-        position: fixed;
-        bottom: 80px;
-        left: 20px;
-        z-index: 9999;
+        z-index: 99999;
     `;
 
-            button.addEventListener('click', () => this.createPopup());
-            document.body.appendChild(button);
-        }
+    button.title = 'Open Grepolis Manager';
+    button.addEventListener('click', () => {
+        // Vervang dit met je hoofdscherm logic
+        console.log('Grepolis Manager geopend');
+        toggleMainWindow();
+    });
+
+    document.body.appendChild(button);
+}
 
         createPopup() {
             if (!this.popup) {
