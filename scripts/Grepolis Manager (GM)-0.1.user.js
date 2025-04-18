@@ -276,7 +276,7 @@
                         {title: "Leidinggevenden", content: "Inhoud van Leidinggevenden..."},
                     ],
                 };
-    
+
                 this.popup = null;
                 this.playerName = '';
                 this.server = '';
@@ -284,7 +284,7 @@
                 this.topicsData = {/* ... blijft hetzelfde ... */};
                 this.militaryManager = new MilitaryManager();
                 this.initHelpers();
-    
+
                 this.initializeDependencies().then(() => {
                     this.initializeScript(); // Hier worden de knoppen gemaakt
                     this.fetchPlayerInfo();
@@ -293,7 +293,7 @@
                     console.error("Initialisatie mislukt:", error);
                 });
             }
-    
+
             async initHelpers() {
                 try {
                     // Voeg de ontbrekende methode toe
@@ -305,7 +305,7 @@
                     this.attackRangeHelper = this.createFallbackHelper();
                 }
             }
-    
+
             async initializeDependencies() {
                 try {
                     await this.waitForGameReady();
@@ -319,7 +319,7 @@
                     this.attackRangeHelper = this.createFallbackHelper();
                 }
             }
-    
+
             // Implementeer de ontbrekende methode
             waitForGameReady() {
                 return new Promise((resolve, reject) => {
@@ -338,7 +338,7 @@
                     check();
                 });
             }
-    
+
             createFallbackHelper() {
                 return {
                     toggle: () => console.error('Helper niet beschikbaar'),
@@ -346,11 +346,11 @@
                     townColoring: () => {}
                 };
             }
-    
+
             addHelperToggle(label, helpText, onClick, onHelpClick) {
                 const container = document.getElementById('helper-buttons');
                 if (!container) return;
-    
+
                 // Main container
                 const wrapper = document.createElement('div');
                 wrapper.style.cssText = `
@@ -360,7 +360,7 @@
                 margin-bottom: 15px;
                 align-items: flex-start;
             `;
-    
+
                 // Label boven de switch
                 const labelElement = document.createElement('span');
                 labelElement.textContent = label;
@@ -370,7 +370,7 @@
                 font-size: 14px;
                 margin-left: 5px;
             `;
-    
+
                 // Switch container
                 const switchContainer = document.createElement('div');
                 switchContainer.style.cssText = `
@@ -379,13 +379,13 @@
                 gap: 10px;
                 width: 100%;
             `;
-    
+
                 // Switch element
                 const switchInput = document.createElement('input');
                 switchInput.type = 'checkbox';
                 switchInput.id = `switch-${label.toLowerCase().replace(/\s+/g, '-')}`;
                 switchInput.style.display = 'none';
-    
+
                 // Visuele switch
                 const switchLabel = document.createElement('label');
                 switchLabel.htmlFor = switchInput.id;
@@ -401,7 +401,7 @@
                 border: 1px solid #FF0000;
                 order: 1;
             `;
-    
+
                 // Switch knop
                 const switchButton = document.createElement('span');
                 switchButton.style.cssText = `
@@ -414,7 +414,7 @@
                 border-radius: 50%;
                 transition: all 0.3s;
             `;
-    
+
                 // Help knop
                 const helpBtn = document.createElement('button');
                 helpBtn.innerHTML = '?';
@@ -432,17 +432,17 @@
                 border: none;
                 order: 2;
             `;
-    
+
                 // Voeg elementen toe
                 switchLabel.appendChild(switchButton);
                 switchContainer.appendChild(switchInput);
                 switchContainer.appendChild(switchLabel);
                 switchContainer.appendChild(helpBtn);
-    
+
                 wrapper.appendChild(labelElement);
                 wrapper.appendChild(switchContainer);
                 container.appendChild(wrapper);
-    
+
                 // Event listeners
                 switchInput.addEventListener('change', (e) => {
                     const state = e.target.checked ? 'on' : 'off';
@@ -455,21 +455,21 @@
                     }
                     onClick(state);
                 });
-    
+
                 helpBtn.addEventListener('click', () => {
                     onHelpClick();
                 });
             }
-    
+
             showHelperTools() {
                 const content = document.getElementById('popup-content');
                 if (!content) return;
-    
+
                 content.innerHTML = `
                 <h2>Helper Tools</h2>
                 <div id="helper-buttons" style="display: grid; gap: 10px;"></div>
             `;
-    
+
                 // AttackRange Helper
                 this.addHelperToggle(
                     'AttackRange Helper',
@@ -477,7 +477,7 @@
                     (state) => this.attackRangeHelper?.toggle(state),
                     () => this.attackRangeHelper?.showHelpPopup() // Gebruik optionele chaining
                 );
-    
+
                 // FeestenFixed
                 this.addHelperToggle(
                     'FeestenFixed',
@@ -486,8 +486,8 @@
                     () => this.feestenFixed.showCustomHelp()
                 );
             }
-    
-    
+
+
             toggleFeestenFixed(state) {
                 if (state === 'on') {
                     this.feestenFixed.show();
@@ -495,13 +495,13 @@
                     this.feestenFixed.hide();
                 }
             }
-    
+
             // Initialiseer het script
             initializeScript() {
                 this.addMainButton();
                 this.injectStyles();
             }
-    
+
             addMainButton() {
                  const button = document.createElement('div');
         button.id = 'grepolis-manager-main-btn';
@@ -521,22 +521,21 @@
             cursor: pointer;
             z-index: 99999;
         `;
-    
-        button.title = 'Open Grepolis Manager';
-        button.addEventListener('click', () => {
-            // Vervang dit met je hoofdscherm logic
-            console.log('Grepolis Manager geopend');
-            toggleMainWindow();
-        });
-    
-        document.body.appendChild(button);
-    }
-    
-            function toggleMainWindow() {
-        alert('Grepolis Manager geopend! (Placeholder)');
-    }
-    
-            createPopup() {
+
+                button.title = 'Open Grepolis Manager';
+                button.addEventListener('click', () => {
+                    // Vervang dit met je hoofdscherm logic
+                    console.log('Grepolis Manager geopend');
+                    this.toggleMainWindow();
+                });
+                document.body.appendChild(button);
+            }
+
+        toggleMainWindow() {
+            this.createPopup(); // Dit toont je hoofdscherm
+        }
+
+        createPopup() {
             if (!this.popup) {
                 this.popup = document.createElement('div');
                 this.popup.id = 'forum-popup';
