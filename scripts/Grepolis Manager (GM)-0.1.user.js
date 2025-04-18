@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  Popup met werkbalk en buttons, inclusief Afwezigheidsassistent en Militaire Manager
-// @author       You
+// @author       Zambia1972
 // @match        *://*.grepolis.com/*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
@@ -276,22 +276,189 @@
                     {title: "Leidinggevenden", content: "Inhoud van Leidinggevenden..."},
                 ],
             };
-            this.militaryManager = new MilitaryManager(); // Initialiseer militaryManager hier
-            this.initializeScript();
-            this.playerId = localStorage.getItem('grepolisPlayerId');
-            this.fetchPlayerInfo();
-            this.injectAfwezigheidsassistent();
-            this.showHelperTools = this.showHelperTools.bind(this);
-            this.toggleAttackRangeHelper = this.toggleAttackRangeHelper.bind(this);
+
+            this.popup = null;
+            this.playerName = '';
+            this.server = '';
+            this.fora = [/* ... blijft hetzelfde ... */];
+            this.topicsData = {/* ... blijft hetzelfde ... */};
+            this.militaryManager = new MilitaryManager();
+            this.initHelpers();
+
+            this.initializeDependencies().then(() => {
+                this.initializeScript(); // Hier worden de knoppen gemaakt
+                this.fetchPlayerInfo();
+                this.injectAfwezigheidsassistent();
+            }).catch(error => {
+                console.error("Initialisatie mislukt:", error);
+            });
+        }
+
+        async initHelpers() {
             try {
+                // Voeg de ontbrekende methode toe
+                await this.waitForGameReady();
                 this.attackRangeHelper = new AttackRangeHelperManager(unsafeWindow);
-            } catch (e) {
-                console.error("Failed to initialize AttackRangeHelper:", e);
-                this.attackRangeHelper = {
-                    toggle: () => console.log("Attack Range Helper unavailable"),
-                    townColoring: () => {}
-                };
+                await this.attackRangeHelper.initialize();
+            } catch (error) {
+                console.error('Helper initialisatie mislukt:', error);
+                this.attackRangeHelper = this.createFallbackHelper();
             }
+        }
+
+        async initializeDependencies() {
+            try {
+                await this.waitForGameReady();
+                // Initialiseer AttackRangeHelperManager EERST
+                this.attackRangeHelper = new AttackRangeHelperManager(unsafeWindow);
+                await this.attackRangeHelper.initialize(); // Wacht op initialisatie
+                this.feestenFixed = new FeestenFixedManager();
+                console.log("[DEBUG] Dependencies geïnitialiseerd");
+            } catch (e) {
+                console.error("Fout bij initialiseren dependencies:", e);
+                this.attackRangeHelper = this.createFallbackHelper();
+            }
+        }
+
+        // Implementeer de ontbrekende methode
+        waitForGameReady() {
+            return new Promise((resolve, reject) => {
+                let attempts = 0;
+                const check = () => {
+                    if (typeof unsafeWindow.Game !== 'undefined' &&
+                        typeof unsafeWindow.ITowns !== 'undefined') {
+                        resolve();
+                    } else if (attempts < 30) {
+                        attempts++;
+                        setTimeout(check, 250);
+                    } else {
+                        reject(new Error("Game objecten niet gevonden"));
+                    }
+                };
+                check();
+            });
+        }
+
+        createFallbackHelper() {
+            return {
+                toggle: () => console.error('Helper niet beschikbaar'),
+                showHelpPopup: () => console.error('Help niet beschikbaar'),
+                townColoring: () => {}
+            };
+        }
+
+        addHelperToggle(label, helpText, onClick, onHelpClick) {
+            const container = document.getElementById('helper-buttons');
+            if (!container) return;
+
+            // Main container
+            const wrapper = document.createElement('div');
+            wrapper.style.cssText = `
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 15px;
+            align-items: flex-start;
+        `;
+
+            // Label boven de switch
+            const labelElement = document.createElement('span');
+            labelElement.textContent = label;
+            labelElement.style.cssText = `
+            color: #FF0000;
+            font-weight: bold;
+            font-size: 14px;
+            margin-left: 5px;
+        `;
+
+            // Switch container
+            const switchContainer = document.createElement('div');
+            switchContainer.style.cssText = `
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        `;
+
+            // Switch element
+            const switchInput = document.createElement('input');
+            switchInput.type = 'checkbox';
+            switchInput.id = `switch-${label.toLowerCase().replace(/\s+/g, '-')}`;
+            switchInput.style.display = 'none';
+
+            // Visuele switch
+            const switchLabel = document.createElement('label');
+            switchLabel.htmlFor = switchInput.id;
+            switchLabel.style.cssText = `
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            background-color: #333;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #FF0000;
+            order: 1;
+        `;
+
+            // Switch knop
+            const switchButton = document.createElement('span');
+            switchButton.style.cssText = `
+            position: absolute;
+            height: 26px;
+            width: 26px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+        `;
+
+            // Help knop
+            const helpBtn = document.createElement('button');
+            helpBtn.innerHTML = '?';
+            helpBtn.title = helpText;
+            helpBtn.style.cssText = `
+            background: #444;
+            color: #FFF;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+            order: 2;
+        `;
+
+            // Voeg elementen toe
+            switchLabel.appendChild(switchButton);
+            switchContainer.appendChild(switchInput);
+            switchContainer.appendChild(switchLabel);
+            switchContainer.appendChild(helpBtn);
+
+            wrapper.appendChild(labelElement);
+            wrapper.appendChild(switchContainer);
+            container.appendChild(wrapper);
+
+            // Event listeners
+            switchInput.addEventListener('change', (e) => {
+                const state = e.target.checked ? 'on' : 'off';
+                if (state === 'on') {
+                    switchLabel.style.backgroundColor = '#FF0000';
+                    switchButton.style.transform = 'translateX(30px)';
+                } else {
+                    switchLabel.style.backgroundColor = '#333';
+                    switchButton.style.transform = 'translateX(0)';
+                }
+                onClick(state);
+            });
+
+            helpBtn.addEventListener('click', () => {
+                onHelpClick();
+            });
         }
 
         showHelperTools() {
@@ -303,16 +470,30 @@
             <div id="helper-buttons" style="display: grid; gap: 10px;"></div>
         `;
 
-            this.addToggleButton(
+            // AttackRange Helper
+            this.addHelperToggle(
                 'AttackRange Helper',
                 'Toont aanvalsbereik op basis van spelerspunten',
-                (state) => this.toggleAttackRangeHelper(state)
+                (state) => this.attackRangeHelper?.toggle(state),
+                () => this.attackRangeHelper?.showHelpPopup() // Gebruik optionele chaining
+            );
+
+            // FeestenFixed
+            this.addHelperToggle(
+                'FeestenFixed',
+                'Toont steden waar je Stadsfeesten en Theaters kan activeren',
+                (state) => this.feestenFixed.toggle(state),
+                () => this.feestenFixed.showCustomHelp()
             );
         }
 
 
-        toggleAttackRangeHelper(state) {
-            this.attackRangeHelper.toggle(state);
+        toggleFeestenFixed(state) {
+            if (state === 'on') {
+                this.feestenFixed.show();
+            } else {
+                this.feestenFixed.hide();
+            }
         }
 
         // Initialiseer het script
@@ -324,7 +505,7 @@
         addMainButton() {
             const button = document.createElement('button');
             button.id = 'open-forum-popup';
-            button.textContent = 'GFM';
+            button.textContent = 'GM';
             button.style = `
         width: 60px;
         height: 60px;
@@ -432,75 +613,6 @@
 
             // Toon het startscherm standaard
             this.showStartScreen();
-        }
-
-        showHelpPopup() {
-        // Verwijder bestaande popup als die er is
-        if (this.helpPopup) {
-            document.body.removeChild(this.helpPopup);
-        }
-
-            // Maak nieuwe popup
-            this.helpPopup = document.createElement('div');
-            this.helpPopup.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 400px;
-            max-width: 90%;
-            background: #1e1e1e;
-            border: 2px solid #FF0000;
-            border-radius: 10px;
-            padding: 20px;
-            color: white;
-            font-family: Arial, sans-serif;
-            z-index: 100000;
-            box-shadow: 0 0 20px rgba(255,0,0,0.5);
-        `;
-
-            // Popup inhoud
-            this.helpPopup.innerHTML = `
-            <h2 style="color: #FF0000; margin-top: 0;">AttackRange Helper Uitleg</h2>
-
-            <h3>Kleuren betekenis:</h3>
-            <ul style="padding-left: 20px;">
-                <li><span style="color: #FF4444;">■ Rood/Orange:</span> Speler heeft <strong>minder dan 83.3%</strong> of <strong>meer dan 120%</strong> van jouw punten</li>
-                <li><span style="color: #44FF44;">■ Groen/Blauw:</span> Speler heeft tussen <strong>83.3% en 120%</strong> van jouw punten</li>
-            </ul>
-
-            <h3>Hoe werkt het?</h3>
-            <p>De helper analyseert alle zichtbare steden op de kaart en kleurt ze gebaseerd op:</p>
-            <ol>
-                <li>Punten van de speler die de stad bezit</li>
-                <li>Vergelijking met jouw punten (${this.pPoints})</li>
-            </ol>
-
-            <h3>Berekeningsformule:</h3>
-            <p>Attack range = <strong>0.833 × jouw punten</strong> tot <strong>1.2 × jouw punten</strong></p>
-            <p>Binnen dit bereik: <span style="color: #44FF44;">Groen/Blauw</span><br>
-            Buiten dit bereik: <span style="color: #FF4444;">Rood/Orange</span></p>
-
-            <div style="text-align: center; margin-top: 20px;">
-                <button id="closeHelpBtn" style="
-                    background: #FF0000;
-                    color: white;
-                    border: none;
-                    padding: 8px 20px;
-                    border-radius: 5px;
-                    cursor: pointer;
-                ">Sluiten</button>
-            </div>
-        `;
-
-            // Voeg toe aan DOM
-            document.body.appendChild(this.helpPopup);
-
-            // Sluitknop functionaliteit
-            document.getElementById('closeHelpBtn').addEventListener('click', () => {
-                document.body.removeChild(this.helpPopup);
-                this.helpPopup = null;
-            });
         }
 
         addToggleButton(label, helpText, onClick) {
@@ -1491,37 +1603,415 @@
         }
     }
 
+    class FeestenFixedManager {
+        constructor() {
+            this.isActive = false;
+            this.container = null;
+            this.box = null;
+            this.triggerBtn = null;
+            this.initialized = false;
+            this.interval = null;
+            this.helpPopup = null;
+
+            this.init();
+        }
+
+        init() {
+            if (this.initialized) return;
+
+            this.addStyles();
+            this.createUIElements();
+            this.initialized = true;
+        }
+
+        toggle(state) {
+            if (state === 'on') {
+                this.show();
+            } else {
+                this.hide();
+            }
+        }
+
+        addStyles() {
+            const styleElement = document.createElement('style');
+            styleElement.textContent = `
+            #feestenFixedContainer {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                z-index: 9999;
+                display: none;
+            }
+
+            .feestenFixedBox {
+                position: absolute;
+                right: 0;
+                bottom: 50px;
+                background-color: rgba(30, 30, 30, 0.9);
+                border: 1px solid #FF0000;
+                padding: 10px;
+                width: 300px;
+                max-height: 400px;
+                overflow: auto;
+                border-radius: 10px;
+                display: none;
+                color: white;
+                font-family: Arial, sans-serif;
+            }
+
+            #feestenFixedTrigger {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                background-color: #1e1e1e;
+                color: #FF0000;
+                border: 1px solid #FF0000;
+                padding: 8px 16px;
+                font-size: 14px;
+                cursor: pointer;
+                z-index: 1000;
+                border-radius: 5px;
+                transition: all 0.3s ease;
+            }
+
+            #feestenFixedTrigger:hover {
+                background-color: #FF0000 !important;
+                color: white !important;
+            }
+
+            #feestenFixedTrigger.active {
+                background-color: #f44336 !important;
+                color: white !important;
+            }
+
+            .feestenFixedBox div {
+                margin: 5px 0;
+                padding: 5px;
+                background-color: rgba(255, 255, 255, 0.1);
+                border-radius: 3px;
+            }
+
+            .feestenFixedBox a {
+                color: #FF4444;
+                text-decoration: none;
+            }
+
+            .feestenFixedBox a:hover {
+                text-decoration: underline;
+            }
+        `;
+            document.head.appendChild(styleElement);
+        }
+
+        createUIElements() {
+            // Main container
+            this.container = document.createElement('div');
+            this.container.id = 'feestenFixedContainer';
+            document.body.appendChild(this.container);
+
+            // Content box
+            this.box = document.createElement('div');
+            this.box.className = 'feestenFixedBox';
+            this.container.appendChild(this.box);
+
+            // Trigger button
+            this.triggerBtn = document.createElement('button');
+            this.triggerBtn.id = 'feestenFixedTrigger';
+            this.triggerBtn.textContent = 'Show SFs';
+            this.container.appendChild(this.triggerBtn);
+
+            // Event listeners
+            this.triggerBtn.addEventListener('click', () => this.toggleBox());
+        }
+
+        show() {
+            if (!this.container) return;
+            this.container.style.display = 'block';
+            this.isActive = true;
+            this.refreshContent();
+            this.interval = setInterval(() => this.refreshContent(), 10000);
+        }
+
+        hide() {
+            if (!this.container) return;
+            this.container.style.display = 'none';
+            this.box.style.display = 'none';
+            this.isActive = false;
+            this.triggerBtn.classList.remove('active');
+            if (this.interval) {
+                clearInterval(this.interval);
+                this.interval = null;
+            }
+        }
+
+        toggleBox() {
+            if (!this.box) return;
+            if (this.box.style.display === 'block') {
+                this.box.style.display = 'none';
+                this.triggerBtn.classList.remove('active');
+            } else {
+                this.box.style.display = 'block';
+                this.triggerBtn.classList.add('active');
+                this.refreshContent();
+            }
+        }
+
+        refreshContent() {
+            if (!this.box || !this.isActive) return;
+
+            this.box.innerHTML = '';
+
+            try {
+                const celebrations = Object.values(unsafeWindow.MM.getModels().Celebration || {});
+                const towns = Object.values(unsafeWindow.ITowns.getTowns() || {});
+                let hasContent = false;
+
+                for (const town of towns) {
+                    const townId = town.getId();
+                    const townName = town.getName();
+                    const theaterLevel = town.buildings()?.attributes?.theater || 0;
+                    const academyLevel = town.buildings()?.attributes?.academy || 0;
+
+                    const hasParty = celebrations.some(c =>
+                                                       c.attributes?.town_id === townId &&
+                                                       c.attributes?.celebration_type === 'party'
+                                                      );
+
+                    const hasTheater = celebrations.some(c =>
+                                                         c.attributes?.town_id === townId &&
+                                                         c.attributes?.celebration_type === 'theater'
+                                                        );
+
+                    let message = '';
+                    if (theaterLevel === 1 && !hasTheater) {
+                        message += 'Activeer theater ';
+                    }
+                    if (academyLevel >= 30 && !hasParty) {
+                        message += 'Activeer SF ';
+                    }
+
+                    if (message) {
+                        hasContent = true;
+                        const townLink = this.generateTownLink(townId, townName);
+                        const msgElement = document.createElement('div');
+                        msgElement.innerHTML = `${townLink}: ${message}`;
+                        this.box.appendChild(msgElement);
+                    }
+                }
+
+                if (!hasContent) {
+                    const defaultMsg = document.createElement('div');
+                    defaultMsg.textContent = 'Alle SFs en theaters in gebruik';
+                    this.box.appendChild(defaultMsg);
+                }
+            } catch (error) {
+                const errorMsg = document.createElement('div');
+                errorMsg.textContent = 'Fout bij ophalen data';
+                errorMsg.style.color = '#FF4444';
+                this.box.appendChild(errorMsg);
+                console.error('FeestenFixed error:', error);
+            }
+        }
+
+        generateTownLink(townId, townName) {
+            const encodedData = btoa(JSON.stringify({
+                id: townId,
+                ix: 436,
+                iy: 445,
+                tp: 'town',
+                name: townName
+            }));
+            return `<a href="#${encodedData}" class="gp_town_link">${townName}</a>`;
+        }
+
+        showCustomHelp() {
+            const existing = document.getElementById('feestenfixed-help-popup');
+            if (existing) existing.remove();
+
+            const popup = document.createElement('div');
+            popup.id = 'feestenfixed-help-popup';
+            popup.style.cssText = `
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1e1e1e;
+        color: white;
+        border: 2px solid #FF0000;
+        padding: 20px;
+        border-radius: 10px;
+        z-index: 99999;
+        max-width: 500px;
+        box-shadow: 0 0 15px #FF0000;
+        font-family: Arial, sans-serif;
+    `;
+            popup.innerHTML = `
+            <div style="border-bottom: 1px solid #444; margin-bottom: 15px;">
+                <h2 style="color: #FF0000; margin: 0 0 10px 0;">FeestenFixed Help</h2>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <h3 style="color: #FF8888; margin: 0 0 8px 0;">Functionaliteit</h3>
+                <p>Dit hulpmiddel identificeert steden waar:</p>
+                <ul style="margin: 8px 0 0 20px; padding: 0;">
+                    <li>Stadsfeesten (SF) geactiveerd kunnen worden</li>
+                    <li>Theatervoorstellingen gestart kunnen worden</li>
+                </ul>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <h3 style="color: #FF8888; margin: 0 0 8px 0;">Vereisten</h3>
+                <ul style="margin: 8px 0 0 20px; padding: 0;">
+                    <li><strong>Stadsfeest:</strong> Academie niveau 30+</li>
+                    <li><strong>Theater:</strong> Theater gebouw niveau 1</li>
+                </ul>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: #FF8888; margin: 0 0 8px 0;">Gebruiksaanwijzing</h3>
+                <ol style="margin: 8px 0 0 20px; padding: 0;">
+                    <li>Activeer FeestenFixed via de toggle switch</li>
+                    <li>Klik op "Show SFs" knop rechtsonder</li>
+                    <li>Klik op stadnamen om direct te navigeren</li>
+                    <li>Automatische refresh elke 10 seconden</li>
+                </ol>
+            </div>
+
+            <div style="text-align: center;">
+                <button id="close-feestenfixed-help" style="
+            display:block; margin:20px auto 0;
+            background:black; color:white;
+            padding:5px 15px; border:1px solid #FF0000;
+            border-radius:5px; cursor:pointer;">Sluiten</button>
+    `;
+
+            document.body.appendChild(popup);
+
+            document.getElementById('close-feestenfixed-help').addEventListener('click', () => popup.remove());
+        }
+    }
+
     class AttackRangeHelperManager {
         constructor(uw) {
-            this.uw = uw || window;
+            this.uw = uw;
+            this.initialized = false;
             this.townInterval = null;
             this.isActive = false;
             this.playerList = [];
             this.townsList = [];
             this.pPoints = 0;
             this.helpPopup = null;
-            this.initialize();
+        }
+
+        showHelpPopup() {
+            const existingPopup = document.getElementById('attackrange-help-popup');
+            if (existingPopup) {
+                existingPopup.remove(); // Verwijder als hij al bestaat
+            }
+
+            const popup = document.createElement('div');
+            popup.id = 'attackrange-help-popup';
+            popup.style.cssText = `
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1e1e1e;
+        color: white;
+        border: 2px solid #FF0000;
+        padding: 20px;
+        border-radius: 10px;
+        z-index: 99999;
+        max-width: 500px;
+        box-shadow: 0 0 15px #FF0000;
+        font-family: Arial, sans-serif;
+    `;
+            popup.innerHTML = `
+        <h3 style="color:#FF0000; text-align:center;">AttackRange Helper – Uitleg</h3>
+        <p>Deze tool toont automatisch welke steden zich in jouw aanvalsbereik bevinden.</p>
+        <ul>
+                <li><b>Groen:</b> Steden binnen bereik en lager in punten.</li>
+                <li><b>Geel:</b> Binnen bereik maar vergelijkbaar in punten.</li>
+                <li><b>Rood:</b> Buiten bereik of gevaarlijke tegenstanders.</li>
+            </ul>
+        <p>De kleuren worden toegepast op steden op de kaart.</p>
+        <button id="close-attackrange-help" style="
+            display:block; margin:20px auto 0;
+            background:black; color:white;
+            padding:5px 15px; border:1px solid #FF0000;
+            border-radius:5px; cursor:pointer;">Sluiten</button>
+    `;
+            document.body.appendChild(popup);
+
+            document.getElementById('close-attackrange-help').addEventListener('click', () => {
+                popup.remove();
+            });
+        }
+
+
+        toggle(state) {
+            if (!this.initialized) {
+                console.error("AttackRangeHelper is not initialized yet");
+                return;
+            }
+            this.isActive = state === 'on';
+            if (this.isActive) {
+                this.townInterval = setInterval(() => this.townColoring(), 1500);
+            } else {
+                if (this.townInterval) {
+                    clearInterval(this.townInterval);
+                    this.townInterval = null;
+                }
+                this.cleanupBlessings();
+            }
         }
 
         async initialize() {
             try {
-                // Method 1: Try to get points from Game object
-                this.pPoints = this.uw.Game?.player_points ||
-                    this.uw.Game?.player_data?.points ||
-                    0;
+                // Wacht op vereiste game objecten
+                await this.waitForGameReady();
 
-                // Method 2: Fallback to DOM parsing if needed
-                if (this.pPoints === 0) {
-                    this.pPoints = this.getPlayerPointsFromDOM();
-                }
+                this.pPoints = this.uw.Game.player_points ||
+                    this.uw.Game.player_data?.points ||
+                    this.getPlayerPointsFromDOM();
 
-                // Load player and town data
-                this.playerList = await this.loadData("/data/players.txt");
-                this.townsList = await this.loadData("/data/towns.txt");
-
+                await this.loadGameData();
                 this.injectStyles();
+                this.initialized = true;
+                console.log("AttackRangeHelper succesvol geïnitialiseerd");
             } catch (error) {
-                console.error("Initialization error:", error);
+                console.error("Initialisatiefout:", error);
+                throw error;
+            }
+            console.log("[AttackRangeHelper] Geïnstalleerd.");
+        }
+
+        async waitForGameReady() {
+            return new Promise((resolve, reject) => {
+                let attempts = 0;
+                const check = () => {
+                    if (this.uw.ITowns && this.uw.MM) {
+                        resolve();
+                    } else if (attempts < 30) {
+                        attempts++;
+                        setTimeout(check, 250);
+                    } else {
+                        reject(new Error("Game objecten niet gevonden"));
+                    }
+                };
+                check();
+            });
+        }
+
+        async loadGameData() {
+            try {
+                [this.playerList, this.townsList] = await Promise.all([
+                    this.loadData("/data/players.txt"),
+                    this.loadData("/data/towns.txt")
+                ]);
+            } catch (error) {
+                console.error("Data laden mislukt:", error);
+                throw error;
             }
         }
 
@@ -1605,24 +2095,33 @@
                     pointer-events: none !important;
                 }
             `;
-            
+
             // Alternatief voor GM_addStyle
             const styleElement = document.createElement('style');
             styleElement.textContent = css;
             document.head.appendChild(styleElement);
         }
 
+        // toggle methode met initialisatie check
         toggle(state) {
+            if (!this.initialized) {
+                console.error("AttackRangeHelper not initialized");
+                return;
+            }
             this.isActive = state === 'on';
             if (this.isActive) {
                 this.townInterval = setInterval(() => this.townColoring(), 1500);
-                // You could add other UI updates here like the original script does
             } else {
                 if (this.townInterval) {
                     clearInterval(this.townInterval);
                     this.townInterval = null;
                 }
                 this.cleanupBlessings();
+            }
+            if (state === 'on') {
+                this.townColoring(true);
+            } else {
+                this.townColoring(false);
             }
         }
 
