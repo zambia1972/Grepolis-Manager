@@ -203,336 +203,340 @@
                         "                    Fase 2 begint om: \n" +
                         "                    Fase 2 eindigt om: \n" +
                         "                    [spoiler=Rapporten] \n" +
-                        "                    *Opstandsrapport(ten)!!!*\n" +
-                        "                    [/spoiler]\n"
-                    }
-                ],
-                Deff: [
-                    {
-                        title: "Pre-deff", content: "Vraag hier je pre-deff aan voor belangrijke steden.\n" +
-                        "\n" +
-                        "                    Pre-deff kan je krijgen op voorwaarde dat je muur 25 is en Toren.\n" +
-                        "\n" +
-                        "                    hoe aanvragen:\n" +
-                        "                    stadsnaam: in BB\n" +
-                        "                    Muur Lv:\n" +
-                        "                    Toren:\n" +
-                        "                    aanwezige Lt:\n"
-                    },
-                ],
-                Offens: [
-                    {
-                        title: "OFF. | Template", content: "Titel\n" +
-                        "                    VB: Oceaan | Te veroveren stadsnaam | Status\n" +
-                        "                    VB: 55 | 55-01 | Opstand/ VS clear nodig\n" +
-                        "\n" +
-                        "                    -------------------------------------------------------\n" +
-                        "\n" +
-                        "                    Alliantie:\n" +
-                        "                    Speler:\n" +
-                        "                    Stad:\n" +
-                        "\n" +
-                        "                    Gevraagde hulp: Spionage/ VS clear/ Zee clear\n" +
-                        "\n" +
-                        "                    [spoiler=Recentste spionage][/spoiler]\n" +
-                        "\n" +
-                        "                    [spoiler=Opstand aanval][/spoiler]\n"
-                    },
-                    {
-                        title: "Opstand breken met Helena", content: "[b]Aan wie Helena bezit:[/b]\n" +
-                        "                Zorg dat Helena op Lv 20 is.\n" +
-                        "                meld hier in welke stad Helena zit.\n" +
-                        "                controleer hier regelmatig naar opstanden.\n" +
-                        "\n" +
-                        "                [b]Aan wie opstand heeft:[/b]\n" +
-                        "\n" +
-                        "                Laat hier onmiddellijk weten waar er opstand in een stad word gezet (zelfs indien je zeker bent van een opstand, nog voor die er is).\n" +
-                        "\n" +
-                        "                stad: in BB\n" +
-                        "                F2 tijd:\n" +
-                        "\n" +
-                        "                [table]\n" +
-                        "                [**]naam[||]lv[||]stad[||][/**]\n" +
-                        "                [*][|][|][|][/*]\n" +
-                        "                [/table]\n"
-                    },
-                    {
-                        title: "Spionage rapporten", content: "Hier kan je alle recente spionage rapporten bekijken."
-                    },
-                ],
-                Massa_Aanval: [
-                    {title: "Massa-aanvallen", content: "Inhoud van Massa-aanvallen..."},
-                ],
-                Interne_Overnames: [
-                    {title: "Interne overnames", content: "Inhoud van Interne overnames..."},
-                ],
-                Cluster: [
-                    {title: "Clusterbeheer", content: "Inhoud van Clusterbeheer..."},
-                ],
-                Kroeg: [
-                    {title: "Kroegpraat", content: "Inhoud van Kroegpraat..."},
-                ],
-                Leiding: [
-                    {title: "Leidinggevenden", content: "Inhoud van Leidinggevenden..."},
-                ],
-            };
-
-            this.popup = null;
-            this.playerName = '';
-            this.server = '';
-            this.fora = [/* ... blijft hetzelfde ... */];
-            this.topicsData = {/* ... blijft hetzelfde ... */};
-            this.militaryManager = new MilitaryManager();
-            this.initHelpers();
-
-            this.initializeDependencies().then(() => {
-                this.initializeScript(); // Hier worden de knoppen gemaakt
-                this.fetchPlayerInfo();
-                this.injectAfwezigheidsassistent();
-            }).catch(error => {
-                console.error("Initialisatie mislukt:", error);
-            });
-        }
-
-        async initHelpers() {
-            try {
-                // Voeg de ontbrekende methode toe
-                await this.waitForGameReady();
-                this.attackRangeHelper = new AttackRangeHelperManager(unsafeWindow);
-                await this.attackRangeHelper.initialize();
-            } catch (error) {
-                console.error('Helper initialisatie mislukt:', error);
-                this.attackRangeHelper = this.createFallbackHelper();
-            }
-        }
-
-        async initializeDependencies() {
-            try {
-                await this.waitForGameReady();
-                // Initialiseer AttackRangeHelperManager EERST
-                this.attackRangeHelper = new AttackRangeHelperManager(unsafeWindow);
-                await this.attackRangeHelper.initialize(); // Wacht op initialisatie
-                this.feestenFixed = new FeestenFixedManager();
-                console.log("[DEBUG] Dependencies geïnitialiseerd");
-            } catch (e) {
-                console.error("Fout bij initialiseren dependencies:", e);
-                this.attackRangeHelper = this.createFallbackHelper();
-            }
-        }
-
-        // Implementeer de ontbrekende methode
-        waitForGameReady() {
-            return new Promise((resolve, reject) => {
-                let attempts = 0;
-                const check = () => {
-                    if (typeof unsafeWindow.Game !== 'undefined' &&
-                        typeof unsafeWindow.ITowns !== 'undefined') {
-                        resolve();
-                    } else if (attempts < 30) {
-                        attempts++;
-                        setTimeout(check, 250);
-                    } else {
-                        reject(new Error("Game objecten niet gevonden"));
-                    }
+                            "                    *Opstandsrapport(ten)!!!*\n" +
+                            "                    [/spoiler]\n"
+                        }
+                    ],
+                    Deff: [
+                        {
+                            title: "Pre-deff", content: "Vraag hier je pre-deff aan voor belangrijke steden.\n" +
+                            "\n" +
+                            "                    Pre-deff kan je krijgen op voorwaarde dat je muur 25 is en Toren.\n" +
+                            "\n" +
+                            "                    hoe aanvragen:\n" +
+                            "                    stadsnaam: in BB\n" +
+                            "                    Muur Lv:\n" +
+                            "                    Toren:\n" +
+                            "                    aanwezige Lt:\n"
+                        },
+                    ],
+                    Offens: [
+                        {
+                            title: "OFF. | Template", content: "Titel\n" +
+                            "                    VB: Oceaan | Te veroveren stadsnaam | Status\n" +
+                            "                    VB: 55 | 55-01 | Opstand/ VS clear nodig\n" +
+                            "\n" +
+                            "                    -------------------------------------------------------\n" +
+                            "\n" +
+                            "                    Alliantie:\n" +
+                            "                    Speler:\n" +
+                            "                    Stad:\n" +
+                            "\n" +
+                            "                    Gevraagde hulp: Spionage/ VS clear/ Zee clear\n" +
+                            "\n" +
+                            "                    [spoiler=Recentste spionage][/spoiler]\n" +
+                            "\n" +
+                            "                    [spoiler=Opstand aanval][/spoiler]\n"
+                        },
+                        {
+                            title: "Opstand breken met Helena", content: "[b]Aan wie Helena bezit:[/b]\n" +
+                            "                Zorg dat Helena op Lv 20 is.\n" +
+                            "                meld hier in welke stad Helena zit.\n" +
+                            "                controleer hier regelmatig naar opstanden.\n" +
+                            "\n" +
+                            "                [b]Aan wie opstand heeft:[/b]\n" +
+                            "\n" +
+                            "                Laat hier onmiddellijk weten waar er opstand in een stad word gezet (zelfs indien je zeker bent van een opstand, nog voor die er is).\n" +
+                            "\n" +
+                            "                stad: in BB\n" +
+                            "                F2 tijd:\n" +
+                            "\n" +
+                            "                [table]\n" +
+                            "                [**]naam[||]lv[||]stad[||][/**]\n" +
+                            "                [*][|][|][|][/*]\n" +
+                            "                [/table]\n"
+                        },
+                        {
+                            title: "Spionage rapporten", content: "Hier kan je alle recente spionage rapporten bekijken."
+                        },
+                    ],
+                    Massa_Aanval: [
+                        {title: "Massa-aanvallen", content: "Inhoud van Massa-aanvallen..."},
+                    ],
+                    Interne_Overnames: [
+                        {title: "Interne overnames", content: "Inhoud van Interne overnames..."},
+                    ],
+                    Cluster: [
+                        {title: "Clusterbeheer", content: "Inhoud van Clusterbeheer..."},
+                    ],
+                    Kroeg: [
+                        {title: "Kroegpraat", content: "Inhoud van Kroegpraat..."},
+                    ],
+                    Leiding: [
+                        {title: "Leidinggevenden", content: "Inhoud van Leidinggevenden..."},
+                    ],
                 };
-                check();
-            });
-        }
-
-        createFallbackHelper() {
-            return {
-                toggle: () => console.error('Helper niet beschikbaar'),
-                showHelpPopup: () => console.error('Help niet beschikbaar'),
-                townColoring: () => {}
-            };
-        }
-
-        addHelperToggle(label, helpText, onClick, onHelpClick) {
-            const container = document.getElementById('helper-buttons');
-            if (!container) return;
-
-            // Main container
-            const wrapper = document.createElement('div');
-            wrapper.style.cssText = `
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            margin-bottom: 15px;
-            align-items: flex-start;
-        `;
-
-            // Label boven de switch
-            const labelElement = document.createElement('span');
-            labelElement.textContent = label;
-            labelElement.style.cssText = `
-            color: #FF0000;
-            font-weight: bold;
-            font-size: 14px;
-            margin-left: 5px;
-        `;
-
-            // Switch container
-            const switchContainer = document.createElement('div');
-            switchContainer.style.cssText = `
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-        `;
-
-            // Switch element
-            const switchInput = document.createElement('input');
-            switchInput.type = 'checkbox';
-            switchInput.id = `switch-${label.toLowerCase().replace(/\s+/g, '-')}`;
-            switchInput.style.display = 'none';
-
-            // Visuele switch
-            const switchLabel = document.createElement('label');
-            switchLabel.htmlFor = switchInput.id;
-            switchLabel.style.cssText = `
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-            background-color: #333;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 1px solid #FF0000;
-            order: 1;
-        `;
-
-            // Switch knop
-            const switchButton = document.createElement('span');
-            switchButton.style.cssText = `
-            position: absolute;
-            height: 26px;
-            width: 26px;
-            left: 2px;
-            bottom: 2px;
-            background-color: white;
-            border-radius: 50%;
-            transition: all 0.3s;
-        `;
-
-            // Help knop
-            const helpBtn = document.createElement('button');
-            helpBtn.innerHTML = '?';
-            helpBtn.title = helpText;
-            helpBtn.style.cssText = `
-            background: #444;
-            color: #FFF;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: none;
-            order: 2;
-        `;
-
-            // Voeg elementen toe
-            switchLabel.appendChild(switchButton);
-            switchContainer.appendChild(switchInput);
-            switchContainer.appendChild(switchLabel);
-            switchContainer.appendChild(helpBtn);
-
-            wrapper.appendChild(labelElement);
-            wrapper.appendChild(switchContainer);
-            container.appendChild(wrapper);
-
-            // Event listeners
-            switchInput.addEventListener('change', (e) => {
-                const state = e.target.checked ? 'on' : 'off';
-                if (state === 'on') {
-                    switchLabel.style.backgroundColor = '#FF0000';
-                    switchButton.style.transform = 'translateX(30px)';
-                } else {
-                    switchLabel.style.backgroundColor = '#333';
-                    switchButton.style.transform = 'translateX(0)';
-                }
-                onClick(state);
-            });
-
-            helpBtn.addEventListener('click', () => {
-                onHelpClick();
-            });
-        }
-
-        showHelperTools() {
-            const content = document.getElementById('popup-content');
-            if (!content) return;
-
-            content.innerHTML = `
-            <h2>Helper Tools</h2>
-            <div id="helper-buttons" style="display: grid; gap: 10px;"></div>
-        `;
-
-            // AttackRange Helper
-            this.addHelperToggle(
-                'AttackRange Helper',
-                'Toont aanvalsbereik op basis van spelerspunten',
-                (state) => this.attackRangeHelper?.toggle(state),
-                () => this.attackRangeHelper?.showHelpPopup() // Gebruik optionele chaining
-            );
-
-            // FeestenFixed
-            this.addHelperToggle(
-                'FeestenFixed',
-                'Toont steden waar je Stadsfeesten en Theaters kan activeren',
-                (state) => this.feestenFixed.toggle(state),
-                () => this.feestenFixed.showCustomHelp()
-            );
-        }
-
-
-        toggleFeestenFixed(state) {
-            if (state === 'on') {
-                this.feestenFixed.show();
-            } else {
-                this.feestenFixed.hide();
+    
+                this.popup = null;
+                this.playerName = '';
+                this.server = '';
+                this.fora = [/* ... blijft hetzelfde ... */];
+                this.topicsData = {/* ... blijft hetzelfde ... */};
+                this.militaryManager = new MilitaryManager();
+                this.initHelpers();
+    
+                this.initializeDependencies().then(() => {
+                    this.initializeScript(); // Hier worden de knoppen gemaakt
+                    this.fetchPlayerInfo();
+                    this.injectAfwezigheidsassistent();
+                }).catch(error => {
+                    console.error("Initialisatie mislukt:", error);
+                });
             }
-        }
-
-        // Initialiseer het script
-        initializeScript() {
-            this.addMainButton();
-            this.injectStyles();
-        }
-
-        addMainButton() {
-             const button = document.createElement('div');
-    button.id = 'grepolis-manager-main-btn';
-    button.style.cssText = `
-        position: fixed;
-        bottom: 60px;
-        right: 30px;
-        width: 60px;
-        height: 60px;
-        background-image: url('https://imgur.com/I62TXeo.png');
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        border-radius: 50%;
-        border: 2px solid #caa35d;
-        box-shadow: 0 0 15px #caa35d;
-        cursor: pointer;
-        z-index: 99999;
-    `;
-
-    button.title = 'Open Grepolis Manager';
-    button.addEventListener('click', () => {
-        // Vervang dit met je hoofdscherm logic
-        console.log('Grepolis Manager geopend');
-        toggleMainWindow();
-    });
-
-    document.body.appendChild(button);
-}
-
-        createPopup() {
+    
+            async initHelpers() {
+                try {
+                    // Voeg de ontbrekende methode toe
+                    await this.waitForGameReady();
+                    this.attackRangeHelper = new AttackRangeHelperManager(unsafeWindow);
+                    await this.attackRangeHelper.initialize();
+                } catch (error) {
+                    console.error('Helper initialisatie mislukt:', error);
+                    this.attackRangeHelper = this.createFallbackHelper();
+                }
+            }
+    
+            async initializeDependencies() {
+                try {
+                    await this.waitForGameReady();
+                    // Initialiseer AttackRangeHelperManager EERST
+                    this.attackRangeHelper = new AttackRangeHelperManager(unsafeWindow);
+                    await this.attackRangeHelper.initialize(); // Wacht op initialisatie
+                    this.feestenFixed = new FeestenFixedManager();
+                    console.log("[DEBUG] Dependencies geïnitialiseerd");
+                } catch (e) {
+                    console.error("Fout bij initialiseren dependencies:", e);
+                    this.attackRangeHelper = this.createFallbackHelper();
+                }
+            }
+    
+            // Implementeer de ontbrekende methode
+            waitForGameReady() {
+                return new Promise((resolve, reject) => {
+                    let attempts = 0;
+                    const check = () => {
+                        if (typeof unsafeWindow.Game !== 'undefined' &&
+                            typeof unsafeWindow.ITowns !== 'undefined') {
+                            resolve();
+                        } else if (attempts < 30) {
+                            attempts++;
+                            setTimeout(check, 250);
+                        } else {
+                            reject(new Error("Game objecten niet gevonden"));
+                        }
+                    };
+                    check();
+                });
+            }
+    
+            createFallbackHelper() {
+                return {
+                    toggle: () => console.error('Helper niet beschikbaar'),
+                    showHelpPopup: () => console.error('Help niet beschikbaar'),
+                    townColoring: () => {}
+                };
+            }
+    
+            addHelperToggle(label, helpText, onClick, onHelpClick) {
+                const container = document.getElementById('helper-buttons');
+                if (!container) return;
+    
+                // Main container
+                const wrapper = document.createElement('div');
+                wrapper.style.cssText = `
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                margin-bottom: 15px;
+                align-items: flex-start;
+            `;
+    
+                // Label boven de switch
+                const labelElement = document.createElement('span');
+                labelElement.textContent = label;
+                labelElement.style.cssText = `
+                color: #FF0000;
+                font-weight: bold;
+                font-size: 14px;
+                margin-left: 5px;
+            `;
+    
+                // Switch container
+                const switchContainer = document.createElement('div');
+                switchContainer.style.cssText = `
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                width: 100%;
+            `;
+    
+                // Switch element
+                const switchInput = document.createElement('input');
+                switchInput.type = 'checkbox';
+                switchInput.id = `switch-${label.toLowerCase().replace(/\s+/g, '-')}`;
+                switchInput.style.display = 'none';
+    
+                // Visuele switch
+                const switchLabel = document.createElement('label');
+                switchLabel.htmlFor = switchInput.id;
+                switchLabel.style.cssText = `
+                position: relative;
+                display: inline-block;
+                width: 60px;
+                height: 30px;
+                background-color: #333;
+                border-radius: 15px;
+                cursor: pointer;
+                transition: all 0.3s;
+                border: 1px solid #FF0000;
+                order: 1;
+            `;
+    
+                // Switch knop
+                const switchButton = document.createElement('span');
+                switchButton.style.cssText = `
+                position: absolute;
+                height: 26px;
+                width: 26px;
+                left: 2px;
+                bottom: 2px;
+                background-color: white;
+                border-radius: 50%;
+                transition: all 0.3s;
+            `;
+    
+                // Help knop
+                const helpBtn = document.createElement('button');
+                helpBtn.innerHTML = '?';
+                helpBtn.title = helpText;
+                helpBtn.style.cssText = `
+                background: #444;
+                color: #FFF;
+                border-radius: 50%;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                border: none;
+                order: 2;
+            `;
+    
+                // Voeg elementen toe
+                switchLabel.appendChild(switchButton);
+                switchContainer.appendChild(switchInput);
+                switchContainer.appendChild(switchLabel);
+                switchContainer.appendChild(helpBtn);
+    
+                wrapper.appendChild(labelElement);
+                wrapper.appendChild(switchContainer);
+                container.appendChild(wrapper);
+    
+                // Event listeners
+                switchInput.addEventListener('change', (e) => {
+                    const state = e.target.checked ? 'on' : 'off';
+                    if (state === 'on') {
+                        switchLabel.style.backgroundColor = '#FF0000';
+                        switchButton.style.transform = 'translateX(30px)';
+                    } else {
+                        switchLabel.style.backgroundColor = '#333';
+                        switchButton.style.transform = 'translateX(0)';
+                    }
+                    onClick(state);
+                });
+    
+                helpBtn.addEventListener('click', () => {
+                    onHelpClick();
+                });
+            }
+    
+            showHelperTools() {
+                const content = document.getElementById('popup-content');
+                if (!content) return;
+    
+                content.innerHTML = `
+                <h2>Helper Tools</h2>
+                <div id="helper-buttons" style="display: grid; gap: 10px;"></div>
+            `;
+    
+                // AttackRange Helper
+                this.addHelperToggle(
+                    'AttackRange Helper',
+                    'Toont aanvalsbereik op basis van spelerspunten',
+                    (state) => this.attackRangeHelper?.toggle(state),
+                    () => this.attackRangeHelper?.showHelpPopup() // Gebruik optionele chaining
+                );
+    
+                // FeestenFixed
+                this.addHelperToggle(
+                    'FeestenFixed',
+                    'Toont steden waar je Stadsfeesten en Theaters kan activeren',
+                    (state) => this.feestenFixed.toggle(state),
+                    () => this.feestenFixed.showCustomHelp()
+                );
+            }
+    
+    
+            toggleFeestenFixed(state) {
+                if (state === 'on') {
+                    this.feestenFixed.show();
+                } else {
+                    this.feestenFixed.hide();
+                }
+            }
+    
+            // Initialiseer het script
+            initializeScript() {
+                this.addMainButton();
+                this.injectStyles();
+            }
+    
+            addMainButton() {
+                 const button = document.createElement('div');
+        button.id = 'grepolis-manager-main-btn';
+        button.style.cssText = `
+            position: fixed;
+            bottom: 60px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-image: url('https://imgur.com/I62TXeo.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            border-radius: 50%;
+            border: 2px solid #caa35d;
+            box-shadow: 0 0 15px #caa35d;
+            cursor: pointer;
+            z-index: 99999;
+        `;
+    
+        button.title = 'Open Grepolis Manager';
+        button.addEventListener('click', () => {
+            // Vervang dit met je hoofdscherm logic
+            console.log('Grepolis Manager geopend');
+            toggleMainWindow();
+        });
+    
+        document.body.appendChild(button);
+    }
+    
+            function toggleMainWindow() {
+        alert('Grepolis Manager geopend! (Placeholder)');
+    }
+    
+            createPopup() {
             if (!this.popup) {
                 this.popup = document.createElement('div');
                 this.popup.id = 'forum-popup';
