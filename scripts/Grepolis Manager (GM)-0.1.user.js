@@ -502,34 +502,33 @@
                 this.injectStyles();
             }
 
-            addMainButton() {
-                 const button = document.createElement('div');
-        button.id = 'grepolis-manager-main-btn';
-        button.style.cssText = `
-            position: fixed;
-            bottom: 60px;
-            left: 30px;
-            width: 60px;
-            height: 60px;
-            background-image: url('https://imgur.com/I62TXeo.png');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            border-radius: 50%;
-            border: 2px solid #caa35d;
-            box-shadow: 0 0 15px #caa35d;
-            cursor: pointer;
-            z-index: 99999;
-        `;
+        addMainButton() {
+            const button = document.createElement('div');
+            button.id = 'grepolis-manager-main-btn';
+            button.style.cssText = `
+        position: fixed;
+        bottom: 60px;
+        left: 30px; /* <-- aangepast van right naar left */
+        width: 60px;
+        height: 60px;
+        background-image: url('https://imgur.com/I62TXeo.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        border-radius: 50%;
+        border: 2px solid #caa35d;
+        box-shadow: 0 0 15px #caa35d;
+        cursor: pointer;
+        z-index: 99999;
+    `;
 
-                button.title = 'Open Grepolis Manager';
-                button.addEventListener('click', () => {
-                    // Vervang dit met je hoofdscherm logic
-                    console.log('Grepolis Manager geopend');
-                    this.toggleMainWindow();
-                });
-                document.body.appendChild(button);
-            }
+            button.title = 'Open Grepolis Manager';
+            button.addEventListener('click', () => {
+                this.toggleMainWindow(); // gebruik 'this.'
+            });
+
+            document.body.appendChild(button);
+        }
 
         toggleMainWindow() {
             this.createPopup(); // Dit toont je hoofdscherm
