@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name		GrepoTools
 // @namespace	https://www.grepotools.nl/
-// @version		1.9.7
+// @version		1.9.9
 // @author		Marcel_Z
 // @description Grepotools.nl | Script for InnoGames Grepolis
 // @match       http://*.grepolis.com/game/*
@@ -3489,7 +3489,7 @@ let islandNumbers = {
 
 // Module: mapTags
 // Discrption: This module will render and display maptags on the map.
-// Last Updated: 2025/01/05
+// Last Updated: 2025/01/07
 
 let mapTags = {
   module: "mapTags",
@@ -3606,105 +3606,54 @@ let mapTags = {
   },
 
   animate() {
-    let start;
-    // NOTE this is a workarround if DioTools is active
-    if ($("#town_icon > div.town_icon_bg").get(0)) {
-      start = 1;
-    } else {
-      start = 0;
-    }
+    if (!this.rendered || !externalData.townDataLoaded) return;
+    mapTags.towns = $("[id^=town]").not("[id*=flag]").toArray();
 
-    // reset nessasary when a setting has changd or the data has reloaded from the server
-    if (mapTags.mapTagsReset) {
-      for (let i = start; i < mapTags.towns.length; i++) {
-        let townID = JSON.parse(atob(mapTags.towns[i].hash.substr(1))).id;
-        $("#town_flag_" + townID).empty();
+    const townsLength = mapTags.towns.length;
+    mapTags.towns.forEach((town, i) => {
+      if (i === townsLength - 1 && mapTags.mapTagsReset)
+        mapTags.mapTagsReset = false;
+
+      if (town.className === "flag town" || !town.hash) return;
+
+      const townID = JSON.parse(atob(town.hash.substr(1))).id;
+      if (mapTags.mapTagsReset) $("#town_flag_" + townID).empty();
+      if (!externalData.townData.has(townID.toString())) return;
+
+      const townData = externalData.townData.get(townID.toString());
+      const playerName = townData.playerName
+        ? decodeURIComponent(townData.playerName.split("+").join(" "))
+        : "";
+      const tag_speler_id = townData.playerId || "";
+      const townName = decodeURIComponent(
+        townData.townName.split("+").join(" ")
+      );
+      const allianceName = townData.allianceName
+        ? decodeURIComponent(townData.allianceName.split("+").join(" "))
+        : "";
+      const townPoints = townData.points;
+      const windDirection = mapTags.getTownWindDirection(town.className);
+      let idle = 0;
+
+      if (
+        externalData.idleDataLoaded &&
+        externalData.idleData.has(tag_speler_id.toString())
+      ) {
+        idle = externalData.idleData.get(tag_speler_id.toString()).idle;
       }
-      mapTags.mapTagsReset = false;
-    }
 
-    mapTags.towns = $("[id^=town]")
-      .not("[id*=flag]")
-      .not("[id*=info-]")
-      .not("[id*=bbcode]")
-      .toArray();
-
-    if (externalData.townDataLoaded) {
-      for (let i = start; i < mapTags.towns.length; i++) {
-        if (mapTags.towns[i].className != "flag town") {
-          try {
-            let townID = JSON.parse(atob(mapTags.towns[i].hash.substr(1))).id;
-
-            if (externalData.townData.has(townID.toString())) {
-              let playerName = "";
-              let tag_speler_id = "";
-              let allianceName;
-
-              externalData.townData.get(townID.toString()).playerName != null
-                ? (playerName = decodeURIComponent(
-                    externalData.townData
-                      .get(townID.toString())
-                      .playerName.split("+")
-                      .join(" ")
-                  ))
-                : (playerName = "");
-
-              externalData.townData.get(townID.toString()).playerId != null
-                ? (tag_speler_id = externalData.townData.get(
-                    townID.toString()
-                  ).playerId)
-                : (tag_speler_id = "");
-
-              let townName = decodeURIComponent(
-                externalData.townData
-                  .get(townID.toString())
-                  .townName.split("+")
-                  .join(" ")
-              );
-
-              externalData.townData.get(townID.toString()).allianceName != null
-                ? (allianceName = decodeURIComponent(
-                    externalData.townData
-                      .get(townID.toString())
-                      .allianceName.split("+")
-                      .join(" ")
-                  ))
-                : (allianceName = "");
-
-              let townPoints = externalData.townData.get(
-                townID.toString()
-              ).points;
-              let windDirection = mapTags.getTownWindDirection(
-                mapTags.towns[i].className
-              );
-              let idle = 0;
-
-              if (externalData.idleDataLoaded) {
-                if (externalData.idleData.has(tag_speler_id.toString())) {
-                  idle = externalData.idleData.get(
-                    tag_speler_id.toString()
-                  ).idle;
-                }
-              }
-
-              if (!document.getElementById("gt_" + townID.toString())) {
-                this.draw(
-                  townID,
-                  playerName,
-                  townName,
-                  townPoints,
-                  allianceName,
-                  windDirection,
-                  idle
-                );
-              }
-            }
-          } catch (error) {
-            return;
-          }
-        }
+      if (!$("#gt_" + townID.toString()).length) {
+        this.draw(
+          townID,
+          playerName,
+          townName,
+          townPoints,
+          allianceName,
+          windDirection,
+          idle
+        );
       }
-    }
+    });
   },
 
   getTownWindDirection(className) {
@@ -3725,39 +3674,31 @@ let mapTags = {
   ) {
     let tagText = "";
     let lines = 0;
-    let linesCss = "";
-
-    if (this.getSettingValue("settingPlayerName") && playerName) lines++;
-    if (this.getSettingValue("settingAllianceName") && playerName) lines++;
-    if (this.getSettingValue("settingTownName")) lines++;
-    if (this.getSettingValue("settingTownPoints")) lines++;
-
     const regelClasses = ["", "one", "two", "three", "four"];
-    linesCss = regelClasses[lines] || "";
 
-    if (this.getSettingValue("settingAllianceName") && playerName) {
-      tagText = allianceName || "";
-    }
+    const settings = [
+      { key: "settingPlayerName", value: playerName },
+      { key: "settingAllianceName", value: allianceName },
+      { key: "settingTownName", value: townName },
+      {
+        key: "settingTownPoints",
+        value: `${townPoints} ${
+          language[language.settingActiveLanguage].points
+        }`,
+      },
+    ];
 
-    if (this.getSettingValue("settingPlayerName") && playerName) {
-      tagText = tagText ? `${tagText}<br>${playerName}` : playerName;
-    }
+    settings.forEach((setting) => {
+      if (this.getSettingValue(setting.key) && setting.value) {
+        lines++;
+        tagText = tagText ? `${tagText}<br>${setting.value}` : setting.value;
+      }
+    });
 
-    if (this.getSettingValue("settingTownName")) {
-      tagText = tagText ? `${tagText}<br>${townName}` : townName;
-    }
+    const linesCss = regelClasses[lines] || "";
 
-    if (this.getSettingValue("settingTownPoints")) {
-      const puntenTekst = `${townPoints} ${
-        language[language.settingActiveLanguage].points
-      }`;
-      tagText = tagText ? `${tagText}<br>${puntenTekst}` : puntenTekst;
-    }
-
-    // Update de HTML van de stadsvlag
     if (lines) {
       const townFlag = $(`#town_flag_${townID}`);
-      townFlag.empty();
       townFlag.append(
         `<div id="gt_${townID}" class="tags ${windDirection} ${linesCss}">${tagText}</div>`
       );
@@ -3766,7 +3707,6 @@ let mapTags = {
       }
     }
 
-    // Toon inactiviteit indien ingesteld
     if (this.getSettingValue("settingInactiveTimePlayer")) {
       mapTags.displayIdle(idle, windDirection, townID);
     }
@@ -3791,6 +3731,17 @@ let mapTags = {
         `<div class="inactive_${windDirection} nowrap ${idleClass}">${idleText}</div>`
       );
     }
+  },
+
+  calculateIdle(idleTime) {
+    const { day, days, hour } = language[language.settingActiveLanguage];
+    const idleDays = Math.floor(idleTime / 24);
+    const idleHours = idleTime % 24;
+
+    const dayText = idleDays === 1 ? day : days;
+    return idleDays > 0
+      ? `${idleDays} ${dayText} ${idleHours} ${hour}`
+      : `${idleHours} ${hour}`;
   },
 
   calculateIdle(idleTime) {
@@ -6633,7 +6584,6 @@ let externalData = {
             externalData.townData.set(data[i].townId, data[i]);
           }
           externalData.townDataLoaded = true;
-
           mapTags.mapTagsReset = true;
           mapTags.animate();
         } else {
@@ -8159,7 +8109,15 @@ let script = {
     );
 
     script.initInterval = setInterval(script.modulesInit, 500);
-    script.renderInterval = setInterval(script.modulesRenderActions, 250);
+    script.renderIntervalSlow = setInterval(
+      script.modulesRenderActionsSlow,
+      500
+    );
+
+    script.renderIntervalFast = setInterval(
+      script.modulesRenderActionsFast,
+      100
+    );
     script.versionUpdateInterval = setInterval(version.checkUpdate, 10000);
   },
 
@@ -8168,7 +8126,11 @@ let script = {
     clearInterval(script.initInterval);
   },
 
-  modulesRenderActions() {
+  modulesRenderActionsSlow() {
+    modulesAnimateSlow.forEach((module) => module.animate());
+  },
+
+  modulesRenderActionsFast() {
     $.each(Layout.wnd.getAllOpen(), function (ind, elem) {
       let window = elem.getController();
       switch (window) {
@@ -8214,7 +8176,7 @@ let script = {
     }
 
     ocean.visibleOnScreen();
-    modulesAnimate.forEach((module) => module.animate());
+    modulesAnimateFast.forEach((module) => module.animate());
   },
 };
 
@@ -8254,10 +8216,11 @@ const modulesInit = [
   messageIsland,
 ];
 
-const modulesAnimate = [
+const modulesAnimateSlow = [islandNumbers];
+
+const modulesAnimateFast = [
   oceanGrid,
   oceanNumbers,
-  islandNumbers,
   mapTags,
   coordinatesGrid,
   attackNotification,
@@ -8273,3 +8236,5 @@ $(function () {
     }
   }, 50);
 });
+
+
