@@ -1,0 +1,1 @@
+// Aanvalsbereik helpermodule

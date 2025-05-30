@@ -1,0 +1,1 @@
+// BBCode toolbar interface logica
