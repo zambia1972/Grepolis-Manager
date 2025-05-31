@@ -17,8 +17,15 @@
 // @require      https://github.com/zambia1972/Grepolis-Manager/raw/refs/heads/main//modules/utils/dom.js
 // ==/UserScript==
 
-// Laad hoofdcomponent
-(function() {
+(function () {
     'use strict';
-    new ForumManager();
+
+    // Start het script via main.js
+    window.addEventListener('load', () => {
+        try {
+            GrepolisManagerMain.init();
+        } catch (error) {
+            console.error('[Grepolis Manager] Fout bij opstarten:', error);
+        }
+    });
 })();
