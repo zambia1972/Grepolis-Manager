@@ -1,5 +1,5 @@
 export function troopManager(isActive) {
-class TroopManager {
+    class TroopManager {
         constructor(manager) {
             this.manager = manager;
             this.uw = unsafeWindow;
@@ -1062,3 +1062,4 @@ class TroopManager {
             }
         }
     }
+}
