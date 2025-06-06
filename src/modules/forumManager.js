@@ -1,5 +1,5 @@
 export function forumManager(isActive) {
-class ForumManager {
+    class ForumManager {
         constructor() {
             this.popup = null;
             this.playerName = '';
@@ -558,3 +558,4 @@ class ForumManager {
             document.head.appendChild(styleElement);
         }
     }
+}
