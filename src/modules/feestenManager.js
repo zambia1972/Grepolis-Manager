@@ -145,26 +145,6 @@ export function feestenManager(isActive) {
             this.triggerBtn.addEventListener('click', () => this.toggleBox());
         }
 
-        show() {
-            if (!this.container) return;
-            this.container.style.display = 'block';
-            this.isActive = true;
-            this.refreshContent();
-            this.interval = setInterval(() => this.refreshContent(), 10000);
-        }
-
-        hide() {
-            if (!this.container) return;
-            this.container.style.display = 'none';
-            this.box.style.display = 'none';
-            this.isActive = false;
-            this.triggerBtn.classList.remove('active');
-            if (this.interval) {
-                clearInterval(this.interval);
-                this.interval = null;
-            }
-        }
-
         toggleBox() {
             if (!this.box) return;
             if (this.box.style.display === 'block') {
