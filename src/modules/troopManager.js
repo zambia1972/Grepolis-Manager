@@ -1,4 +1,8 @@
-export function troopManager(isActive) {
+export function startTroopManager() {
+    const manager = new TroopManager();
+    manager.show();
+}
+
     class TroopManager {
         constructor(manager) {
             this.manager = manager;
