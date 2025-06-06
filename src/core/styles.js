@@ -1,7 +1,8 @@
-// styles.js - Injecteert globale CSS voor Grepolis Manager
+// styles.js - CSS voor knoppen en popup
 
 export function injectGlobalStyles() {
-  const css = `
+  const style = document.createElement('style');
+  style.textContent = `
     .gm-toggle-button {
       width: 40px;
       height: 20px;
@@ -13,11 +14,21 @@ export function injectGlobalStyles() {
       cursor: pointer;
     }
 
+    #gm-button-bar {
+      position: fixed;
+      top: 10px;
+      left: 350px; /* aangepast van 180px naar 350px */
+      z-index: 9999;
+      display: flex;
+      gap: 5px;
+    }
+
     #gm-popup {
       position: fixed;
       top: 50%;
       left: 50%;
-      width: 600px;
+      width: 800px;
+      height: 600px;
       transform: translate(-50%, -50%);
       background: #1e1e1e;
       border: 2px solid #FF0000;
@@ -26,6 +37,7 @@ export function injectGlobalStyles() {
       color: white;
       z-index: 10000;
       box-shadow: 0 0 15px #FF0000;
+      overflow-y: auto;
     }
 
     #gm-popup h2 {
@@ -52,7 +64,5 @@ export function injectGlobalStyles() {
       text-decoration: underline;
     }
   `;
-  const style = document.createElement('style');
-  style.textContent = css;
   document.head.appendChild(style);
 }
