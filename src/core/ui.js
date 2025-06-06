@@ -20,7 +20,7 @@ const buttonIcons = [
 export function initializeButtons(callbacks) {
   const container = document.createElement('div');
   container.id = 'gm-button-bar';
-  container.style.cssText = 'position: fixed; top: 10px; left: 180px; z-index: 9999; display: flex; gap: 5px;';
+  container.style.cssText = 'position: fixed; top: 5px; left: 330px; z-index: 9999; display: flex; gap: 0px;';
 
   callbacks.forEach((callback, i) => {
     const button = document.createElement('div');
