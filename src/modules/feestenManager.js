@@ -1,6 +1,6 @@
 export function feestenManager(isActive) {
-class FeestenFixedManager {
-    constructor() {
+    class FeestenFixedManager {
+        constructor() {
             this.container = null;
             this.box = null;
             this.triggerBtn = null;
@@ -311,3 +311,4 @@ class FeestenFixedManager {
             document.getElementById('close-feestenfixed-help').addEventListener('click', () => popup.remove());
         }
     }
+}
