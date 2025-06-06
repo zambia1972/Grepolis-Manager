@@ -33,7 +33,6 @@ export function startFeestenManager() {
             } else if (this.container) {
                 this.container.style.display = 'none';
                 clearInterval(this.interval);
-            }
         }
 
         show() {
