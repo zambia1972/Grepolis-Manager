@@ -1,4 +1,8 @@
-export function feestenManager(isActive) {
+export function startFeestenManager() {
+    const manager = new FeestenManager();
+    manager.show(); // of een init functie
+}
+
     class FeestenFixedManager {
         constructor() {
             this.container = null;
