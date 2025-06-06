@@ -1,4 +1,8 @@
-export function forumManager(isActive) {
+export function startForumManager() {
+    const manager = new ForumManager();
+    manager.show();
+}
+
     class ForumManager {
         constructor() {
             this.popup = null;
