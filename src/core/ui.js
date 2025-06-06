@@ -17,19 +17,12 @@ const buttonIcons = [
   'icioon-fora-en-topics.png'       // Button 7 - ForumManager
 ];
 
-export function initializeButtons() {
+export function initializeButtons(callbacks) {
   const container = document.createElement('div');
   container.id = 'gm-button-bar';
-  container.style.cssText = `
-    position: fixed;
-    top: 10px;
-    left: 180px;
-    z-index: 9999;
-    display: flex;
-    gap: 5px;
-  `;
+  container.style.cssText = 'position: fixed; top: 10px; left: 180px; z-index: 9999; display: flex; gap: 5px;';
 
-  for (let i = 0; i < buttonIcons.length; i++) {
+  callbacks.forEach((callback, i) => {
     const button = document.createElement('div');
     button.className = 'gm-toggle-button';
     button.dataset.index = i;
@@ -41,13 +34,16 @@ export function initializeButtons() {
     icon.style.pointerEvents = 'none';
     button.appendChild(icon);
 
+    let active = false;
     button.addEventListener('click', () => {
-      toggleButtonState(i, button);
-      handleModule(i, buttonStates[i]);
+      active = !active;
+      button.style.backgroundImage = active
+        ? 'url("https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/icons/button-on.png")'
+        : 'url("https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/icons/button-off.png")';
+      if (typeof callback === 'function') callback(active);
     });
-
-    container.appendChild(button);
-  }
+  container.appendChild(button);
+  });
 
   document.body.appendChild(container);
 }
