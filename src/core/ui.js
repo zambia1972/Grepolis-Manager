@@ -1,13 +1,20 @@
-// ui.js - Beheert de 6 hoofdbuttons en de popup
+// ui.js - Beheert de 7 hoofdbuttons en de popup + modules
 
-let buttonStates = [false, false, false, false, false, false];
+import { showStartscreenPopup } from './popup.js';
+import { startAttackRangeHelper } from '../modules/attackRangeHelper.js';
+import { startFeestenManager } from '../modules/feestenManager.js';
+import { startTroopManager } from '../modules/troopManager.js';
+import { startForumManager } from '../modules/forumManager.js';
+
+let buttonStates = Array(7).fill(false);
 const buttonIcons = [
-  'icioon-GM.png',  // Button 1
-  'icon-2.png',
-  'icon-3.png',
-  'icon-4.png',
-  'icon-5.png',
-  'icon-6.png',
+  'icioon-GM.png',                  // Button 1 - Startscherm
+  'icioon-attackrange-helper.png',  // Button 2 - AttackRangeHelper
+  'icioon-Feesten-manager.png',     // Button 3 - Feesten
+  'icioon-chat.png',                // Button 4 - Chat (nog niet gekoppeld)
+  'icioon-troop-counter.png',       // Button 5 - TroopCounter
+  'icioon-Kaart.png',               // Button 6 - Kaart (nog niet gekoppeld)
+  'icioon-fora-en-topics.png'       // Button 7 - ForumManager
 ];
 
 export function initializeButtons() {
@@ -22,7 +29,7 @@ export function initializeButtons() {
     gap: 5px;
   `;
 
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < buttonIcons.length; i++) {
     const button = document.createElement('div');
     button.className = 'gm-toggle-button';
     button.dataset.index = i;
@@ -36,7 +43,7 @@ export function initializeButtons() {
 
     button.addEventListener('click', () => {
       toggleButtonState(i, button);
-      if (i === 0) showPopup(); // alleen eerste knop opent popup
+      handleModule(i, buttonStates[i]);
     });
 
     container.appendChild(button);
@@ -52,23 +59,24 @@ function toggleButtonState(index, button) {
     : 'url("https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/icons/button-off.png")';
 }
 
-function showPopup() {
-  let popup = document.getElementById('gm-popup');
-  if (!popup) {
-    popup = document.createElement('div');
-    popup.id = 'gm-popup';
-    popup.innerHTML = `
-      <div class="gm-popup-content">
-        <h2>Grepolis Manager Startscherm</h2>
-        <p>Download hier handige scripts voor Grepolis:</p>
-        <ul>
-          <li><a href="https://www.grepotools.nl/script/stable/grepotools.user.js" target="_blank">Grepotools</a></li>
-          <li><a href="https://dio-david1327.github.io/DIO-TOOLS-David1327/code.user.js" target="_blank">DIO-Tools</a></li>
-          <li><a href="https://www.grcrt.net/scripts/GrepolisReportConverterV2.user.js" target="_blank">GRCRTools</a></li>
-        </ul>
-      </div>
-    `;
-    document.body.appendChild(popup);
+function handleModule(index, isActive) {
+  switch (index) {
+    case 0:
+      showStartscreenPopup();
+      break;
+    case 1:
+      startAttackRangeHelper(isActive);
+      break;
+    case 2:
+      startFeestenManager(isActive);
+      break;
+    case 4:
+      startTroopManager(isActive);
+      break;
+    case 6:
+      startForumManager(isActive);
+      break;
+    default:
+      console.log(`Button ${index + 1} is (nog) niet gekoppeld aan een module.`);
   }
-  popup.style.display = 'block';
 }
