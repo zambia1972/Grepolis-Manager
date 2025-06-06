@@ -1,5 +1,5 @@
 export function startAttackRangeHelper(isActive) {
-class AttackRangeHelperManager {
+    class AttackRangeHelperManager {
         constructor(uw) {
             this.uw = uw;
             this.townInterval = null;
@@ -323,3 +323,4 @@ class AttackRangeHelperManager {
             }
         }
     }
+}
