@@ -1,3 +1,4 @@
+export function troopManager(isActive) {
 class TroopManager {
         constructor(manager) {
             this.manager = manager;
