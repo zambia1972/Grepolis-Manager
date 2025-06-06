@@ -1,3 +1,4 @@
+export function forumManager(isActive) {
 class ForumManager {
         constructor() {
             this.popup = null;
