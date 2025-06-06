@@ -1,5 +1,7 @@
-// ui.js - Beheert de 7 hoofdbuttons en de popup + modules
-
+export function initUI() {
+    console.log("Grepolis Manager gestart");
+    // Initialiseer je popup, knoppen, etc.
+}
 import { showStartscreenPopup } from './popup.js';
 import { startAttackRangeHelper } from '../modules/attackRangeHelper.js';
 import { startFeestenManager } from '../modules/feestenManager.js';
