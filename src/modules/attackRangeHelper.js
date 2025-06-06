@@ -1,3 +1,4 @@
+export function startAttackRangeHelper(isActive) {
 class AttackRangeHelperManager {
         constructor(uw) {
             this.uw = uw;
