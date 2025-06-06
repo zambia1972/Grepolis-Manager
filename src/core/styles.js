@@ -17,7 +17,7 @@ export function injectGlobalStyles() {
       position: fixed;
       top: 50%;
       left: 50%;
-      width: 300px;
+      width: 600px;
       transform: translate(-50%, -50%);
       background: #1e1e1e;
       border: 2px solid #FF0000;
