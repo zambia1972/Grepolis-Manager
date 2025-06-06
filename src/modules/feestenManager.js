@@ -1,3 +1,4 @@
+export function feestenManager(isActive) {
 class FeestenFixedManager {
     constructor() {
             this.container = null;
