@@ -1,6 +1,7 @@
 // main.js - Hoofdbestand voor Grepolis Manager
 import { initializeButtons } from './ui.js';
 import { injectGlobalStyles } from './styles.js';
+import { initUI } from './ui.js';
 
 import { showStartscreenPopup } from './popup.js';
 import { startAttackRangeHelper } from '../modules/attackRangeHelper.js';
@@ -20,4 +21,7 @@ import { startForumManager } from '../modules/forumManager.js';
     () => console.log("Kaart volgt later"),// Button 6
     () => startForumManager()         // Button 7: ForumManager
   ]);
+  window.addEventListener('load', () => {
+    initUI();  // of een andere startfunctie
+  });
 })();
