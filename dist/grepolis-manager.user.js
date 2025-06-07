@@ -2,41 +2,23 @@
 // @name         Grepolis Manager
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  Popup + modules: startscherm, feesten, troops, forum, enz.
+// @description  Modulair script: knoppen, popup, modules
 // @author       Zambia1972
 // @match        *://*.grepolis.com/*
 // @grant        none
+//
+// @require      https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/refs/heads/main/src/core/styles.js
+// @require      https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/refs/heads/main/src/core/popup.js
+// @require      https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/refs/heads/main/src/core/ui.js
+//
+// @require      https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/refs/heads/main/src/modules/attackRangeHelper.js
+// @require      https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/refs/heads/main/src/modules/feestenManager.js
+// @require      https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/refs/heads/main/src/modules/troopManager.js
+// @require      https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/refs/heads/main/src/modules/forumManager.js
 // ==/UserScript==
 
-// --- styles.js ---
-const style = document.createElement('style');
-style.textContent = `...CSS HIER...`;
-document.head.appendChild(style);
-
-// --- popup.js ---
-function showStartscreenPopup() {
-  let popup = document.getElementById('gm-popup');
-  if (!popup) {
-    popup = document.createElement('div');
-    popup.id = 'gm-popup';
-    popup.innerHTML = `...`;
-    document.body.appendChild(popup);
-  }
-  popup.style.display = 'block';
-}
-
-// --- attackRangeHelper.js ---
-function startAttackRangeHelper(isActive) {
-  console.log("AttackRangeHelper: ", isActive);
-}
-
-// --- ui.js ---
-function initializeButtons() {
-  // Maak buttons aan, koppel aan functies zoals: showStartscreenPopup()
-}
-
-// --- main.js ---
 (function () {
   'use strict';
-  initializeButtons();
+  injectGlobalStyles();   // uit styles.js
+  initializeButtons();    // uit ui.js
 })();
