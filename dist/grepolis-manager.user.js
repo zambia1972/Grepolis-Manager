@@ -18,7 +18,32 @@
 // ==/UserScript==
 
 (function () {
-  'use strict';
-  injectGlobalStyles();   // uit styles.js
-  initializeButtons();    // uit ui.js
+    'use strict';
+
+    function initWhenReady() {
+        if (
+            typeof window.injectGlobalStyles === 'function' &&
+            typeof window.initializeButtons === 'function' &&
+            typeof window.startAttackRangeHelper === 'function' &&
+            typeof window.startFeestenManager === 'function' &&
+            typeof window.startTroopManager === 'function' &&
+            typeof window.startForumManager === 'function'
+        ) {
+            window.injectGlobalStyles();
+
+            window.initializeButtons([
+                () => console.log("Startscherm volgt"),
+                (on) => window.startAttackRangeHelper(on),
+                (on) => window.startFeestenManager(on),
+                () => console.log("Chat volgt later"),
+                (on) => window.startTroopManager(on),
+                () => console.log("Kaart volgt later"),
+                (on) => window.startForumManager(on)
+            ]);
+        } else {
+            setTimeout(initWhenReady, 200);
+        }
+    }
+
+    initWhenReady();
 })();
