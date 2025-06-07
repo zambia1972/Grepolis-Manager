@@ -1,3 +1,4 @@
+function FeestenFixedManager() {
 class FeestenFixedManager {
     constructor() {
         this.container = null;
