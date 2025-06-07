@@ -2,11 +2,6 @@ function initUI() {
     console.log("Grepolis Manager gestart");
     // Initialiseer je popup, knoppen, etc.
 }
-import { showStartscreenPopup } from './popup.js';
-import { startAttackRangeHelper } from '../modules/attackRangeHelper.js';
-import { startFeestenManager } from '../modules/feestenManager.js';
-import { startTroopManager } from '../modules/troopManager.js';
-import { startForumManager } from '../modules/forumManager.js';
 
 let buttonStates = Array(7).fill(false);
 const buttonIcons = [
@@ -19,7 +14,7 @@ const buttonIcons = [
   'icioon-fora-en-topics.png'       // Button 7 - ForumManager
 ];
 
-export function initializeButtons(callbacks) {
+function initializeButtons(callbacks) {
   const container = document.createElement('div');
   container.id = 'gm-button-bar';
   container.style.cssText = 'position: fixed; top: 5px; left: 330px; z-index: 9999; display: flex; gap: 0px;';
