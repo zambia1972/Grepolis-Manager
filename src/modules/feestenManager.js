@@ -154,8 +154,3 @@ class FeestenFixedManager {
     }
 }
 
-// ✅ Correcte export buiten de class
-export function startFeestenManager() {
-    const manager = new FeestenFixedManager();
-    manager.show();
-}
