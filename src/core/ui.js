@@ -1,4 +1,4 @@
-export function initUI() {
+function initUI() {
     console.log("Grepolis Manager gestart");
     // Initialiseer je popup, knoppen, etc.
 }
