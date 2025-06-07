@@ -1,5 +1,8 @@
-function startAttackRangeHelper(isActive) {
-    class AttackRangeHelperManager {
+(function () {
+    window.startAttackRangeHelper = function (enabled) {
+        if (!enabled) return;
+        console.log("[GM] AttackRangeHelper geactiveerd");
+
         constructor(uw) {
             this.uw = uw;
             this.townInterval = null;
@@ -322,5 +325,5 @@ function startAttackRangeHelper(isActive) {
                 console.error('Fout bij kleuren ranglijst:', err);
             }
         }
-    }
-}
+    };
+})();
