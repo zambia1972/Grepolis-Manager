@@ -1,4 +1,4 @@
-export function startTroopManager() {
+function startTroopManager() {
     const manager = new TroopManager();
     manager.show();
 }
