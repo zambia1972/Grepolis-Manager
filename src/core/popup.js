@@ -1,6 +1,4 @@
-// popup.js - popup voor startscherm (button 1)
-
-export function showStartscreenPopup() {
+function showStartscreenPopup() {
   let popup = document.getElementById('gm-popup');
   if (!popup) {
     popup = document.createElement('div');
