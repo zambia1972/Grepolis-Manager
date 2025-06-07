@@ -1,13 +1,3 @@
-// main.js - Hoofdbestand voor Grepolis Manager
-import { initializeButtons } from './ui.js';
-import { injectGlobalStyles } from './styles.js';
-import { initUI } from './ui.js';
-
-import { showStartscreenPopup } from './popup.js';
-import { startAttackRangeHelper } from '../modules/attackRangeHelper.js';
-import { startFeestenManager } from '../modules/feestenManager.js';
-import { startTroopManager } from '../modules/troopManager.js';
-import { startForumManager } from '../modules/forumManager.js';
 
 (function () {
   'use strict';
