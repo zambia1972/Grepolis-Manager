@@ -1,4 +1,12 @@
-function FeestenFixedManager() {
+function startFeestenManager(active) {
+    const manager = new FeestenManager();
+    if (active) {
+        manager.show();
+    } else {
+        manager.hide();
+    }
+}
+
 class FeestenFixedManager {
     constructor() {
         this.container = null;
