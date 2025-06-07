@@ -1,6 +1,4 @@
-// styles.js - CSS voor knoppen en popup
-
-export function injectGlobalStyles() {
+function injectGlobalStyles() {
   const style = document.createElement('style');
   style.textContent = `
     .gm-toggle-button {
