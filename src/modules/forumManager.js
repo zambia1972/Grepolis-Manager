@@ -1,4 +1,4 @@
-export function startForumManager() {
+function startForumManager() {
     const manager = new ForumManager();
     manager.show();
 
