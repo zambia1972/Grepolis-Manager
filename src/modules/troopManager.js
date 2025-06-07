@@ -1,20 +1,8 @@
-function startTroopManager() {
-    const manager = new TroopManager();
-    manager.show();
-}
-
-    class TroopManager {
-        constructor(manager) {
-            this.manager = manager;
-            this.uw = unsafeWindow;
-            this.world = window.location.host.split('.')[0];
-            if (!this.world) this.world = "nl" + new Date().getFullYear().toString().slice(2);
-            this.currentData = null;export function startTroopManager() {
-    const manager = new TroopManager();
-    manager.show();
-}
-
-    class TroopManager {
+(function () {
+    window.startTroopManager = function (enabled) {
+        if (!enabled) return;
+        console.log("[GM] TroopManager geactiveerd");
+        
         constructor(manager) {
             this.manager = manager;
             this.uw = unsafeWindow;
@@ -2133,5 +2121,5 @@ function startTroopManager() {
                 console.error('Document head not found');
             }
         }
-    }
-}
+    };
+})();
