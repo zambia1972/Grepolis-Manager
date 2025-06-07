@@ -1,24 +1,23 @@
 (function () {
+    'use strict';
+
     window.initializeButtons = function (callbacks) {
-        if (document.getElementById('gm-button-container')) return;
-        
-        let buttonStates = Array(7).fill(false);
-        const buttonIcons = [
-          'icioon-GM.png',                  // Button 1 - Startscherm
-          'icioon-attackrange-helper.png',  // Button 2 - AttackRangeHelper
-          'icioon-Feesten-manager.png',     // Button 3 - Feesten
-          'icioon-chat.png',                // Button 4 - Chat (nog niet gekoppeld)
-          'icioon-troop-counter.png',       // Button 5 - TroopCounter
-          'icioon-Kaart.png',               // Button 6 - Kaart (nog niet gekoppeld)
-          'icioon-fora-en-topics.png'       // Button 7 - ForumManager
+        if (document.getElementById('gm-button-container')) return; // voorkom dubbele weergave
+
+        const container = document.createElement('div');
+        container.id = 'gm-button-container';
+
+        const labels = [
+            'Startscherm',
+            'AttackRange',
+            'Feesten',
+            'Chat',
+            'TroopManager',
+            'Kaart',
+            'Forum'
         ];
-        
-        function initializeButtons(callbacks) {
-          const container = document.createElement('div');
-          container.id = 'gm-button-bar';
-          container.style.cssText = 'position: fixed; top: 5px; left: 330px; z-index: 9999; display: flex; gap: 0px;';
-        
-          callbacks.forEach((callback, i) => {
+
+        callbacks.forEach((callback, index) => {
             const button = document.createElement('div');
             button.className = 'gm-toggle-button';
             button.dataset.index = i;
