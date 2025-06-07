@@ -1,6 +1,6 @@
-function injectGlobalStyles() {
+window.injectGlobalStyles = function() {
   const style = document.createElement('style');
-  style.textContent = `
+  style.innerHTML = `
     .gm-toggle-button {
       width: 40px;
       height: 20px;
