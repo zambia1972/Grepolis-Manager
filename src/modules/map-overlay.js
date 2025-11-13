@@ -43,6 +43,46 @@ export default class MapOverlay {
         }
     }
 
+    initUI() {
+        // Create map controls container
+        this.controlsContainer = this.main.ui.createElement('div', 'gm-map-controls');
+        
+        // Add toggle button
+        this.toggleButton = this.main.ui.createButton('Toggle Map Overlay', () => this.toggleMapOverlay(), 'gm-btn gm-btn-primary');
+        this.controlsContainer.appendChild(this.toggleButton);
+        
+        // Add controls to the page
+        const mapContainer = document.getElementById('mapContainer') || document.querySelector('.map-container');
+        if (mapContainer) {
+            mapContainer.prepend(this.controlsContainer);
+        } else {
+            document.body.prepend(this.controlsContainer);
+        }
+        
+        this.logger.log('Map Overlay UI initialized');
+    }
+    
+    toggleMapOverlay() {
+        this.isMapActive = !this.isMapActive;
+        if (this.isMapActive) {
+            this.showMapOverlay();
+        } else {
+            this.hideMapOverlay();
+        }
+    }
+    
+    showMapOverlay() {
+        // Implement map overlay display logic here
+        this.logger.log('Showing map overlay');
+        this.toggleButton.textContent = 'Hide Map Overlay';
+    }
+    
+    hideMapOverlay() {
+        // Implement map overlay hiding logic here
+        this.logger.log('Hiding map overlay');
+        this.toggleButton.textContent = 'Show Map Overlay';
+    }
+
     async loadCachedData() {
         try {
             const cachedData = this.main.getStorage('gm_map_data', null);

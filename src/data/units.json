@@ -1,0 +1,253 @@
+{
+    "units": [
+        {
+            "id": "sword",
+            "name": "Swordsman",
+            "type": "infantry",
+            "attack": 65,
+            "defense": 35,
+            "defenseCavalry": 20,
+            "defenseArcher": 40,
+            "speed": 6,
+            "capacity": 20,
+            "cost": {
+                "wood": 30,
+                "stone": 30,
+                "iron": 70,
+                "population": 1
+            },
+            "time": 480,
+            "description": "Basic infantry unit with balanced stats."
+        },
+        {
+            "id": "spear",
+            "name": "Spearman",
+            "type": "infantry",
+            "attack": 10,
+            "defense": 35,
+            "defenseCavalry": 60,
+            "defenseArcher": 10,
+            "speed": 7,
+            "capacity": 25,
+            "cost": {
+                "wood": 50,
+                "stone": 30,
+                "iron": 10,
+                "population": 1
+            },
+            "time": 300,
+            "description": "Anti-cavalry unit with high defense against cavalry."
+        },
+        {
+            "id": "axe",
+            "name": "Axeman",
+            "type": "infantry",
+            "attack": 40,
+            "defense": 10,
+            "defenseCavalry": 5,
+            "defenseArcher": 10,
+            "speed": 6,
+            "capacity": 10,
+            "cost": {
+                "wood": 60,
+                "stone": 30,
+                "iron": 40,
+                "population": 1
+            },
+            "time": 360,
+            "description": "Offensive unit with high attack power."
+        },
+        {
+            "id": "archer",
+            "name": "Archer",
+            "type": "ranged",
+            "attack": 25,
+            "defense": 40,
+            "defenseCavalry": 10,
+            "defenseArcher": 5,
+            "speed": 9,
+            "capacity": 10,
+            "cost": {
+                "wood": 100,
+                "stone": 30,
+                "iron": 60,
+                "population": 1
+            },
+            "time": 600,
+            "description": "Ranged unit that can attack from a distance."
+        },
+        {
+            "id": "light",
+            "name": "Light Cavalry",
+            "type": "cavalry",
+            "attack": 130,
+            "defense": 30,
+            "defenseCavalry": 30,
+            "defenseArcher": 40,
+            "speed": 16,
+            "capacity": 80,
+            "cost": {
+                "wood": 125,
+                "stone": 100,
+                "iron": 250,
+                "population": 4
+            },
+            "time": 1320,
+            "description": "Fast cavalry unit with high attack and movement speed."
+        },
+        {
+            "id": "mounted_archer",
+            "name": "Mounted Archer",
+            "type": "cavalry",
+            "attack": 150,
+            "defense": 40,
+            "defenseCavalry": 30,
+            "defenseArcher": 50,
+            "speed": 14,
+            "capacity": 50,
+            "cost": {
+                "wood": 250,
+                "stone": 100,
+                "iron": 150,
+                "population": 5
+            },
+            "time": 1500,
+            "description": "Ranged cavalry unit with high mobility."
+        },
+        {
+            "id": "heavy",
+            "name": "Heavy Cavalry",
+            "type": "cavalry",
+            "attack": 150,
+            "defense": 200,
+            "defenseCavalry": 80,
+            "defenseArcher": 180,
+            "speed": 10,
+            "capacity": 50,
+            "cost": {
+                "wood": 200,
+                "stone": 150,
+                "iron": 600,
+                "population": 3
+            },
+            "time": 1800,
+            "description": "Heavily armored cavalry with high defense."
+        },
+        {
+            "id": "ram",
+            "name": "Ram",
+            "type": "siege",
+            "attack": 2,
+            "defense": 20,
+            "defenseCavalry": 50,
+            "defenseArcher": 20,
+            "speed": 4,
+            "capacity": 0,
+            "cost": {
+                "wood": 2000,
+                "stone": 2000,
+                "iron": 2000,
+                "population": 5
+            },
+            "time": 3000,
+            "description": "Siege weapon effective against buildings."
+        },
+        {
+            "id": "catapult",
+            "name": "Catapult",
+            "type": "siege",
+            "attack": 100,
+            "defense": 100,
+            "defenseCavalry": 50,
+            "defenseArcher": 100,
+            "speed": 3,
+            "capacity": 0,
+            "cost": {
+                "wood": 3200,
+                "stone": 4000,
+                "iron": 5000,
+                "population": 8
+            },
+            "time": 9000,
+            "description": "Powerful siege weapon with area damage."
+        },
+        {
+            "id": "slinger",
+            "name": "Slinger",
+            "type": "ranged",
+            "attack": 10,
+            "defense": 15,
+            "defenseCavalry": 10,
+            "defenseArcher": 10,
+            "speed": 7,
+            "capacity": 20,
+            "cost": {
+                "wood": 40,
+                "stone": 30,
+                "iron": 10,
+                "population": 1
+            },
+            "time": 300,
+            "description": "Basic ranged unit, cheap to produce."
+        },
+        {
+            "id": "hoplite",
+            "name": "Hoplite",
+            "type": "infantry",
+            "attack": 30,
+            "defense": 35,
+            "defenseCavalry": 30,
+            "defenseArcher": 40,
+            "speed": 7,
+            "capacity": 25,
+            "cost": {
+                "wood": 130,
+                "stone": 130,
+                "iron": 70,
+                "population": 1
+            },
+            "time": 600,
+            "description": "Well-balanced defensive unit."
+        },
+        {
+            "id": "chariot",
+            "name": "Chariot",
+            "type": "cavalry",
+            "attack": 100,
+            "defense": 50,
+            "defenseCavalry": 30,
+            "defenseArcher": 30,
+            "speed": 8,
+            "capacity": 30,
+            "cost": {
+                "wood": 150,
+                "stone": 150,
+                "iron": 200,
+                "population": 2
+            },
+            "time": 1200,
+            "description": "Fast and powerful chariot unit."
+        },
+        {
+            "id": "sniper",
+            "name": "Sniper",
+            "type": "ranged",
+            "attack": 120,
+            "defense": 60,
+            "defenseCavalry": 30,
+            "defenseArcher": 30,
+            "speed": 7,
+            "capacity": 20,
+            "cost": {
+                "wood": 200,
+                "stone": 200,
+                "iron": 200,
+                "population": 2
+            },
+            "time": 1800,
+            "description": "Elite ranged unit with high accuracy."
+        }
+    ],
+    "last_updated": "2023-11-13T17:30:00Z",
+    "version": "1.0.0"
+}

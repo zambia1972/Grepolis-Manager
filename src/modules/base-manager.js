@@ -5,7 +5,7 @@
 export default class BaseManager {
     constructor(mainManager) {
         this.main = mainManager;
-        this.uw = mainManager?.uw || unsafeWindow;
+        this.uw = mainManager?.uw || window; // Use window instead of unsafeWindow
         this._events = new Map();
         this._intervals = new Set();
         this._timeouts = new Set();

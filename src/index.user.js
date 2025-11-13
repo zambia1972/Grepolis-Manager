@@ -34,6 +34,7 @@
     // Main manager object
     const manager = {
         modules: {},
+        uw: typeof unsafeWindow !== 'undefined' ? unsafeWindow : window,
         settings: {
             debug: DEBUG,
             getSetting: function(key, defaultValue) {
@@ -190,6 +191,8 @@
                 if (module.default) {
                     try {
                         const instance = new module.default(manager);
+                        instance.manager = manager;
+                        instance.uw = manager.uw;
                         if (typeof instance.init === 'function') {
                             await instance.init(manager);
                         }
