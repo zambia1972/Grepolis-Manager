@@ -94,13 +94,13 @@
     manager.setStorage = manager.storage.set.bind(manager.storage);
 
     // Load CSS
-    function loadCSS() {
-        const cssUrl = GM_getResourceURL('css');
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = cssUrl;
-        document.head.appendChild(link);
-    }
+function loadCSS() {
+    const cssUrl = 'https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/src/css/grepolis-manager.css';
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = cssUrl;
+    document.head.appendChild(link);
+}
 
     // Load a module
     async function loadModule(modulePath) {
