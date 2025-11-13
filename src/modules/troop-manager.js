@@ -53,7 +53,7 @@ export default class TroopManager {
                     }
                 }
             } catch (e) {
-                this.logger.warn('Failed to load unit data from file, trying fallback...', e);
+                this.logger.warn('Failed to load unit data from resource, trying fallback...', e);
             }
             
             // Fallback to storage if available
@@ -65,14 +65,17 @@ export default class TroopManager {
             }
             
             // Final fallback to default units
-            throw new Error('No unit data available');
+            this.units = this.getDefaultUnits();
+            this.logger.warn('Using default unit data');
+            return true;
+            
         } catch (error) {
             this.logger.error('Failed to load unit data:', error);
             
             // Fallback to default units if available
             if (!this.units.length) {
                 this.units = this.getDefaultUnits();
-                this.logger.warn('Using default unit data');
+                this.logger.warn('Using default unit data as fallback');
             }
             
             return false;
