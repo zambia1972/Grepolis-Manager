@@ -136,24 +136,149 @@
             // Fallback to inline styles
             const fallbackStyle = document.createElement('style');
             fallbackStyle.textContent = `
-                .gm-button {
-                    padding: 5px 10px;
-                    margin: 2px;
-                    border: 1px solid #ccc;
-                    background: #f5f5f5;
+                /* Main container */
+                #gm-button-container {
+                    position: fixed;
+                    top: 1px;
+                    left: 380px;
+                    display: flex;
+                    flex-direction: row;
+                    gap: 1px;
+                    z-index: 9999;
+                    background: rgba(0,0,0,0.2);
+                    padding: 2px;
+                }
+
+                /* Buttons */
+                .gm-toggle-button {
+                    width: 32px;
+                    height: 32px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                     cursor: pointer;
+                    background: url('https://grepodata.com/images/ui/button.png') no-repeat -32px 0;
+                    transition: all 0.2s ease;
+                    position: relative;
+                    overflow: hidden;
                 }
-                .gm-button:hover {
-                    background: #e5e5e5;
+
+                .gm-toggle-button:hover {
+                    background-position: -64px 0;
                 }
+
+                .gm-toggle-button.active {
+                    background-position: 0 0;
+                }
+
+                /* Icons */
                 .gm-icon {
-                    display: inline-block;
-                    width: 16px;
-                    height: 16px;
-                    background-size: contain;
+                    width: 20px;
+                    height: 20px;
+                    background-image: url('https://grepodata.com/images/ui/icons.png');
                     background-repeat: no-repeat;
-                    margin-right: 5px;
-                    vertical-align: middle;
+                    pointer-events: none;
+                }
+
+                /* GM Button */
+                .gm-toggle-button[title="Grepolis Manager Startscherm"] {
+                    color: #fff;
+                    font-weight: bold;
+                    font-size: 14px;
+                    text-shadow: 0 0 2px #000;
+                    line-height: 32px;
+                }
+
+                /* Panel styles */
+                .gm-panel {
+                    position: fixed;
+                    top: 40px;
+                    right: 10px;
+                    width: 400px;
+                    max-width: 90%;
+                    background: #1a1a1a;
+                    border: 1px solid #444;
+                    border-radius: 4px;
+                    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+                    z-index: 10000;
+                    display: flex;
+                    flex-direction: column;
+                    overflow: hidden;
+                    opacity: 0;
+                    transform: translateY(-20px);
+                    transition: opacity 0.2s ease, transform 0.2s ease;
+                }
+
+                .gm-panel.active {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+
+                .gm-panel-header {
+                    padding: 10px 15px;
+                    background: #2a2a2a;
+                    border-bottom: 1px solid #444;
+                    color: #fff;
+                    font-weight: bold;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                .gm-panel-content {
+                    padding: 15px;
+                    overflow-y: auto;
+                    max-height: 70vh;
+                    color: #eee;
+                }
+
+                .gm-close-btn {
+                    position: absolute;
+                    top: 5px;
+                    right: 5px;
+                    width: 24px;
+                    height: 24px;
+                    background: transparent;
+                    border: none;
+                    color: #ccc;
+                    font-size: 20px;
+                    line-height: 1;
+                    cursor: pointer;
+                    z-index: 10;
+                }
+
+                .gm-close-btn:hover {
+                    color: #fff;
+                }
+
+                /* Notification styles */
+                .gm-notification {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    padding: 10px 15px;
+                    border-radius: 4px;
+                    color: white;
+                    z-index: 9999;
+                    animation: slideIn 0.3s ease-out;
+                    max-width: 300px;
+                }
+
+                .gm-notification.success {
+                    background-color: #4caf50;
+                }
+
+                .gm-notification.error {
+                    background-color: #f44336;
+                }
+
+                .gm-notification.info {
+                    background-color: #2196f3;
+                }
+
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
                 }
             `;
             document.head.appendChild(fallbackStyle);
@@ -350,30 +475,25 @@ async function initialize() {
         // Create main button container
         const container = document.createElement('div');
         container.id = 'gm-button-container';
-        container.style.position = 'fixed';
-        container.style.top = '1px';
-        container.style.left = '380px';
-        container.style.display = 'inline-flex';
-        container.style.flexDirection = 'row';
-        container.style.gap = '1px';
-        container.style.zIndex = '9999';
-        container.style.background = 'rgba(0,0,0,0.2)';
-        container.style.padding = '2px';
-        container.style.width = 'auto';
-        container.style.height = 'auto';
         document.body.appendChild(container);
 
         // Button configurations
         const buttonConfigs = [
             {
                 title: 'Grepolis Manager Startscherm',
-                icon: 'gm-icon',
-                iconPos: '',
+                icon: 'icon-gm',
                 action: (active) => {
                     if (active) {
                         openPanel('startscreen', (container) => {
-                            container.innerHTML = '<h2>Grepolis Manager</h2><p>Welcome to Grepolis Manager</p>';
-                        });
+                            container.innerHTML = `
+                                <div class="gm-panel-header">
+                                    <h2>Grepolis Manager</h2>
+                                </div>
+                                <div class="gm-panel-content">
+                                    <p>Welcome to Grepolis Manager</p>
+                                </div>
+                            `;
+                        }, 'gm-panel-medium');
                     } else {
                         document.getElementById('gm-panel-startscreen')?.remove();
                     }
@@ -382,16 +502,22 @@ async function initialize() {
             {
                 title: 'Instellingen',
                 icon: 'icon-settings',
-                iconPos: '0 -50px',
                 action: (active) => {
                     if (active) {
                         openPanel('settings', (container) => {
                             if (manager.modules['modules/settings.js']?.render) {
                                 manager.modules['modules/settings.js'].render(container);
                             } else {
-                                container.innerHTML = '<p>Settings module not loaded</p>';
+                                container.innerHTML = `
+                                    <div class="gm-panel-header">
+                                        <h2>Instellingen</h2>
+                                    </div>
+                                    <div class="gm-panel-content">
+                                        <p>Settings module not loaded</p>
+                                    </div>
+                                `;
                             }
-                        });
+                        }, 'gm-panel-medium');
                     } else {
                         document.getElementById('gm-panel-settings')?.remove();
                     }
@@ -400,16 +526,22 @@ async function initialize() {
             {
                 title: 'Wereldinfo',
                 icon: 'icon-world',
-                iconPos: '0 -100px',
                 action: (active) => {
                     if (active) {
                         openPanel('wereldinfo', (container) => {
                             if (manager.modules['modules/wereldinfo.js']?.render) {
                                 manager.modules['modules/wereldinfo.js'].render(container);
                             } else {
-                                container.innerHTML = '<p>Wereldinfo module not loaded</p>';
+                                container.innerHTML = `
+                                    <div class="gm-panel-header">
+                                        <h2>Wereldinfo</h2>
+                                    </div>
+                                    <div class="gm-panel-content">
+                                        <p>Wereldinfo module not loaded</p>
+                                    </div>
+                                `;
                             }
-                        });
+                        }, 'gm-panel-large');
                     } else {
                         document.getElementById('gm-panel-wereldinfo')?.remove();
                     }
@@ -418,50 +550,62 @@ async function initialize() {
             {
                 title: 'Troop Manager',
                 icon: 'icon-troop',
-                iconPos: '0 -150px',
                 action: (active) => {
                     if (manager.modules['modules/troop-manager.js']) {
                         manager.modules['modules/troop-manager.js'].toggle(active);
+                        // Toggle button state
+                        const button = document.querySelector(`#gm-button-container [data-index="${index}"]`);
+                        if (button) {
+                            button.classList.toggle('active', active);
+                        }
                     } else {
                         console.error('Troop Manager module not found');
+                        manager.ui.showNotification('Troop Manager module not loaded', 'error');
                     }
                 }
             },
             {
                 title: 'Forum Manager',
                 icon: 'icon-forum',
-                iconPos: '0 -200px',
                 action: (active) => {
                     if (manager.modules['modules/forum-manager.js']) {
                         manager.modules['modules/forum-manager.js'].toggle(active);
+                        // Toggle button state
+                        const button = document.querySelector(`#gm-button-container [data-index="${index}"]`);
+                        if (button) {
+                            button.classList.toggle('active', active);
+                        }
                     } else {
                         console.error('Forum Manager module not found');
+                        manager.ui.showNotification('Forum Manager module not loaded', 'error');
                     }
                 }
             },
             {
                 title: 'Afwezigheids Manager',
                 icon: 'icon-afk',
-                iconPos: '0 -250px',
                 action: (active) => {
                     if (active) {
                         openPanel('afwezigheid', (container) => {
                             if (manager.modules['modules/afwezigheid.js']?.render) {
                                 manager.modules['modules/afwezigheid.js'].render(container);
                             } else {
-                                container.innerHTML = '<h2>Afwezigheids Manager</h2><p>Module not available</p>';
+                                container.innerHTML = `
+                                    <div class="gm-panel-header">
+                                        <h2>Afwezigheids Manager</h2>
+                                    </div>
+                                    <div class="gm-panel-content">
+                                        <p>Afwezigheids Manager module not loaded</p>
+                                    </div>
+                                `;
                             }
-                        });
+                        }, 'gm-panel-medium');
                     } else {
                         document.getElementById('gm-panel-afwezigheid')?.remove();
                     }
                 }
             }
         ];
-
-        // Sprite URL for buttons
-        const spriteUrl = 'https://gpnl.innogamescdn.com/images/game/autogenerated/layout/layout_095495a.png';
-        const buttonStates = new Array(buttonConfigs.length).fill(false);
 
         // Create buttons
         buttonConfigs.forEach((config, index) => {
@@ -470,35 +614,16 @@ async function initialize() {
             button.title = config.title;
             button.dataset.index = index;
 
-            // Base style (sprite)
-            button.style.background = `url(${spriteUrl}) no-repeat -607px -182px`;
-            button.style.width = '32px';
-            button.style.height = '32px';
-            button.style.display = 'flex';
-            button.style.alignItems = 'center';
-            button.style.justifyContent = 'center';
-            button.style.cursor = 'pointer';
-            button.style.margin = '0 1px';
-            button.style.position = 'relative';
-            button.style.overflow = 'hidden';
+            // Add icon
+            const iconEl = document.createElement('div');
+            iconEl.className = `gm-icon ${config.icon}`;
 
-            // Add icon or text for GM button
-            if (index === 0) {
+            // Set icon position based on type
+            if (config.icon === 'icon-gm') {
                 // GM button with text
                 button.textContent = 'GM';
-                button.style.color = 'white';
-                button.style.fontWeight = 'bold';
-                button.style.fontSize = '14px';
-                button.style.textShadow = '0 0 2px #000';
             } else {
                 // Other buttons with icons
-                const iconEl = document.createElement('div');
-                iconEl.className = `gm-icon ${config.icon}`;
-                iconEl.style.width = '20px';
-                iconEl.style.height = '20px';
-                iconEl.style.background = `url(${spriteUrl}) no-repeat ${config.iconPos}`;
-                iconEl.style.backgroundSize = 'auto';
-                iconEl.style.pointerEvents = 'none';
                 button.appendChild(iconEl);
             }
 
@@ -531,23 +656,80 @@ async function initialize() {
         function openPanel(id, renderFn, sizeClass = 'gm-panel-medium') {
             // Close existing panel with same id
             const old = document.getElementById(`gm-panel-${id}`);
-            if (old) old.remove();
+            if (old) {
+                old.remove();
+                return; // Don't reopen if already open
+            }
 
             // Create panel
             const panel = document.createElement('div');
             panel.id = `gm-panel-${id}`;
             panel.className = `gm-panel ${sizeClass} active`;
+            panel.style.cssText = `
+                position: fixed;
+                top: 40px;
+                right: 10px;
+                width: 400px;
+                max-width: 90%;
+                background: #1a1a1a;
+                border: 1px solid #444;
+                border-radius: 4px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+                z-index: 10000;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                opacity: 0;
+                transform: translateY(-20px);
+                transition: opacity 0.2s ease, transform 0.2s ease;
+            `;
+
+            // Add animation
+            setTimeout(() => {
+                panel.style.opacity = '1';
+                panel.style.transform = 'translateY(0)';
+            }, 10);
 
             // Close button
             const closeBtn = document.createElement('button');
             closeBtn.className = 'gm-close-btn';
             closeBtn.textContent = '×';
-            closeBtn.onclick = () => panel.remove();
+            closeBtn.style.cssText = `
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                width: 24px;
+                height: 24px;
+                background: transparent;
+                border: none;
+                color: #ccc;
+                font-size: 20px;
+                line-height: 1;
+                cursor: pointer;
+                z-index: 10;
+            `;
+            closeBtn.addEventListener('click', () => {
+                panel.style.opacity = '0';
+                panel.style.transform = 'translateY(-20px)';
+                setTimeout(() => panel.remove(), 200);
+                
+                // Update button state
+                const button = document.querySelector(`#gm-button-container [data-action="${id}"]`);
+                if (button) {
+                    button.classList.remove('active');
+                }
+            });
             panel.appendChild(closeBtn);
 
             // Content container
             const content = document.createElement('div');
             content.className = 'gm-panel-body';
+            content.style.cssText = `
+                padding: 15px;
+                overflow-y: auto;
+                max-height: 80vh;
+                color: #eee;
+            `;
             panel.appendChild(content);
 
             // Render content
