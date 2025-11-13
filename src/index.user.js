@@ -242,28 +242,111 @@
                 container.style.top = '10px';
                 container.style.right = '10px';
                 container.style.zIndex = '9999';
+                container.style.display = 'flex';
+                container.style.flexDirection = 'column';
+                container.style.gap = '5px';
+                container.style.background = 'rgba(0, 0, 0, 0.7)';
+                container.style.padding = '10px';
+                container.style.borderRadius = '5px';
                 document.body.appendChild(container);
             }
             
             // Initialize UI elements
             const uiContainer = document.getElementById('grepolis-manager-container');
             if (uiContainer) {
-                // Create a button to toggle the UI
-                const toggleButton = manager.ui.createButton('Toggle UI', () => {
-                    uiContainer.classList.toggle('gm-hidden');
-                });
-                uiContainer.appendChild(toggleButton);
+                // Clear any existing buttons
+                uiContainer.innerHTML = '';
                 
-                // Add some basic styling to make the button visible
-                toggleButton.style.padding = '8px 16px';
+                // Create main toggle button
+                const toggleButton = manager.ui.createButton('GM', () => {
+                    const buttons = uiContainer.querySelectorAll('.gm-feature-btn');
+                    buttons.forEach(btn => {
+                        btn.style.display = btn.style.display === 'none' ? 'block' : 'none';
+                    });
+                });
+                
+                // Style the main toggle button
                 toggleButton.style.background = '#4CAF50';
                 toggleButton.style.color = 'white';
                 toggleButton.style.border = 'none';
                 toggleButton.style.borderRadius = '4px';
+                toggleButton.style.padding = '8px 12px';
                 toggleButton.style.cursor = 'pointer';
-                toggleButton.style.margin = '5px';
+                toggleButton.style.marginBottom = '5px';
+                toggleButton.style.fontWeight = 'bold';
                 
-                // Make sure the container is visible
+                // Add main toggle button to container
+                uiContainer.appendChild(toggleButton);
+                
+                // Create feature buttons container
+                const buttonsContainer = document.createElement('div');
+                buttonsContainer.className = 'gm-buttons-container';
+                buttonsContainer.style.display = 'flex';
+                buttonsContainer.style.flexDirection = 'column';
+                buttonsContainer.style.gap = '5px';
+                
+                // Create buttons for each feature
+                const buttons = [
+                    { id: 'settings', text: 'Instellingen', color: '#2196F3' },
+                    { id: 'wereldinfo', text: 'Wereldinfo', color: '#9C27B0' },
+                    { id: 'troop', text: 'Troop Manager', color: '#FF9800' },
+                    { id: 'forum', text: 'Forum Manager', color: '#E91E63' },
+                    { id: 'map', text: 'Map Overlay', color: '#00BCD4' }
+                ];
+                
+                // Add each button to the container
+                buttons.forEach(btnInfo => {
+                    const btn = manager.ui.createButton(btnInfo.text, () => {
+                        // Handle button click - this will be connected to the respective module
+                        console.log(`Button clicked: ${btnInfo.text}`);
+                        
+                        // Toggle active state
+                        btn.classList.toggle('active');
+                        if (btn.classList.contains('active')) {
+                            btn.style.opacity = '0.8';
+                            // Call the appropriate module's show method if it exists
+                            if (manager.modules[`modules/${btnInfo.id}.js`] && 
+                                typeof manager.modules[`modules/${btnInfo.id}.js`].show === 'function') {
+                                manager.modules[`modules/${btnInfo.id}.js`].show();
+                            }
+                        } else {
+                            btn.style.opacity = '1';
+                            // Call the appropriate module's hide method if it exists
+                            if (manager.modules[`modules/${btnInfo.id}.js`] && 
+                                typeof manager.modules[`modules/${btnInfo.id}.js`].hide === 'function') {
+                                manager.modules[`modules/${btnInfo.id}.js`].hide();
+                            }
+                        }
+                    });
+                    
+                    // Style the button
+                    btn.className = 'gm-feature-btn';
+                    btn.style.display = 'none'; // Initially hidden
+                    btn.style.background = btnInfo.color;
+                    btn.style.color = 'white';
+                    btn.style.border = 'none';
+                    btn.style.borderRadius = '4px';
+                    btn.style.padding = '6px 10px';
+                    btn.style.cursor = 'pointer';
+                    btn.style.transition = 'opacity 0.2s';
+                    btn.style.textAlign = 'left';
+                    
+                    // Add hover effect
+                    btn.onmouseover = () => btn.style.opacity = '0.8';
+                    btn.onmouseout = function() {
+                        if (!this.classList.contains('active')) {
+                            this.style.opacity = '1';
+                        }
+                    };
+                    
+                    // Add to container
+                    buttonsContainer.appendChild(btn);
+                });
+                
+                // Add buttons container to UI
+                uiContainer.appendChild(buttonsContainer);
+                
+                // Show the UI
                 uiContainer.style.display = 'block';
             }
             
