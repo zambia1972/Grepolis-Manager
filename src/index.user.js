@@ -82,6 +82,26 @@
                     title: 'Grepolis Manager',
                     timeout: 3000
                 });
+            },
+            createButton: function(text, onClick, className = '') {
+                const button = document.createElement('button');
+                button.textContent = text;
+                button.className = `gm-button ${className}`;
+                button.addEventListener('click', onClick);
+                return button;
+            },
+            createElement: function(tag, className = '', attributes = {}) {
+                const element = document.createElement(tag);
+                if (className) element.className = className;
+                Object.entries(attributes).forEach(([key, value]) => {
+                    element.setAttribute(key, value);
+                });
+                return element;
+            },
+            createIcon: function(iconName, className = '') {
+                const icon = document.createElement('i');
+                icon.className = `gm-icon gm-icon-${iconName} ${className}`;
+                return icon;
             }
         },
         debug: DEBUG ? console.debug.bind(console) : function() {}
@@ -94,13 +114,60 @@
     manager.setStorage = manager.storage.set.bind(manager.storage);
 
     // Load CSS
-function loadCSS() {
-    const cssUrl = 'https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/src/css/grepolis-manager.css';
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = cssUrl;
-    document.head.appendChild(link);
-}
+    async function loadCSS() {
+        const cssUrl = 'https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/src/css/grepolis-manager.css';
+        
+        try {
+            const response = await manager.fetchWithRetry(cssUrl);
+            if (!response.ok) throw new Error('Failed to fetch CSS');
+            
+            const cssText = await response.text();
+            const style = document.createElement('style');
+            style.textContent = cssText;
+            document.head.appendChild(style);
+            console.log('CSS loaded successfully');
+        } catch (error) {
+            console.error('Failed to load CSS:', error);
+            // Fallback to inline styles
+            const fallbackStyle = document.createElement('style');
+            fallbackStyle.textContent = `
+                .gm-button {
+                    padding: 5px 10px;
+                    margin: 2px;
+                    border: 1px solid #ccc;
+                    background: #f5f5f5;
+                    cursor: pointer;
+                }
+                .gm-button:hover {
+                    background: #e5e5e5;
+                }
+                .gm-icon {
+                    display: inline-block;
+                    width: 16px;
+                    height: 16px;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    margin-right: 5px;
+                    vertical-align: middle;
+                }
+            `;
+            document.head.appendChild(fallbackStyle);
+        }
+    }
+
+    // Add fetchWithRetry to manager
+    manager.fetchWithRetry = async function(url, options = {}, retries = 3, delay = 1000) {
+        for (let i = 0; i < retries; i++) {
+            try {
+                const response = await fetch(url, options);
+                if (response.ok) return response;
+                throw new Error(`HTTP error! status: ${response.status}`);
+            } catch (error) {
+                if (i === retries - 1) throw error;
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+        }
+    };
 
     // Load a module
     async function loadModule(modulePath) {
@@ -108,24 +175,38 @@ function loadCSS() {
         
         try {
             const url = `${REPO_BASE}${modulePath}`;
-            const code = await fetch(url).then(r => r.text());
+            const response = await manager.fetchWithRetry(url);
+            const code = await response.text();
             
             // Create a blob URL for the module
             const blob = new Blob([code], { type: 'application/javascript' });
             const blobUrl = URL.createObjectURL(blob);
             
-            // Import the module
-            const module = await import(blobUrl);
-            
-            // Initialize the module if it has an init function
-            if (module.default && typeof module.default.init === 'function') {
-                const instance = new module.default(manager);
-                await instance.init();
-                manager.modules[modulePath] = instance;
+            try {
+                // Import the module
+                const module = await import(blobUrl);
+                
+                // Initialize the module if it has an init function
+                if (module.default) {
+                    try {
+                        const instance = new module.default(manager);
+                        if (typeof instance.init === 'function') {
+                            await instance.init(manager);
+                        }
+                        manager.modules[modulePath] = instance;
+                        console.log(`Loaded module: ${modulePath}`);
+                        return true;
+                    } catch (e) {
+                        console.error(`Error initializing module ${modulePath}:`, e);
+                        return false;
+                    }
+                }
+                
+                console.log(`Loaded module (no default export): ${modulePath}`);
+                return true;
+            } finally {
+                URL.revokeObjectURL(blobUrl);
             }
-            
-            console.log(`Loaded module: ${modulePath}`);
-            return true;
         } catch (error) {
             console.error(`Error loading module ${modulePath}:`, error);
             return false;
@@ -137,7 +218,7 @@ function loadCSS() {
         console.log('Initializing Grepolis Manager...');
         
         // Load CSS
-        loadCSS();
+        await loadCSS();
         
         // Load modules in sequence
         for (const modulePath of MODULE_LIST) {
