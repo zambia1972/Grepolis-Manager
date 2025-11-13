@@ -363,95 +363,111 @@ async function initialize() {
         container.style.height = 'auto';
         document.body.appendChild(container);
 
-        // Button titles (tooltips)
-        const buttonTitles = [
-            'Grepolis Manager Startscherm',
-            'Instellingen',
-            'Wereldinfo',
-            'Troop Manager',
-            'Forum Manager',
-            'Afwezigheids Manager'
-        ];
-
-        // Callbacks for each button
-        const callbacks = [
-            // Start screen
-            (active) => {
-                if (active) {
-                    openPanel('startscreen', (container) => {
-                        container.innerHTML = '<h2>Grepolis Manager</h2><p>Welcome to Grepolis Manager</p>';
-                    });
-                } else {
-                    document.getElementById('gm-panel-startscreen')?.remove();
-                }
-            },
-            // Settings
-            (active) => {
-                if (active) {
-                    openPanel('settings', (container) => {
-                        if (manager.modules['modules/settings.js']?.render) {
-                            manager.modules['modules/settings.js'].render(container);
-                        }
-                    });
-                } else {
-                    document.getElementById('gm-panel-settings')?.remove();
-                }
-            },
-            // Wereldinfo
-            (active) => {
-                if (active) {
-                    openPanel('wereldinfo', (container) => {
-                        if (manager.modules['modules/wereldinfo.js']?.render) {
-                            manager.modules['modules/wereldinfo.js'].render(container);
-                        }
-                    });
-                } else {
-                    document.getElementById('gm-panel-wereldinfo')?.remove();
-                }
-            },
-            // Troop Manager
-            (active) => {
-                if (manager.modules['modules/troop-manager.js']) {
+        // Button configurations
+        const buttonConfigs = [
+            {
+                title: 'Grepolis Manager Startscherm',
+                icon: 'gm-icon',
+                iconPos: '',
+                action: (active) => {
                     if (active) {
-                        manager.modules['modules/troop-manager.js'].toggle(true);
+                        openPanel('startscreen', (container) => {
+                            container.innerHTML = '<h2>Grepolis Manager</h2><p>Welcome to Grepolis Manager</p>';
+                        });
                     } else {
-                        manager.modules['modules/troop-manager.js'].toggle(false);
+                        document.getElementById('gm-panel-startscreen')?.remove();
                     }
                 }
             },
-            // Forum Manager
-            (active) => {
-                if (manager.modules['modules/forum-manager.js']) {
+            {
+                title: 'Instellingen',
+                icon: 'icon-settings',
+                iconPos: '0 -50px',
+                action: (active) => {
                     if (active) {
-                        manager.modules['modules/forum-manager.js'].toggle(true);
+                        openPanel('settings', (container) => {
+                            if (manager.modules['modules/settings.js']?.render) {
+                                manager.modules['modules/settings.js'].render(container);
+                            } else {
+                                container.innerHTML = '<p>Settings module not loaded</p>';
+                            }
+                        });
                     } else {
-                        manager.modules['modules/forum-manager.js'].toggle(false);
+                        document.getElementById('gm-panel-settings')?.remove();
                     }
                 }
             },
-            // Afwezigheids Manager
-            (active) => {
-                if (active) {
-                    openPanel('afwezigheid', (container) => {
-                        container.innerHTML = '<h2>Afwezigheids Manager</h2><p>Afwezigheids Manager content here</p>';
-                    });
-                } else {
-                    document.getElementById('gm-panel-afwezigheid')?.remove();
+            {
+                title: 'Wereldinfo',
+                icon: 'icon-world',
+                iconPos: '0 -100px',
+                action: (active) => {
+                    if (active) {
+                        openPanel('wereldinfo', (container) => {
+                            if (manager.modules['modules/wereldinfo.js']?.render) {
+                                manager.modules['modules/wereldinfo.js'].render(container);
+                            } else {
+                                container.innerHTML = '<p>Wereldinfo module not loaded</p>';
+                            }
+                        });
+                    } else {
+                        document.getElementById('gm-panel-wereldinfo')?.remove();
+                    }
+                }
+            },
+            {
+                title: 'Troop Manager',
+                icon: 'icon-troop',
+                iconPos: '0 -150px',
+                action: (active) => {
+                    if (manager.modules['modules/troop-manager.js']) {
+                        manager.modules['modules/troop-manager.js'].toggle(active);
+                    } else {
+                        console.error('Troop Manager module not found');
+                    }
+                }
+            },
+            {
+                title: 'Forum Manager',
+                icon: 'icon-forum',
+                iconPos: '0 -200px',
+                action: (active) => {
+                    if (manager.modules['modules/forum-manager.js']) {
+                        manager.modules['modules/forum-manager.js'].toggle(active);
+                    } else {
+                        console.error('Forum Manager module not found');
+                    }
+                }
+            },
+            {
+                title: 'Afwezigheids Manager',
+                icon: 'icon-afk',
+                iconPos: '0 -250px',
+                action: (active) => {
+                    if (active) {
+                        openPanel('afwezigheid', (container) => {
+                            if (manager.modules['modules/afwezigheid.js']?.render) {
+                                manager.modules['modules/afwezigheid.js'].render(container);
+                            } else {
+                                container.innerHTML = '<h2>Afwezigheids Manager</h2><p>Module not available</p>';
+                            }
+                        });
+                    } else {
+                        document.getElementById('gm-panel-afwezigheid')?.remove();
+                    }
                 }
             }
         ];
 
-        // Button states
-        const buttonStates = new Array(buttonTitles.length).fill(false);
-
         // Sprite URL for buttons
         const spriteUrl = 'https://gpnl.innogamescdn.com/images/game/autogenerated/layout/layout_095495a.png';
+        const buttonStates = new Array(buttonConfigs.length).fill(false);
 
         // Create buttons
-        callbacks.forEach((callback, index) => {
+        buttonConfigs.forEach((config, index) => {
             const button = document.createElement('div');
             button.className = 'gm-toggle-button gm-original-button';
-            button.title = buttonTitles[index];
+            button.title = config.title;
             button.dataset.index = index;
 
             // Base style (sprite)
@@ -463,6 +479,8 @@ async function initialize() {
             button.style.justifyContent = 'center';
             button.style.cursor = 'pointer';
             button.style.margin = '0 1px';
+            button.style.position = 'relative';
+            button.style.overflow = 'hidden';
 
             // Add icon or text for GM button
             if (index === 0) {
@@ -471,27 +489,16 @@ async function initialize() {
                 button.style.color = 'white';
                 button.style.fontWeight = 'bold';
                 button.style.fontSize = '14px';
+                button.style.textShadow = '0 0 2px #000';
             } else {
                 // Other buttons with icons
                 const iconEl = document.createElement('div');
-                iconEl.className = `gm-icon-${index}`;
+                iconEl.className = `gm-icon ${config.icon}`;
                 iconEl.style.width = '20px';
                 iconEl.style.height = '20px';
-                iconEl.style.background = `url(${spriteUrl}) no-repeat`;
-                
-                // Set different background positions for different icons
-                const positions = [
-                    '', // GM button (handled separately)
-                    '0 -50px', // Settings
-                    '0 -100px', // Wereldinfo
-                    '0 -150px', // Troop
-                    '0 -200px'  // Forum
-                ];
-                
-                if (positions[index]) {
-                    iconEl.style.backgroundPosition = positions[index];
-                }
-                
+                iconEl.style.background = `url(${spriteUrl}) no-repeat ${config.iconPos}`;
+                iconEl.style.backgroundSize = 'auto';
+                iconEl.style.pointerEvents = 'none';
                 button.appendChild(iconEl);
             }
 
@@ -505,11 +512,12 @@ async function initialize() {
                     ? `url(${spriteUrl}) no-repeat -639px -214px`
                     : `url(${spriteUrl}) no-repeat -607px -182px`;
 
-                // Call the callback
+                // Call the action
                 try {
-                    callback(buttonStates[idx]);
+                    config.action(buttonStates[idx]);
                 } catch (err) {
-                    console.error('Button callback error:', err);
+                    console.error('Button action error:', err);
+                    manager.ui.showNotification(`Error in ${config.title}: ${err.message}`, false);
                 }
             });
 
