@@ -1,17 +1,21 @@
 // ==UserScript==
-// @name         Grepolis Manager (Loader)
-// @namespace    https://github.com/zambia1972/Grepolis-Manager
-// @version      1.0.0
-// @description  Minimal loader — rest op GitHub
-// @match        https://*.grepolis.com/*
+// @name         Grepolis Manager
+// @namespace    http://tampermonkey.net/
+// @version      1.0
+// @description  A comprehensive manager for Grepolis
+// @author       You
+// @match        https://*.grepolis.com/game/*
+// @icon         https://www.google.com/s2/favicons?domain=grepolis.com
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @grant        GM_xmlhttpRequest
-// @grant        GM_info
 // @grant        GM_notification
-// @grant        GM_openInTab
-// @grant        unsafeWindow
+// @grant        GM_getResourceText
+// @grant        GM_getResourceURL
 // @resource     css https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/src/css/grepolis-manager.css
+// @resource     unitsJson https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/src/data/units.json
+// @connect      raw.githubusercontent.com
+// @run-at       document-start
 // ==/UserScript==
 
 (function() {

@@ -39,30 +39,33 @@ export default class TroopManager {
 
     async loadUnitData() {
         try {
-            // Try to load from storage first
-            const cachedData = this.main.getStorage('gm_unit_data', null);
-            const lastUpdated = this.main.getStorage('gm_unit_data_updated', 0);
-            
-            // Refresh data if older than 7 days or not found
-            if (!cachedData || (Date.now() - lastUpdated) > (7 * 24 * 60 * 60 * 1000)) {
-                this.logger.log('Fetching fresh unit data...');
-                const response = await this.main.fetchWithRetry(
-                    'https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/data/units.json'
-                );
-                
-                if (response && response.units) {
-                    this.units = response.units;
-                    this.main.setStorage('gm_unit_data', response);
-                    this.main.setStorage('gm_unit_data_updated', Date.now());
-                } else {
-                    throw new Error('Invalid unit data format');
+            // Try to load from resource
+            try {
+                const unitsJson = GM_getResourceText('unitsJson');
+                if (unitsJson) {
+                    const data = JSON.parse(unitsJson);
+                    if (data && data.units) {
+                        this.units = data.units;
+                        this.main.setStorage('gm_unit_data', data);
+                        this.main.setStorage('gm_unit_data_updated', Date.now());
+                        this.logger.log('Loaded unit data from resource');
+                        return true;
+                    }
                 }
-            } else {
-                this.units = cachedData.units || [];
-                this.logger.log('Using cached unit data');
+            } catch (e) {
+                this.logger.warn('Failed to load unit data from file, trying fallback...', e);
             }
             
-            return true;
+            // Fallback to storage if available
+            const cachedData = this.main.getStorage('gm_unit_data', null);
+            if (cachedData && cachedData.units) {
+                this.units = cachedData.units;
+                this.logger.log('Using cached unit data');
+                return true;
+            }
+            
+            // Final fallback to default units
+            throw new Error('No unit data available');
         } catch (error) {
             this.logger.error('Failed to load unit data:', error);
             
