@@ -44,10 +44,14 @@ export default class MapOverlay {
     }
 
     initUI() {
-        // Create map controls container
+        // Create map controls container with proper styling
         this.controlsContainer = this.main.ui.createElement('div', 'gm-map-controls');
+        this.controlsContainer.style.position = 'absolute';
+        this.controlsContainer.style.top = '10px';
+        this.controlsContainer.style.left = '10px';
+        this.controlsContainer.style.zIndex = '1000';
         
-        // Add toggle button
+        // Add toggle button with proper styling
         this.toggleButton = this.main.ui.createButton('Toggle Map Overlay', () => this.toggleMapOverlay(), 'gm-btn gm-btn-primary');
         this.controlsContainer.appendChild(this.toggleButton);
         

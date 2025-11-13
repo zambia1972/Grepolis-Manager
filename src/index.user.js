@@ -176,11 +176,15 @@
 
     // Load a module
     async function loadModule(modulePath) {
-        console.log(`Loading module: ${modulePath}`);
-        
         try {
-            const url = `${REPO_BASE}${modulePath}`;
-            const response = await manager.fetchWithRetry(url);
+            const fullUrl = `${REPO_BASE}${modulePath}`;
+            console.log(`Loading module: ${modulePath}`);
+            
+            // Fetch the module code
+            const response = await manager.fetchWithRetry(fullUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             const code = await response.text();
             
             // Create a blob URL for the module
@@ -191,22 +195,19 @@
                 // Import the module
                 const module = await import(blobUrl);
                 
-                // Initialize the module if it has an init function
-                if (module.default) {
-                    try {
-                        const instance = new module.default(manager);
-                        instance.manager = manager;
-                        instance.uw = manager.uw;
-                        if (typeof instance.init === 'function') {
-                            await instance.init(manager);
-                        }
-                        manager.modules[modulePath] = instance;
-                        console.log(`Loaded module: ${modulePath}`);
-                        return true;
-                    } catch (e) {
-                        console.error(`Error initializing module ${modulePath}:`, e);
-                        return false;
+                // Initialize the module if it has a default export with an init method
+                if (module && module.default) {
+                    const instance = new module.default(manager);
+                    instance.manager = manager;
+                    instance.uw = manager.uw;
+                    
+                    if (typeof instance.init === 'function') {
+                        await instance.init(manager);
                     }
+                    
+                    manager.modules[modulePath] = instance;
+                    console.log(`Loaded module: ${modulePath}`);
+                    return true;
                 }
                 
                 console.log(`Loaded module (no default export): ${modulePath}`);
@@ -222,26 +223,63 @@
 
     // Initialize the manager
     async function initialize() {
-        console.log('Initializing Grepolis Manager...');
-        
-        // Load CSS
-        await loadCSS();
-        
-        // Load modules in sequence
-        for (const modulePath of MODULE_LIST) {
-            await loadModule(modulePath);
+        try {
+            console.log('Initializing Grepolis Manager...');
+            
+            // Load CSS first
+            await loadCSS();
+            
+            // Load all modules
+            for (const modulePath of MODULE_LIST) {
+                await loadModule(modulePath);
+            }
+            
+            // Add main container for UI elements if it doesn't exist
+            if (!document.getElementById('grepolis-manager-container')) {
+                const container = document.createElement('div');
+                container.id = 'grepolis-manager-container';
+                container.style.position = 'fixed';
+                container.style.top = '10px';
+                container.style.right = '10px';
+                container.style.zIndex = '9999';
+                document.body.appendChild(container);
+            }
+            
+            // Initialize UI elements
+            const uiContainer = document.getElementById('grepolis-manager-container');
+            if (uiContainer) {
+                // Create a button to toggle the UI
+                const toggleButton = manager.ui.createButton('Toggle UI', () => {
+                    uiContainer.classList.toggle('gm-hidden');
+                });
+                uiContainer.appendChild(toggleButton);
+                
+                // Add some basic styling to make the button visible
+                toggleButton.style.padding = '8px 16px';
+                toggleButton.style.background = '#4CAF50';
+                toggleButton.style.color = 'white';
+                toggleButton.style.border = 'none';
+                toggleButton.style.borderRadius = '4px';
+                toggleButton.style.cursor = 'pointer';
+                toggleButton.style.margin = '5px';
+                
+                // Make sure the container is visible
+                uiContainer.style.display = 'block';
+            }
+            
+            console.log('Grepolis Manager initialized');
+        } catch (error) {
+            console.error('Failed to initialize Grepolis Manager:', error);
         }
-        
-        console.log('Grepolis Manager initialized');
     }
 
-    // Start the manager when the page is fully loaded
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initialize);
-    } else {
-        initialize();
-    }
+// Start the manager when the page is fully loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initialize);
+} else {
+    initialize();
+}
 
-    // Expose the manager to the window for debugging
-    window.gm = manager;
+// Expose the manager to the window for debugging
+window.gm = manager;
 })();
