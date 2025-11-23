@@ -28,6 +28,7 @@
         const popup = await loadModule("https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/src/core/popup.js");
 
         GM_addStyle(css);
+        GM_addStyle(cssText);
 
         eval(ui);
         eval(popup);
