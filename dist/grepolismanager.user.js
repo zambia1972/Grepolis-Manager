@@ -23,11 +23,10 @@
     async function startGM() {
 
         // Modules laden via fetch → eval in sandbox → GEEN conflicten met Grepolis
-        const css = await loadModule("https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/src/styles/styles.css");
+        const cssText = await loadModule("https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/src/styles/styles.css");
         const ui = await loadModule("https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/src/core/ui.js");
         const popup = await loadModule("https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/src/core/popup.js");
 
-        GM_addStyle(css);
         GM_addStyle(cssText);
 
         eval(ui);
