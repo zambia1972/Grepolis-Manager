@@ -12,3 +12,4 @@
 // @require      https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/src/core/ui.js
 // @require      https://raw.githubusercontent.com/zambia1972/Grepolis-Manager/main/src/main.js
 // ==/UserScript==
+
