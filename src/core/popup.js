@@ -1,6 +1,3 @@
-// src/core/popup.js
-// Vervang de bestaande GM_Popup.open implementatie door onderstaande code.
-
 (function(){
     // Styles voor fallback modal (wordt toegevoegd één keer)
     if (typeof GM_addStyle === "function") {
@@ -136,4 +133,5 @@
         }
     };
 })();
+
 
