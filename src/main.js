@@ -1,9 +1,76 @@
 (function() {
-    console.log("Grepolis Manager geladen – versie", GM_CONFIG.VERSION);
+    console.log("Grepolis Manager initializing...");
 
     // Only run the initialization once
-    if (window.gmInitialized) return;
+    if (window.gmInitialized) {
+        console.log('Grepolis Manager already initialized');
+        return;
+    }
     window.gmInitialized = true;
+    
+    // Fallback popup in case the main one fails to load
+    function ensurePopupModule() {
+        if (typeof window.GM_Popup === 'undefined') {
+            console.warn('GM_Popup not available, using fallback implementation');
+            window.GM_Popup = {
+                open: function(payload) {
+                    console.warn('Using fallback popup');
+                    const fallbackDiv = document.createElement('div');
+                    fallbackDiv.style.position = 'fixed';
+                    fallbackDiv.style.top = '50%';
+                    fallbackDiv.style.left = '50%';
+                    fallbackDiv.style.transform = 'translate(-50%, -50%)';
+                    fallbackDiv.style.padding = '20px';
+                    fallbackDiv.style.background = '#2c3e50';
+                    fallbackDiv.style.color = 'white';
+                    fallbackDiv.style.borderRadius = '5px';
+                    fallbackDiv.style.zIndex = '999999';
+                    fallbackDiv.style.maxWidth = '80%';
+                    fallbackDiv.style.maxHeight = '80vh';
+                    fallbackDiv.style.overflow = 'auto';
+                    
+                    const title = document.createElement('h3');
+                    title.textContent = payload.title || 'Grepolis Manager';
+                    title.style.marginTop = '0';
+                    title.style.color = '#3498db';
+                    
+                    const content = document.createElement('div');
+                    content.innerHTML = payload.contentHtml || 'No content';
+                    
+                    const closeBtn = document.createElement('button');
+                    closeBtn.textContent = 'Close';
+                    closeBtn.style.marginTop = '10px';
+                    closeBtn.style.padding = '5px 15px';
+                    closeBtn.style.background = '#e74c3c';
+                    closeBtn.style.color = 'white';
+                    closeBtn.style.border = 'none';
+                    closeBtn.style.borderRadius = '3px';
+                    closeBtn.style.cursor = 'pointer';
+                    
+                    closeBtn.onclick = function() {
+                        document.body.removeChild(fallbackDiv);
+                    };
+                    
+                    fallbackDiv.appendChild(title);
+                    fallbackDiv.appendChild(content);
+                    fallbackDiv.appendChild(closeBtn);
+                    document.body.appendChild(fallbackDiv);
+                    
+                    return {
+                        close: function() {
+                            if (document.body.contains(fallbackDiv)) {
+                                document.body.removeChild(fallbackDiv);
+                            }
+                        }
+                    };
+                }
+            };
+        }
+        return window.GM_Popup;
+    }
+    
+    // Initialize popup module
+    ensurePopupModule();
 
     function init() {
         try {
