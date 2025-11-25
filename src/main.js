@@ -1,6 +1,16 @@
 (function() {
     console.log("Grepolis Manager initializing...");
 
+    // Clean up any existing instances
+    const existingContainer = document.getElementById('gm-button-container');
+    if (existingContainer) {
+        existingContainer.remove();
+    }
+    const existingPopup = document.getElementById('gm-gpwindow-backdrop');
+    if (existingPopup) {
+        existingPopup.remove();
+    }
+
     // Only run the initialization once
     if (window.gmInitialized) {
         console.log('Grepolis Manager already initialized');
@@ -71,6 +81,87 @@
     
     // Initialize popup module
     ensurePopupModule();
+
+    // Force initialize GM_Popup if not already available
+    if (typeof window.GM_Popup === 'undefined') {
+        console.warn('Creating new GM_Popup instance');
+        window.GM_Popup = {
+            open: function(payload) {
+                console.log('Opening popup with:', payload);
+                const popup = document.createElement('div');
+                popup.id = 'gm-popup';
+                popup.style.position = 'fixed';
+                popup.style.top = '50%';
+                popup.style.left = '50%';
+                popup.style.transform = 'translate(-50%, -50%)';
+                popup.style.background = '#2c3e50';
+                popup.style.padding = '20px';
+                popup.style.borderRadius = '5px';
+                popup.style.zIndex = '100000';
+                popup.style.color = 'white';
+                popup.style.maxWidth = '80%';
+                popup.style.maxHeight = '80vh';
+                popup.style.overflow = 'auto';
+                popup.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+                
+                const closeBtn = document.createElement('button');
+                closeBtn.textContent = '×';
+                closeBtn.style.position = 'absolute';
+                closeBtn.style.top = '5px';
+                closeBtn.style.right = '10px';
+                closeBtn.style.background = 'none';
+                closeBtn.style.border = 'none';
+                closeBtn.style.color = 'white';
+                closeBtn.style.fontSize = '24px';
+                closeBtn.style.cursor = 'pointer';
+                closeBtn.onclick = function() {
+                    document.body.removeChild(backdrop);
+                };
+                
+                const title = document.createElement('h3');
+                title.textContent = payload.title || 'Grepolis Manager';
+                title.style.marginTop = '0';
+                title.style.color = '#3498db';
+                
+                const content = document.createElement('div');
+                content.innerHTML = payload.contentHtml || 'No content';
+                content.style.marginTop = '20px';
+                
+                popup.appendChild(closeBtn);
+                popup.appendChild(title);
+                popup.appendChild(content);
+                
+                const backdrop = document.createElement('div');
+                backdrop.id = 'gm-popup-backdrop';
+                backdrop.style.position = 'fixed';
+                backdrop.style.top = '0';
+                backdrop.style.left = '0';
+                backdrop.style.width = '100%';
+                backdrop.style.height = '100%';
+                backdrop.style.background = 'rgba(0,0,0,0.5)';
+                backdrop.style.zIndex = '99999';
+                backdrop.style.display = 'flex';
+                backdrop.style.justifyContent = 'center';
+                backdrop.style.alignItems = 'center';
+                backdrop.onclick = function(e) {
+                    if (e.target === backdrop) {
+                        document.body.removeChild(backdrop);
+                    }
+                };
+                
+                backdrop.appendChild(popup);
+                document.body.appendChild(backdrop);
+                
+                return {
+                    close: function() {
+                        if (document.body.contains(backdrop)) {
+                            document.body.removeChild(backdrop);
+                        }
+                    }
+                };
+            }
+        };
+    }
 
     function init() {
         try {
