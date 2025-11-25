@@ -8,135 +8,135 @@
     inset: 0;
     background: rgba(0,0,0,0.45);
     z-index: 99999;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding-top: 64px;
-    -webkit-font-smoothing: antialiased;
-}
-
-.gm-gpwindow {
-    position: absolute;
-    width: 780px;
-    height: 570px;
-    font: 13px Verdana, Arial, Helvetica, sans-serif;
-    text-align: center;
-    z-index: 100000;
-    left: calc(50% - 390px);
-    top: 120px;
-    overflow: visible;
-    background: transparent;
-}
-
-/* core panels - left and right vertical tiles */
-.gm-gpwindow .gpwindow-vert-left,
-.gm-gpwindow .gpwindow-vert-right {
-    position: absolute;
-    top: 44px;
-    bottom: 17px;
-    width: 16px;
-    background-image: url(https://gpnl.innogamescdn.com/images/game/layout/vertical_tile.png);
-    background-repeat: repeat-y;
-    overflow: hidden;
-    display: block;
-}
-.gpwindow-vert-left { left: -16px; background-position: -10px 0; }
-.gpwindow-vert-right { right: -16px; background-position: -26px 0; }
-
-/* corner strips */
-.gm-gpwindow .gpwindow-corner-left,
-.gm-gpwindow .gpwindow-corner-right {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 16px;
-    display:block;
-    background-image: url(https://gpnl.innogamescdn.com/images/game/layout/gpwindow_corners.png);
-    background-repeat: no-repeat;
-    overflow: hidden;
-}
-.gpwindow-corner-left { left: -16px; background-position: left 0; height: 17px; }
-.gpwindow-corner-right{ right: -16px; background-position: right -17px; height: 17px; }
-
-/* top bar / header */
-.gm-gpwindow .gpwindow-top {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 44px;
-    background: url(https://gpnl.innogamescdn.com/images/game/layout/gpwindow_horizontal.png) 0 -17px repeat-x;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding: 0 12px;
-    box-sizing:border-box;
-}
-.gm-gpwindow .gpwindow-title {
-    font-weight: 700;
-    color: #fff;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.6);
-    font-size: 13px;
-}
-.gm-gpwindow .gpwindow-controls {
-    display:flex;
-    gap:6px;
-    align-items:center;
-}
-.gm-gpwindow .gpwindow-close {
-    cursor:pointer;
-    width: 28px;
-    height: 28px;
-    border-radius: 3px;
-    border: none;
-    background: transparent;
-    color: #fff;
-    font-size: 16px;
-    line-height: 1;
-}
-
-/* corner tall strips (for decorative top-left/right larger slices) */
-.gm-gpwindow .gpwindow-corner-top-left,
-.gm-gpwindow .gpwindow-corner-top-right {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 16px;
-    display:block;
-    background-image: url(https://gpnl.innogamescdn.com/images/game/layout/gpwindow_corners.png);
-    background-repeat: no-repeat;
-    height: 44px;
-}
-.gpwindow-corner-top-left { left: -16px; background-position: left -34px; }
-.gpwindow-corner-top-right{ right: -16px; background-position: right -78px; }
-
-/* content area */
-.gm-gpwindow .gpwindow-body {
-    position: absolute;
-    top: 44px;
-    bottom: 17px;
-    left: 0;
-    right: 0;
-    overflow: auto;
-    padding: 12px;
-    box-sizing: border-box;
-    color: #fff;
-    background: linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.0));
-}
-
-/* optional footer bottom (for aesthetic) */
-.gm-gpwindow .gpwindow-bottom-space {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 17px;
-    background: transparent;
-}
-
-/* small responsive adjustments */
-@media (max-width: 820px) {
-    .gm-gpwindow { width: calc(100% - 40px); left: 20px; right: 20px; }
+    display: flex;\
+    align-items: flex-start;\
+    justify-content: center;\
+    padding-top: 64px;\
+    -webkit-font-smoothing: antialiased;\
+}\
+\
+.gm-gpwindow {\
+    position: absolute;\
+    width: 780px;\
+    height: 570px;\
+    font: 13px Verdana, Arial, Helvetica, sans-serif;\
+    text-align: center;\
+    z-index: 100000;\
+    left: calc(50% - 390px);\
+    top: 120px;\
+    overflow: visible;\
+    background: transparent;\
+}\
+\
+/* core panels - left and right vertical tiles */\
+.gm-gpwindow .gpwindow-vert-left,\
+.gm-gpwindow .gpwindow-vert-right {\
+    position: absolute;\
+    top: 44px;\
+    bottom: 17px;\
+    width: 16px;\
+    background-image: url(https://gpnl.innogamescdn.com/images/game/layout/vertical_tile.png);\
+    background-repeat: repeat-y;\
+    overflow: hidden;\
+    display: block;\
+}\
+.gpwindow-vert-left { left: -16px; background-position: -10px 0; }\
+.gpwindow-vert-right { right: -16px; background-position: -26px 0; }\
+\
+/* corner strips */\
+.gm-gpwindow .gpwindow-corner-left,\
+.gm-gpwindow .gpwindow-corner-right {\
+    position: absolute;\
+    top: 0;\
+    bottom: 0;\
+    width: 16px;\
+    display:block;\
+    background-image: url(https://gpnl.innogamescdn.com/images/game/layout/gpwindow_corners.png);\
+    background-repeat: no-repeat;\
+    overflow: hidden;\
+}\
+.gpwindow-corner-left { left: -16px; background-position: left 0; height: 17px; }\
+.gpwindow-corner-right{ right: -16px; background-position: right -17px; height: 17px; }\
+\
+/* top bar / header */\
+.gm-gpwindow .gpwindow-top {\
+    position: absolute;\
+    left: 0;\
+    right: 0;\
+    top: 0;\
+    height: 44px;\
+    background: url(https://gpnl.innogamescdn.com/images/game/layout/gpwindow_horizontal.png) 0 -17px repeat-x;\
+    display:flex;\
+    align-items:center;\
+    justify-content:space-between;\
+    padding: 0 12px;\
+    box-sizing:border-box;\
+}\
+.gm-gpwindow .gpwindow-title {\
+    font-weight: 700;\
+    color: #fff;\
+    text-shadow: 0 1px 0 rgba(0,0,0,0.6);\
+    font-size: 13px;\
+}\
+.gm-gpwindow .gpwindow-controls {\
+    display:flex;\
+    gap:6px;\
+    align-items:center;\
+}\
+.gm-gpwindow .gpwindow-close {\
+    cursor:pointer;\
+    width: 28px;\
+    height: 28px;\
+    border-radius: 3px;\
+    border: none;\
+    background: transparent;\
+    color: #fff;\
+    font-size: 16px;\
+    line-height: 1;\
+}\
+\
+/* corner tall strips (for decorative top-left/right larger slices) */\
+.gm-gpwindow .gpwindow-corner-top-left,\
+.gm-gpwindow .gpwindow-corner-top-right {\
+    position: absolute;\
+    top: 0;\
+    bottom: 0;\
+    width: 16px;\
+    display:block;\
+    background-image: url(https://gpnl.innogamescdn.com/images/game/layout/gpwindow_corners.png);\
+    background-repeat: no-repeat;\
+    height: 44px;\
+}\
+.gpwindow-corner-top-left { left: -16px; background-position: left -34px; }\
+.gpwindow-corner-top-right{ right: -16px; background-position: right -78px; }\
+\
+/* content area */\
+.gm-gpwindow .gpwindow-body {\
+    position: absolute;\
+    top: 44px;\
+    bottom: 17px;\
+    left: 0;\
+    right: 0;\
+    overflow: auto;\
+    padding: 12px;\
+    box-sizing: border-box;\
+    color: #fff;\
+    background: linear-gradient(180deg, rgba(0,0,0,0.0), rgba(0,0,0,0.0));\
+}\
+\
+/* optional footer bottom (for aesthetic) */\
+.gm-gpwindow .gpwindow-bottom-space {\
+    position: absolute;\
+    left: 0;\
+    right: 0;\
+    bottom: 0;\
+    height: 17px;\
+    background: transparent;\
+}\
+\
+/* small responsive adjustments */\
+@media (max-width: 820px) {\
+    .gm-gpwindow { width: calc(100% - 40px); left: 20px; right: 20px; }\
 }
         `, "gm-styles-grepolis");
         // Add dummy element flag
