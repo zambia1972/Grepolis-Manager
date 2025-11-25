@@ -45,15 +45,38 @@ window.GM_UI = {
     },
 
     createToggleButton(container) {
+        console.log('Creating toggle button...');
         // Don't create if it already exists
         let btn = container.querySelector("#gm-toggle-button");
         if (!btn) {
-            btn = document.createElement("div");
+            console.log('Button not found, creating new one');
+            btn = document.createElement("button"); // Changed from div to button for better accessibility
             btn.id = "gm-toggle-button";
             btn.title = "Grepolis Manager";
             btn.textContent = "GM";
+            
+            // Add test click handler directly to verify if button is clickable
+            btn.onclick = function(e) {
+                console.log('Direct click handler triggered');
+                e.stopPropagation();
+                return false;
+            };
+            
+            // Make sure the button is focusable and clickable
+            btn.tabIndex = 0;
+            btn.style.outline = 'none';
+            
             container.appendChild(btn);
+            console.log('Button created and appended to container');
+        } else {
+            console.log('Using existing button');
         }
+        
+        // Debug: Log the button's parent and visibility
+        console.log('Button parent:', btn.parentElement);
+        console.log('Button display style:', window.getComputedStyle(btn).display);
+        console.log('Button visibility:', window.getComputedStyle(btn).visibility);
+        
         return btn;
     }
 };
