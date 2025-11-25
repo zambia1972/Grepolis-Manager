@@ -8,46 +8,46 @@
     inset: 0;
     background: rgba(0,0,0,0.45);
     z-index: 99999;
-    display: flex;\
-    align-items: flex-start;\
-    justify-content: center;\
-    padding-top: 64px;\
-    -webkit-font-smoothing: antialiased;\
-}\
-\
-.gm-gpwindow {\
-    position: absolute;\
-    width: 780px;\
-    height: 570px;\
-    font: 13px Verdana, Arial, Helvetica, sans-serif;\
-    text-align: center;\
-    z-index: 100000;\
-    left: calc(50% - 390px);\
-    top: 120px;\
-    overflow: visible;\
-    background: transparent;\
-}\
-\
-/* core panels - left and right vertical tiles */\
-.gm-gpwindow .gpwindow-vert-left,\
-.gm-gpwindow .gpwindow-vert-right {\
-    position: absolute;\
-    top: 44px;\
-    bottom: 17px;\
-    width: 16px;\
-    background-image: url(https://gpnl.innogamescdn.com/images/game/layout/vertical_tile.png);\
-    background-repeat: repeat-y;\
-    overflow: hidden;\
-    display: block;\
-}\
-.gpwindow-vert-left { left: -16px; background-position: -10px 0; }\
-.gpwindow-vert-right { right: -16px; background-position: -26px 0; }\
-\
-/* corner strips */\
-.gm-gpwindow .gpwindow-corner-left,\
-.gm-gpwindow .gpwindow-corner-right {\
-    position: absolute;\
-    top: 0;\
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 64px;
+    -webkit-font-smoothing: antialiased;
+}
+
+.gm-gpwindow {
+    position: absolute;
+    width: 780px;
+    height: 570px;
+    font: 13px Verdana, Arial, Helvetica, sans-serif;
+    text-align: center;
+    z-index: 100000;
+    left: calc(50% - 390px);
+    top: 120px;
+    overflow: visible;
+    background: transparent;
+}
+
+/* core panels - left and right vertical tiles */
+.gm-gpwindow .gpwindow-vert-left,
+.gm-gpwindow .gpwindow-vert-right {
+    position: absolute;
+    top: 44px;
+    bottom: 17px;
+    width: 16px;
+    background-image: url(https://gpnl.innogamescdn.com/images/game/layout/vertical_tile.png);
+    background-repeat: repeat-y;
+    overflow: hidden;
+    display: block;
+}
+.gpwindow-vert-left { left: -16px; background-position: -10px 0; }
+.gpwindow-vert-right { right: -16px; background-position: -26px 0; }
+
+/* corner strips */
+.gm-gpwindow .gpwindow-corner-left,
+.gm-gpwindow .gpwindow-corner-right {
+    position: absolute;
+    top: 0;
     bottom: 0;\
     width: 16px;\
     display:block;\
@@ -148,6 +148,7 @@
     window.GM_Popup = window.GM_Popup || {};
 
     window.GM_Popup.open = function(payload) {
+        console.log('GM_Popup.open called with payload:', payload);
         payload = payload || {};
         const title = payload.title || "Grepolis Manager";
         const contentHtml = payload.contentHtml || `<div style="min-height:200px;">Grepolis Manager content</div>`;
@@ -169,6 +170,7 @@
 
         // If modal already open - update contents
         const existing = document.getElementById("gm-gpwindow-backdrop");
+        console.log('Existing popup found:', !!existing);
         if (existing) {
             const body = existing.querySelector(".gpwindow-body");
             const t = existing.querySelector(".gpwindow-title");
@@ -180,10 +182,14 @@
         // Create backdrop
         const backdrop = document.createElement("div");
         backdrop.id = "gm-gpwindow-backdrop";
+        backdrop.style.display = 'flex';
+        backdrop.style.visibility = 'visible';
 
         // outer window wrapper
         const win = document.createElement("div");
         win.className = "gm-gpwindow";
+        win.style.display = 'block';
+        win.style.visibility = 'visible';
 
         // decorative verticals / corners (left/right)
         const vertLeft = document.createElement("div"); vertLeft.className = "gpwindow-vert-left";
@@ -221,7 +227,9 @@
         win.appendChild(bottom);
 
         backdrop.appendChild(win);
+        console.log('Appending popup to document.body');
         document.body.appendChild(backdrop);
+        console.log('Popup should be visible now');
 
         // close when clicking outside
         backdrop.addEventListener("click", (ev) => {
